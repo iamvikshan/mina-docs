@@ -1,0 +1,29 @@
+.vscode/
+node_modules/
+*.tar.gz
+.env
+package-lock.json
+
+# build output
+dist/
+# generated types
+.astro/
+.idea/
+
+#tina
+tina/__generated__
+public/admin/index.html
+public/admin/assets/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env
+
+# macOS-specific files
+.DS_Store
