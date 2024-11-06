@@ -3,12 +3,12 @@ import mainLogo from '@images/starlight/screwfast_logo_dark.svg?raw';
 import docsLogo from '@images/starlight/docs_logo.svg?raw';
 import type { Props } from '@astrojs/starlight/props';
 
-const main = '/';
+const main = 'https://mina.vikshan.tech';
 const docs = '/docs/';
 ---
 
 <span class="site-title flex">
-  <a class="main-logo" href={main} set:html={mainLogo} aria-label="Amina" />
+  <a class="main-logo" href={main} rel="noopener noreferer" target="_blank" set:html={mainLogo} aria-label="Amina" />
   <a
     class="docs-logo"
     href={docs}

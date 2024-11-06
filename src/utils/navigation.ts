@@ -1,8 +1,8 @@
 // An array of links for navigation bar
 const navBarLinks = [
-  { name: 'Home', url: '/' },
-  // { name: 'Blog', url: '/blog' },
-  { name: 'Docs', url: '/docs' },
+  { name: 'Home', url: 'https://mina.vikshan.tech' },
+   { name: 'Blog', url: '/blog' },
+  { name: 'Docs', url: '/' },
   /* { name: 'Products', url: '/products' },
   { name: 'Services', url: '/services' },
   { name: 'Contact', url: '/contact' }, */
@@ -12,7 +12,7 @@ const footerLinks = [
   {
     section: 'Resources',
     links: [
-      { name: 'Documentation', url: '/docs' },
+      { name: 'Documentation', url: '/' },
       // { name: 'Blog', url: '/blog' },
       {
         name: 'Invite Amina',

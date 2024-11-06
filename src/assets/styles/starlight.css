@@ -1,11 +1,18 @@
 /* Dark mode colors. */
 :root {
-  --border: hsla(var(--border-neutral), 0.4);
+  --border: hsla(var(--border-cyan), 0.4);
   --backdrop-color: #272727cc;
-  --sl-color-accent: #ff801f;
-  --sl-color-accent-high: #ffa057;
-  --sl-color-accent-low: #562800;
-  --sl-color-black: #181818;
+  --background-overlay: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.05),    /* Cyan */
+    rgba(51, 65, 85, 0.05),     /* Slate */
+    rgba(217, 70, 239, 0.05)    /* Fuchsia */
+  );
+  --base-background: #1a1a1a;
+  --sl-color-accent: #06b6d4;        /* Cyan primary */
+  --sl-color-accent-high: #67e8f9;   /* Cyan lighter */
+  --sl-color-accent-low: #164e63;    /* Cyan darker */
+  --sl-color-black: #1c1917;
   --sl-color-gray-1: #eee;
   --sl-color-gray-2: #c2c2c2;
   --sl-color-gray-3: #8b8b8b;
@@ -13,17 +20,24 @@
   --sl-color-gray-5: #383838;
   --sl-color-gray-6: #272727;
   --sl-color-white: #fff;
-  --list-marker-color: #fb923c;
-  --border-neutral: 0, 0%, 25.1%;
+  --list-marker-color: #0891b2;      /* Cyan marker */
+  --border-cyan: 180, 0%, 25.1%;
 }
 
 /* Light mode colors. */
 :root[data-theme='light'] {
   --border: hsla(var(--border-cyan), 0.4);
   --backdrop-color: #f6f6f699;
-  --sl-color-accent: #b73d00;
-  --sl-color-accent-high: #562800;
-  --sl-color-accent-low: #ffa057;
+  --background-overlay: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.03),    /* Cyan */
+    rgba(51, 65, 85, 0.03),     /* Slate */
+    rgba(217, 70, 239, 0.03)    /* Fuchsia */
+  );
+  --base-background: #ffffff;
+  --sl-color-accent: #0e7490;        /* Cyan primary for light */
+  --sl-color-accent-high: #164e63;   /* Cyan darker */
+  --sl-color-accent-low: #67e8f9;    /* Cyan lighter */
   --sl-color-black: #fff;
   --sl-color-gray-1: #272727;
   --sl-color-gray-2: #383838;
@@ -32,9 +46,9 @@
   --sl-color-gray-5: #c2c2c2;
   --sl-color-gray-6: #eee;
   --sl-color-gray-7: #f6f6f6;
-  --sl-color-white: #181818;
-  --list-marker-color: #fb923c;
-  --border-cyan: 54.9, 96.7%, 88%;
+  --sl-color-white: #1c1917;
+  --list-marker-color: #0891b2;      /* Cyan marker */
+  --border-cyan: 180, 96.7%, 88%;
 }
 
 header {
@@ -51,7 +65,7 @@ header.header {
 }
 
 header > div:first-of-type {
-  backdrop-filter: blur(12px) !important;
+  backdrop-filter: blur(10px) !important;
   background-color: var(--backdrop-color) !important;
   border: 1px var(--border) solid;
   border-radius: 36px;
@@ -95,22 +109,47 @@ select:focus-visible {
   outline: -webkit-focus-ring-color auto 1px;
 }
 
+/* Add background styling to body or main container */
+body {
+  background: var(--base-background);
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--background-overlay);
+  pointer-events: none;
+  z-index: 0;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
 article.card {
   border-radius: 0.5rem;
+  background: var(--backdrop-color);
+  backdrop-filter: blur(8px);
 }
 
 .starlight-aside--tip {
-  background: linear-gradient(45deg, #ff512f, #f09819);
+  background: linear-gradient(45deg, #0891b2, #22d3ee);  /* Cyan gradient */
   border: none;
   border-radius: 0.5rem;
-  color: #66350c;
+  color: #164e63;  /* Darker cyan for text */
 }
 
 .starlight-aside--note {
-  background: linear-gradient(45deg, #00b4db, #2193b0);
+  background: linear-gradient(45deg, #64748b, #94a3b8);  /* Slate gradient */
   border: none;
   border-radius: 0.5rem;
-  color: #004558;
+  color: #1e293b;  /* Darker slate for text */
 }
 
 .starlight-aside__icon {
@@ -118,11 +157,11 @@ article.card {
 }
 
 .starlight-aside--tip .starlight-aside__title {
-  color: #ffe0c2;
+  color: #ecfeff;  /* Very light cyan */
 }
 
 .starlight-aside--note .starlight-aside__title {
-  color: #bbf3fef7;
+  color: #f8fafc;  /* Very light slate */
 }
 
 .sl-markdown-content ul:not(:where(.not-content *)) {
@@ -156,11 +195,9 @@ article.card {
     border-radius: 1rem;
     margin-top: 3rem !important;
   }
-
   header > div:first-of-type {
     padding-inline-end: 5rem !important;
   }
-
   starlight-menu-button > button {
     right: 3rem !important;
     top: 2.2rem !important;

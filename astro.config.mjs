@@ -4,10 +4,11 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import compressor from 'astro-compressor';
 import starlight from '@astrojs/starlight';
-import node from '@astrojs/node';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import react from '@astrojs/react';
+import icon from 'astro-icon';
+
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -31,6 +32,16 @@ export default defineConfig({
     defaultStrategy: 'hover',
   },
   integrations: [
+    icon({
+      include: {
+        tabler: ['shield-cog'],
+        ic: ['round-headset'],
+        solar: ['chat-round-money-broken', 'emoji-funny-circle-broken'],
+        'material-symbols': ['display-settings-outline'],
+        iconoir: ['key-command'],
+        hugeicons: ['configuration-02'],
+      },
+    }),
     react(),
     tailwind(),
     sitemap(),
@@ -116,9 +127,7 @@ export default defineConfig({
         styleOverrides: { borderRadius: '0.5rem' },
       },
       lastUpdated: true,
-      plugins: [
-        starlightSiteGraph({}),
-      ],
+      plugins: [starlightSiteGraph({})],
     }),
     compressor({ gzip: true, brotli: true }),
   ],

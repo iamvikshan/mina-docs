@@ -27,14 +27,14 @@ jobs:
           echo "GH_USERNAME=${{ github.repository_owner }}" >> .env
           echo "GH_REPO=${{ github.event.repository.name }}" >> .env
 
-      - name: Update links in README and astro
+      - name: Update links in README and src
         run: node scripts/update-links.js
 
       - name: Check for changes
         id: git-check
         run: |
           git add README.md
-          git add $(find astro/src -name '*.md')
+          git add $(find /src -name '*.md' -o -name '*.mdx' -o -name '*.ts' -o -name '*.js')
           git diff --staged --quiet && echo "changes=false" >> $GITHUB_OUTPUT || echo "changes=true" >> $GITHUB_OUTPUT
 
       - name: Commit changes
@@ -42,7 +42,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m "links: update README and astro with repository information"
+          git commit -m "links: update README and src with repository information"
 
       - name: Push changes
         if: steps.git-check.outputs.changes == 'true'
