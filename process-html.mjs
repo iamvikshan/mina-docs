@@ -4,9 +4,7 @@ import { globby } from 'globby';
 import { minify } from 'html-minifier-terser';
 import path from 'node:path';
 
-// Astro outputs to dist/client and dist/server for hybrid mode
 const CLIENT_DIR = './dist';
-// const SERVER_DIR = './dist/server';
 
 const minifyOptions = {
   removeComments: true,
@@ -35,24 +33,18 @@ async function checkDirectory(dir) {
 
 async function processHTML() {
   try {
-    // Check if build directories exist
+    // Check if build directory exists
     const clientExists = await checkDirectory(CLIENT_DIR);
-    // const serverExists = await checkDirectory(SERVER_DIR);
 
-    if (!clientExists/* && !serverExists*/) {
-      console.error(
-        'Neither client nor server directories found. Run astro build first.'
-      );
+    if (!clientExists) {
+      console.error('Client directory not found. Run astro build first.');
       process.exit(1);
     }
 
     console.log('🔍 Finding HTML files...');
 
-    // Get HTML files from both client and server directories
-    const files = await globby([
-      `${CLIENT_DIR}/**/*.html`,
-      // `${SERVER_DIR}/**/*.html`,
-    ]);
+    // Get HTML files from the client directory
+    const files = await globby([`${CLIENT_DIR}/**/*.html`]);
 
     if (files.length === 0) {
       console.warn('No HTML files found to process');
@@ -93,22 +85,10 @@ async function processHTML() {
     // Log results
     console.log('\n📊 Processing Results:');
 
-    // Group results by directory
-    const clientFiles = results.filter((r) =>
-      r.file.startsWith('dist/client/')
-    );
-    const serverFiles = results.filter((r) =>
-      r.file.startsWith('dist/server/')
-    );
-
-    if (clientFiles.length > 0) {
+    // Log client files results
+    if (results.length > 0) {
       console.log('\n📱 Client files:');
-      clientFiles.forEach(logResult);
-    }
-
-    if (serverFiles.length > 0) {
-      console.log('\n🖥️  Server files:');
-      serverFiles.forEach(logResult);
+      results.forEach(logResult);
     }
 
     // Calculate and log total statistics

@@ -2,7 +2,6 @@
 //Import relevant dependencies
 import ThemeIcon from '@components/ThemeIcon.astro';
 import NavLink from '@components/ui/links/NavLink.astro';
-import MegaMenuLink from '@components/ui/links/MegaMenuLink.astro';
 import Authentication from '../misc/Authentication.astro';
 import enStrings from '@utils/navigation.ts';
 import BrandLogo from '@components/BrandLogo.astro';
@@ -87,11 +86,7 @@ const homeUrl = '/';
         <!-- Navigation links and Authentication component -->
         {
           strings.navBarLinks.map((link) => {
-            if (link.name === 'Services') {
-              return <MegaMenuLink />;
-            } else {
-              return <NavLink url={link.url} name={link.name} />;
-            }
+            return <NavLink url={link.url} name={link.name} />;
           })
         }
 

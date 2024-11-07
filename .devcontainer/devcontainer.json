@@ -1,18 +1,40 @@
 {
-    "name": "Bun Codespace",
-    "dockerFile": "Dockerfile",
-    "customizations": {
-        "vscode": {
-            "settings": {
-                "terminal.integrated.shell.linux": "/bin/bash"
-            },
-            "extensions": [
-                "esbenp.prettier-vscode",
-                "dbaeumer.vscode-eslint"
-            ]
-        }
-    },
-    "postCreateCommand": "bun install",
-    "forwardPorts": [3000],
-    "remoteUser": "root"
+	"name": "Ubuntu + Bun",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"installZsh": "true",
+			"username": "root",
+			"upgradePackages": "true"
+		},
+		"ghcr.io/devcontainers/features/git:1": {
+			"version": "latest",
+			"ppa": "false"
+		}
+	},
+
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dbaeumer.vscode-eslint",
+				"astro-build.astro-vscode",
+				"GitHub.copilot",
+				"unifiedjs.vscode-mdx",
+				"bradlc.vscode-tailwindcss",
+				"esbenp.prettier-vscode",
+				"eamodio.gitlens",
+				"oven.bun-vscode",
+				"astro-build.astro-vscode"
+			]
+		}
+	},
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "bun install",
+
+	// Set `remoteUser` to `root` to connect as root.
+	"remoteUser": "root"
 }

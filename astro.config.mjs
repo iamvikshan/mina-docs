@@ -9,23 +9,10 @@ import { fileURLToPath } from 'url';
 import react from '@astrojs/react';
 import icon from 'astro-icon';
 
-
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Helper function to ensure proper URL format
-const getSiteURL = (val) => {
-  const isProduction = import.meta.env.PROD === true;
-  if (isProduction) {
-    if (val && val !== '/') {
-      return val.startsWith('http') ? val : `https://${val}`;
-    }
-  }
-  return 'http://localhost:8080';
-};
-
 export default defineConfig({
-  site: getSiteURL(process.env.BASE_URL),
+  site: 'https://docs.vikshan.tech',
   image: { domains: ['images.unsplash.com'] },
   prefetch: {
     prefetchAll: false,
@@ -40,6 +27,8 @@ export default defineConfig({
         'material-symbols': ['display-settings-outline'],
         iconoir: ['key-command'],
         hugeicons: ['configuration-02'],
+        'fluent-color': ['*'],
+        'flat-color-icons': ['*'],
       },
     }),
     react(),
@@ -54,17 +43,22 @@ export default defineConfig({
         },
         {
           label: 'Commands',
-          collapsed: true,
           items: [
             { label: 'My Commands', link: 'commands/commands' },
             {
               label: 'Admin & Mod',
+              collapsed: true,
               autogenerate: { directory: 'commands/admin' },
             },
-            { label: 'Fun', autogenerate: { directory: 'commands/fun' } },
+            {
+              label: 'Fun',
+              autogenerate: { directory: 'commands/fun' },
+              collapsed: true,
+            },
             {
               label: 'Utility',
               autogenerate: { directory: 'commands/utility' },
+              collapsed: true,
             },
             { label: 'Developer', link: 'commands/dev/dev' },
           ],
@@ -76,10 +70,12 @@ export default defineConfig({
             {
               label: 'Installation',
               autogenerate: { directory: 'selfhost/installation' },
+              collapsed: true,
             },
             {
               label: 'Dashboard',
               autogenerate: { directory: 'selfhost/dashboard' },
+              collapsed: true,
             },
           ],
         },
@@ -121,7 +117,7 @@ export default defineConfig({
         },
       ],
       editLink: {
-        baseUrl: 'https://github.com/vixshan/amina/edit/main/astro/',
+        baseUrl: 'https://github.com/vixshan/amina-docs/edit/main/',
       },
       expressiveCode: {
         styleOverrides: { borderRadius: '0.5rem' },

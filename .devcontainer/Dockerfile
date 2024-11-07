@@ -1,16 +1,21 @@
-# Use an Ubuntu base image (or Debian, as Bun supports both)
-FROM ubuntu:22.04
+# Use Ubuntu as the base image
+ARG VARIANT="latest"
+FROM ubuntu:${VARIANT}
 
-# Install Bun dependencies
+# Arguments and environment variables
+ARG USERNAME=root
+ENV PATH="/root/.bun/bin:${PATH}"
+
+# Update and install necessary packages
 RUN apt-get update && \
-    apt-get install -y curl git && \
+    apt-get install -y curl unzip && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Bun
 RUN curl -fsSL https://bun.sh/install | bash
 
-# Add Bun to the PATH
-ENV PATH="/root/.bun/bin:$PATH"
+# Make Bun accessible globally
+RUN ln -s /root/.bun/bin/bun /usr/local/bin/bun
 
-# Optional: Set up a working directory
-WORKDIR /workspaces/mina
+# Optional: Add other tools or dependencies if needed
+# RUN apt-get install -y <other-packages>

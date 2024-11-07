@@ -9,6 +9,8 @@ html.lenis body {
 
 .lenis.lenis-smooth [data-lenis-prevent] {
   overscroll-behavior: contain;
+  /* Enable native scrolling for prevented elements */
+  -webkit-overflow-scrolling: touch;
 }
 
 .lenis.lenis-stopped {
@@ -17,4 +19,10 @@ html.lenis body {
 
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
+}
+
+/* Ensure sidebar maintains proper scrolling behavior */
+#starlight__sidebar {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
 }

@@ -2,6 +2,7 @@
 
 import { z, defineCollection } from 'astro:content';
 import { docsSchema } from '@astrojs/starlight/schema';
+import { pageSiteGraphSchema } from 'starlight-site-graph/schema';
 
 const productsCollection = defineCollection({
   type: 'content',
@@ -96,7 +97,11 @@ const insightsCollection = defineCollection({
 });
 
 export const collections = {
-  docs: defineCollection({ schema: docsSchema() }),
+  docs: defineCollection({
+    schema: docsSchema({
+      extend: pageSiteGraphSchema,
+    }),
+  }),
   products: productsCollection,
   blog: blogCollection,
   insights: insightsCollection,
