@@ -1,20 +1,6 @@
 {
 	"name": "Ubuntu + Bun",
-	"build": {
-		"dockerfile": "Dockerfile"
-	},
-	"features": {
-		"ghcr.io/devcontainers/features/common-utils:2": {
-			"installZsh": "true",
-			"username": "root",
-			"upgradePackages": "true"
-		},
-		"ghcr.io/devcontainers/features/git:1": {
-			"version": "latest",
-			"ppa": "false"
-		}
-	},
-
+  "image": "ghcr.io/vixshan/devcontainers/bun:latest",
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
