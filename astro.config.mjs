@@ -21,12 +21,7 @@ export default defineConfig({
   integrations: [
     icon({
       include: {
-        tabler: ['shield-cog'],
-        ic: ['round-headset'],
-        solar: ['chat-round-money-broken', 'emoji-funny-circle-broken'],
-        'material-symbols': ['display-settings-outline'],
-        iconoir: ['key-command'],
-        hugeicons: ['configuration-02'],
+        solar: ['emoji-funny-circle-broken'],
         'fluent-color': ['*'],
         'flat-color-icons': ['*'],
       },
