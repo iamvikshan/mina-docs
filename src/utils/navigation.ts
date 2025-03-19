@@ -1,6 +1,6 @@
 // An array of links for navigation bar
 const navBarLinks = [
-  { name: 'Home', url: 'https://mina.vikshan.tech' },
+  { name: 'Home', url: 'https://mina.vikshan.me' },
    { name: 'Blog', url: '/blog' },
   { name: 'Docs', url: '/' },
   /* { name: 'Products', url: '/products' },
@@ -24,7 +24,7 @@ const footerLinks = [
   {
     section: 'Community',
     links: [
-      { name: 'GitHub', url: 'https:github.com/vixshan/amina' },
+      { name: 'GitHub', url: 'https:github.com/iamvikshan/amina' },
       { name: 'Support', url: `${process.env.SUPPORT_SERVER}` },
     ],
   },
@@ -33,7 +33,7 @@ const footerLinks = [
 const socialLinks = {
   discord: 'https://discord.com/oauth2/authorize?client_id=1035629678632915055',
   x: 'https://twitter.com/iamvikshan',
-  github: 'https://github.com/vixshan/amina',
+  github: 'https://github.com/iamvikshan/amina',
   youtube: 'https://youtube.com/@vikshan',
 };
 

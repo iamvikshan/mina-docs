@@ -12,7 +12,7 @@ import icon from 'astro-icon';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  site: 'https://docs.vikshan.tech',
+  site: 'https://docs.vikshan.me',
   image: { domains: ['images.unsplash.com'] },
   prefetch: {
     prefetchAll: false,
@@ -81,7 +81,7 @@ export default defineConfig({
       ],
 
       social: {
-        github: 'https://github.com/vixshan/amina',
+        github: 'https://github.com/iamvikshan/amina',
         discord:
           'https://discord.com/oauth2/authorize?client_id=1035629678632915055',
       },
@@ -100,19 +100,19 @@ export default defineConfig({
           tag: 'meta',
           attrs: {
             property: 'og:image',
-            content: 'https://amina.vikshan.tech' + '/social.webp',
+            content: 'https://amina.vikshan.me' + '/social.webp',
           },
         },
         {
           tag: 'meta',
           attrs: {
             property: 'twitter:image',
-            content: 'https://amina.vikshan.tech' + '/social.webp',
+            content: 'https://amina.vikshan.me' + '/social.webp',
           },
         },
       ],
       editLink: {
-        baseUrl: 'https://github.com/vixshan/amina-docs/edit/main/',
+        baseUrl: 'https://github.com/iamvikshan/amina-docs/edit/main/',
       },
       expressiveCode: {
         styleOverrides: { borderRadius: '0.5rem' },
