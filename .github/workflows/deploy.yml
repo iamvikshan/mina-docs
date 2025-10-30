@@ -20,7 +20,7 @@ jobs:
       - name: Deploy Astro Site
         uses: iamvikshan/.github/.github/actions/astro@main
         # Optional: customize with inputs
-        # with:
-        #   package-manager: bun@latest
+        with:
+          package-manager: bun@latest
         #   node-version: 20
         #   path: .
