@@ -12,7 +12,6 @@ updates:
     schedule:
       interval: 'daily'
     open-pull-requests-limit: 5
-    reviewers:
       - 'iamvikshan'
     labels:
       - 'dependencies'
@@ -27,7 +26,5 @@ updates:
     schedule:
       interval: "daily"
     open-pull-requests-limit: 5
-    reviewers:
-      - "iamvikshan"
     labels:
       - "actions"

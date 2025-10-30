@@ -80,11 +80,18 @@ export default defineConfig({
         },
       ],
 
-      social: {
-        github: 'https://github.com/iamvikshan/amina',
-        discord:
-          'https://discord.com/oauth2/authorize?client_id=1035629678632915055',
-      },
+      social: [
+        {
+          icon: 'github',
+          label: 'GitHub',
+          href: 'https://github.com/iamvikshan/amina',
+        },
+        {
+          icon: 'discord',
+          label: 'Discord',
+          href: 'https://discord.com/oauth2/authorize?client_id=1035629678632915055',
+        },
+      ],
       disable404Route: true,
       customCss: ['./src/assets/styles/starlight.css'],
       favicon: '/favicon.ico',
@@ -118,7 +125,7 @@ export default defineConfig({
         styleOverrides: { borderRadius: '0.5rem' },
       },
       lastUpdated: true,
-      plugins: [starlightSiteGraph({})],
+      plugins: [],
     }),
     compressor({ gzip: true, brotli: true }),
   ],

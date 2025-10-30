@@ -1,26 +1,32 @@
 {
-	"name": "Ubuntu + Bun",
-  "image": "ghcr.io/iamvikshan/devcontainers/bun:latest",
-	// Configure tool-specific properties.
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"dbaeumer.vscode-eslint",
-				"astro-build.astro-vscode",
-				"GitHub.copilot",
-				"unifiedjs.vscode-mdx",
-				"bradlc.vscode-tailwindcss",
-				"esbenp.prettier-vscode",
-				"eamodio.gitlens",
-				"oven.bun-vscode",
-				"astro-build.astro-vscode"
-			]
-		}
-	},
+  "name": "Ubuntu + Bun",
+  "image": "ghcr.io/iamvikshan/devcontainers/ubuntu-bun:latest",
+    "features": {
 
-	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "bun install",
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "installDirectlyFromGitHubRelease": true,
+      "version": "latest"
+    }
+  },
+  // Configure tool-specific properties.
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "eamodio.gitlens",
+        "oven.bun-vscode",
+        "christian-kohler.npm-intellisense",
+        "astro-build.astro-vscode",
+        "jock.svg",
+        "unifiedjs.vscode-mdx"
+      ]
+    }
+  },
 
-	// Set `remoteUser` to `root` to connect as root.
-	"remoteUser": "root"
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "bun install && bun run build && bun dev",
+
+  // Set `remoteUser` to `root` to connect as root.
+  "remoteUser": "root"
 }

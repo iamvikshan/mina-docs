@@ -1,0 +1,683 @@
+---
+title: Docker Deployment
+description: Deploy Amina Discord bot with Lavalink and Uptime Kuma using Docker Compose for both local development and production environments.
+sidebar:
+  label: Docker Deployment
+  order: 4
+---
+
+import {
+  Card,
+  CardGrid,
+  LinkCard,
+  Steps,
+  Aside,
+  Tabs,
+  TabItem,
+} from "@astrojs/starlight/components";
+
+This guide explains how to deploy Amina Discord bot with Lavalink and Uptime Kuma using Docker Compose.
+
+## Overview
+
+<CardGrid>
+  <Card title="Quick Start" icon="rocket">
+    Get up and running quickly with Docker.
+    <LinkCard title="Jump to Section" href="#quick-start" />
+  </Card>
+  <Card title="Services Overview" icon="seti:docker">
+    Understand the containerized architecture.
+    <LinkCard title="Jump to Section" href="#services-overview" />
+  </Card>
+  <Card title="VPS Deployment" icon="seti:server">
+    Deploy to production on a VPS.
+    <LinkCard title="Jump to Section" href="#vps-deployment-guide" />
+  </Card>
+</CardGrid>
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- Docker and Docker Compose installed
+- `.env` file configured with your bot tokens and credentials
+- Git (for cloning the repository)
+
+<Aside type="tip">
+  For installation instructions, visit the [Docker documentation](https://docs.docker.com/get-docker/).
+</Aside>
+
+## Quick Start
+
+<Steps>
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/iamvikshan/amina.git
+   cd amina
+   ```
+
+2. **Configure environment variables**
+   
+   Copy `.env.example` to `.env` and update with your credentials:
+   ```bash
+   cp .env.example .env
+   ```
+
+3. **Start all services**
+   ```bash
+   docker-compose up -d
+   ```
+
+4. **Verify deployment**
+   ```bash
+   docker-compose ps
+   docker-compose logs -f
+   ```
+
+</Steps>
+
+## Services Overview
+
+### 1. Amina (Discord Bot)
+
+- **Port**: 3000 (health endpoint)
+- **Health Check**: `http://localhost:3000/health`
+- **Configuration**: Uses `.env` file for secrets
+
+### 2. Lavalink (Music Server)
+
+- **Port**: 2333
+- **Health Check**: `http://localhost:2333/version`
+- **Authorization**: Uses `LAVALINK_PASSWORD_1` from `.env`
+- **Configuration**: `lavalink/application.yml`
+
+### 3. Uptime Kuma (Monitoring)
+
+- **Port**: 3001
+- **Web UI**: `http://localhost:3001`
+- **Data**: Persisted in `uptime-kuma-data` volume
+
+## Environment Variables
+
+The Docker Compose setup automatically passes your `.env` file to the Amina container. Key variables:
+
+```bash
+# Discord Bot
+BOT_TOKEN=your_discord_bot_token
+MONGO_CONNECTION=mongodb://your_mongo_connection
+
+# Lavalink (Docker will override HOST to use container name)
+LAVALINK_HOST_1=lavalink          # Set by docker-compose
+LAVALINK_PORT_1=2333              # Set by docker-compose
+LAVALINK_PASSWORD_1=youshallnotpass
+LAVALINK_ID_1=Lavalink
+LAVALINK_SECURE_1=false           # Set by docker-compose
+
+# Fallback Lavalink (external)
+LAVALINK_HOST_2=wispbyte1
+LAVALINK_PORT_2=443
+LAVALINK_PASSWORD_2=your_password
+LAVALINK_ID_2=Lavalink2
+LAVALINK_SECURE_2=true
+
+# Health Check
+HEALTH_PORT=3000
+```
+
+<Aside type="caution">
+  Never commit your `.env` file to version control. It's already included in `.gitignore`.
+</Aside>
+
+## Common Commands
+
+<Tabs>
+<TabItem label="Start Services">
+
+```bash
+# Start all services
+docker-compose up -d
+
+# Start specific services (without building Amina)
+docker-compose up -d lavalink uptime-kuma
+```
+
+</TabItem>
+<TabItem label="View Logs">
+
+```bash
+# All services
+docker-compose logs -f
+
+# Specific service
+docker-compose logs -f lavalink
+docker-compose logs -f uptime-kuma
+docker-compose logs -f amina
+```
+
+</TabItem>
+<TabItem label="Check Status">
+
+```bash
+# View status of all services
+docker-compose ps
+
+# Check health status
+docker-compose ps
+```
+
+</TabItem>
+<TabItem label="Stop Services">
+
+```bash
+# Stop containers (keeps volumes and data)
+docker-compose down
+
+# Stop and remove volumes (⚠️ DELETES ALL DATA!)
+docker-compose down -v
+```
+
+</TabItem>
+</Tabs>
+
+<Aside type="danger" title="Data Loss Warning">
+  **NEVER use `docker-compose down -v` on production!** This will **DELETE** all data including:
+  - Uptime Kuma monitors, settings, and history
+  - Lavalink cached plugins
+  
+  Only use this if you want to completely reset everything.
+</Aside>
+
+## Service Configuration
+
+### Lavalink Configuration
+
+Edit `lavalink/application.yml` to customize:
+
+- Sources (YouTube, SoundCloud, etc.)
+- Filters and audio effects
+- Buffer settings
+- Memory allocation
+- Plugins (see below)
+
+<Tabs>
+<TabItem label="Memory Settings">
+
+To increase Lavalink memory allocation:
+
+```yaml
+environment:
+  - _JAVA_OPTIONS=-Xmx1G # Increase to 1GB
+```
+
+</TabItem>
+<TabItem label="Adding Plugins">
+
+Plugins are automatically downloaded from Maven repositories. Add them to `lavalink/application.yml`:
+
+```yaml
+lavalink:
+  plugins:
+    # YouTube plugin (recommended)
+    - dependency: 'dev.lavalink.youtube:youtube-plugin:1.11.0'
+      repository: 'https://maven.lavalink.dev/releases'
+
+    # Spotify plugin (optional)
+    - dependency: 'com.github.topi314.lavasrc:lavasrc-plugin:4.4.0'
+      repository: 'https://maven.lavalink.dev/releases'
+```
+
+**Popular plugins:**
+- **YouTube Plugin**: Better YouTube support than the deprecated built-in source
+- **LavaSrc**: Spotify, Apple Music, Deezer, Yandex Music support
+- **SponsorBlock**: Skip sponsored segments in videos
+
+After adding plugins, restart Lavalink:
+
+```bash
+docker-compose restart lavalink
+docker-compose logs -f lavalink  # Watch download progress
+```
+
+</TabItem>
+</Tabs>
+
+### Uptime Kuma Setup
+
+<Steps>
+
+1. Access the web UI at `http://localhost:3001`
+
+2. Create an admin account (first time setup)
+
+3. Add monitors for your services:
+
+</Steps>
+
+<Aside>
+  Your account, monitors, and settings are stored in the `uptime-kuma-data` Docker volume. They will persist across container restarts and updates.
+</Aside>
+
+#### Monitor Configuration Examples
+
+<Tabs>
+<TabItem label="Amina Health">
+
+- **Type**: HTTP(s)
+- **URL**: `http://amina:3000/health`
+- **Expected Status**: 200
+- **Heartbeat Interval**: 60 seconds
+
+</TabItem>
+<TabItem label="Lavalink">
+
+- **Type**: HTTP(s)
+- **URL**: `http://lavalink:2333/version`
+- **Auth Header Name**: `Authorization`
+- **Auth Header Value**: `youshallnotpass`
+- **Expected Status**: 200
+- **Heartbeat Interval**: 60 seconds
+
+</TabItem>
+<TabItem label="External Services">
+
+- **Discord API**: `https://discord.com/api/v10/gateway`
+- **MongoDB**: Use TCP monitor if accessible
+- **Wispbyte1 Lavalink**: `https://wispbyte1:443/version`
+
+</TabItem>
+</Tabs>
+
+## Volume Management
+
+<Aside type="caution" title="Understanding Volume Persistence">
+  Docker volumes persist your data. Understanding how they work is critical to avoid data loss.
+</Aside>
+
+| Command | Containers | Volumes | Uptime Kuma Data |
+|---------|-----------|---------|------------------|
+| `docker-compose down` | ✅ Removed | ✅ **Kept** | ✅ **Safe** |
+| `docker-compose down -v` | ❌ Removed | ❌ **Deleted** | ❌ **Lost!** |
+| `docker-compose restart` | ♻️ Restarted | ✅ Kept | ✅ Safe |
+| `docker-compose up -d --build` | ♻️ Rebuilt | ✅ Kept | ✅ Safe |
+
+### Backup and Restore
+
+<Tabs>
+<TabItem label="Backup">
+
+```bash
+# Backup Uptime Kuma data (recommended before major changes)
+docker run --rm \
+  -v amina_uptime-kuma-data:/data \
+  -v $(pwd):/backup \
+  alpine tar czf /backup/uptime-kuma-backup.tar.gz -C /data .
+```
+
+</TabItem>
+<TabItem label="Restore">
+
+```bash
+# Restore from backup
+docker run --rm \
+  -v amina_uptime-kuma-data:/data \
+  -v $(pwd):/backup \
+  alpine tar xzf /backup/uptime-kuma-backup.tar.gz -C /data
+```
+
+</TabItem>
+<TabItem label="Verify">
+
+```bash
+# Verify backup contents
+tar -tzf uptime-kuma-backup.tar.gz | grep kuma.db
+```
+
+</TabItem>
+</Tabs>
+
+### Rebuild Containers Without Losing Data
+
+```bash
+# Stop containers (keeps volumes)
+docker-compose down
+
+# Remove old images (optional)
+docker rmi amina-amina
+
+# Rebuild and restart
+docker-compose up -d --build
+```
+
+<Aside type="tip">
+  Your Uptime Kuma data persists across rebuilds!
+</Aside>
+
+## Networking
+
+All services communicate via the `amina-network` bridge network:
+
+- Amina connects to Lavalink at `lavalink:2333`
+- Uptime Kuma monitors services using container names
+- Services are isolated from host network (except exposed ports)
+
+## Health Checks
+
+All services have built-in health checks:
+
+- **Amina**: Checks every 30s, 3 retries, 40s startup grace period
+- **Lavalink**: Checks every 30s, 3 retries, 20s startup grace period
+- **Uptime Kuma**: Checks every 60s, 3 retries, 30s startup grace period
+
+View health status:
+
+```bash
+docker-compose ps
+```
+
+## Troubleshooting
+
+<Tabs>
+<TabItem label="Lavalink Issues">
+
+```bash
+# Check logs
+docker-compose logs lavalink
+
+# Common issues:
+# - Port 2333 already in use
+# - Insufficient memory (increase _JAVA_OPTIONS)
+# - Invalid application.yml syntax
+```
+
+</TabItem>
+<TabItem label="Connection Issues">
+
+```bash
+# Verify network connectivity
+docker exec amina-bot ping lavalink
+
+# Check environment variables
+docker exec amina-bot env | grep LAVALINK
+```
+
+</TabItem>
+<TabItem label="Data Loss">
+
+**Most common cause**: Used `docker-compose down -v` which deletes volumes!
+
+```bash
+# Check if volume exists
+docker volume ls | grep uptime-kuma
+
+# If volume exists but is empty
+docker volume inspect amina_uptime-kuma-data
+
+# Restore from backup (see Volume Management section)
+```
+
+**Prevention**:
+- ✅ Always use `docker-compose down` (without `-v`)
+- 🔄 Use `docker-compose restart` for updates
+- 💾 Backup regularly before major changes
+
+</TabItem>
+</Tabs>
+
+## Updating Services
+
+<Tabs>
+<TabItem label="Update Amina">
+
+```bash
+git pull
+docker-compose build amina
+docker-compose up -d amina
+```
+
+</TabItem>
+<TabItem label="Update Lavalink">
+
+```bash
+docker-compose pull lavalink
+docker-compose up -d lavalink
+```
+
+</TabItem>
+<TabItem label="Update Uptime Kuma">
+
+```bash
+docker-compose pull uptime-kuma
+docker-compose up -d uptime-kuma
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## VPS Deployment Guide
+
+Deploy Amina to a production VPS environment with these streamlined steps.
+
+### Files Needed on VPS
+
+```
+/opt/amina/
+├── docker-compose.yml       (use docker-compose.prod.yml)
+├── .env                     (your production secrets)
+└── lavalink/
+    ├── application.yml      (Lavalink config - includes plugin URLs)
+    └── plugins/            (auto-created for plugin caching)
+```
+
+<Aside>
+  The `plugins/` folder will be automatically created by Lavalink to cache downloaded plugins. You don't need to create it manually.
+</Aside>
+
+### Deployment Steps
+
+<Steps>
+
+1. **Create deployment directory**
+   
+   ```bash
+   ssh user@your-vps
+   mkdir -p /opt/amina/lavalink
+   cd /opt/amina
+   ```
+
+2. **Copy files to VPS**
+   
+   From your local machine:
+   ```bash
+   scp docker-compose.prod.yml user@your-vps:/opt/amina/docker-compose.yml
+   scp .env user@your-vps:/opt/amina/.env
+   scp lavalink/application.yml user@your-vps:/opt/amina/lavalink/application.yml
+   ```
+
+3. **Update Lavalink password**
+   
+   Edit `/opt/amina/lavalink/application.yml` on your VPS:
+   
+   ```yaml
+   lavalink:
+     server:
+       password: 'your-secure-production-password' # Change this!
+   ```
+   
+   <Aside type="caution">
+     Ensure this matches `LAVALINK_PASSWORD_1` in your `.env` file.
+   </Aside>
+
+4. **Start services**
+   
+   ```bash
+   cd /opt/amina
+   docker-compose pull  # Pull latest images
+   docker-compose up -d
+   ```
+
+5. **Verify deployment**
+   
+   ```bash
+   docker-compose ps
+   docker-compose logs -f amina
+   ```
+
+</Steps>
+
+### Security Configuration
+
+#### Lavalink Password Security
+
+<Aside type="danger" title="Critical: Password Sync">
+  The Lavalink password exists in TWO places and **MUST match**:
+  
+  1. `.env` → `LAVALINK_PASSWORD_1=your-password` (used by Amina to connect)
+  2. `lavalink/application.yml` → `password: 'your-password'` (used by Lavalink server)
+</Aside>
+
+**Generate a strong password:**
+
+```bash
+openssl rand -base64 32
+```
+
+Update both files with this password.
+
+#### Firewall Configuration
+
+```bash
+# Only expose Uptime Kuma (if needed)
+ufw allow 3001/tcp
+
+# Block direct access to Lavalink and Amina health
+# They communicate via internal Docker network
+ufw deny 2333/tcp
+ufw deny 3000/tcp
+```
+
+### Production Monitoring
+
+<Steps>
+
+1. Open `http://your-vps-ip:3001` in browser
+
+2. Create admin account (first time only)
+
+3. Configure monitors as described in the [Uptime Kuma Setup](#uptime-kuma-setup) section
+
+</Steps>
+
+<Aside type="tip">
+  For external Lavalink fallback monitoring, use:
+  - **URL**: `http://217.160.125.126:14316/version`
+  - **Auth Header Value**: `incorrect`
+  - **Heartbeat**: 120 seconds
+</Aside>
+
+### Production Updates
+
+<Tabs>
+<TabItem label="Update Amina">
+
+```bash
+cd /opt/amina
+docker-compose pull amina
+docker-compose up -d amina
+```
+
+</TabItem>
+<TabItem label="Update All">
+
+```bash
+docker-compose pull
+docker-compose up -d
+```
+
+</TabItem>
+<TabItem label="View Logs">
+
+```bash
+docker-compose logs -f           # All services
+docker-compose logs -f amina     # Just Amina
+docker-compose logs -f lavalink  # Just Lavalink
+```
+
+</TabItem>
+<TabItem label="Safe Stop">
+
+```bash
+# Keeps data safe!
+docker-compose down
+```
+
+</TabItem>
+</Tabs>
+
+### Production Troubleshooting
+
+<Tabs>
+<TabItem label="Connection Test">
+
+```bash
+# Check if Lavalink is running
+docker-compose ps lavalink
+
+# Check Lavalink logs
+docker-compose logs lavalink
+
+# Test Lavalink connection
+docker exec amina-bot curl \
+  -H "Authorization: your-password" \
+  http://lavalink:2333/version
+```
+
+</TabItem>
+<TabItem label="Password Issues">
+
+- Ensure `LAVALINK_PASSWORD_1` in `.env` matches `password` in `lavalink/application.yml`
+- Restart both services after changing:
+  ```bash
+  docker-compose restart lavalink amina
+  ```
+
+</TabItem>
+<TabItem label="Memory Issues">
+
+```bash
+# Increase Lavalink memory in docker-compose.yml
+# Change: _JAVA_OPTIONS=-Xmx512M
+# To: _JAVA_OPTIONS=-Xmx1G
+
+docker-compose up -d lavalink
+```
+
+</TabItem>
+</Tabs>
+
+
+<Aside type="tip">
+  Need help? Check logs with `docker-compose logs -f` or create an issue on GitHub.
+</Aside>
+
+## Additional Resources
+
+<CardGrid>
+  <LinkCard
+    title="Docker Documentation"
+    description="Official Docker guides and references"
+    href="https://docs.docker.com/"
+  />
+  <LinkCard
+    title="Lavalink Documentation"
+    description="Learn more about Lavalink configuration"
+    href="https://lavalink.dev/"
+  />
+  <LinkCard
+    title="Uptime Kuma GitHub"
+    description="Uptime Kuma project repository"
+    href="https://github.com/louislam/uptime-kuma"
+  />
+</CardGrid>
