@@ -1,0 +1,37 @@
+# Amina API - Cloudflare Workers Configuration
+# Domain: api.4mina.app
+
+name = "amina-api"
+main = "src/index.ts"
+compatibility_date = "2024-11-01"
+
+# Development settings
+[dev]
+port = 8787
+local_protocol = "http"
+
+# Environment variables (secrets should be set via `wrangler secret put`)
+[vars]
+ENVIRONMENT = "development"
+# API_VERSION = "v1"
+
+# Production environment
+[env.production]
+name = "amina-api"
+vars = { ENVIRONMENT = "production" }
+
+# Custom domain routing (configure in Cloudflare dashboard)
+# routes = [
+#   { pattern = "api.4mina.app/*", zone_name = "4mina.app" }
+# ]
+
+# KV Namespaces (for caching)
+# [[kv_namespaces]]
+# binding = "CACHE"
+# id = "your-kv-namespace-id"
+
+# D1 Database (if needed instead of MongoDB)
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "amina-db"
+# database_id = "your-d1-database-id"
