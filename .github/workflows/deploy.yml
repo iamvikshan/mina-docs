@@ -1,5 +1,9 @@
 name: Deploy API
 
+permissions:
+  contents: read
+  pull-requests: write
+
 on:
   push:
     branches: [api]
@@ -18,30 +22,53 @@ jobs:
     if: github.ref == 'refs/heads/api' && github.event_name == 'push'
 
     steps:
-      - uses: actions/checkout@v4.0.0
+      - uses: actions/checkout@v6.0.1
 
       - name: Setup Bun and install dependencies
         uses: iamvikshan/.github/.github/actions/setup-node-bun@main
 
       - name: Deploy to Cloudflare Workers
-        uses: cloudflare/wrangler-action@v3.0.0
+        uses: cloudflare/wrangler-action@v3.14.1
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: 2876f82607ce6dfdbd424448a00d69c6
           command: deploy --env production
 
-  # Update API documentation on Bump.sh
-  docs:
-    name: Update Documentation
+  # Deploy API documentation to Bump.sh
+  deploy-doc:
+    if: ${{ github.event_name == 'push' }}
+    name: Deploy API documentation on Bump.sh
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/api' && github.event_name == 'push'
 
     steps:
-      - uses: actions/checkout@v4.0.0
+      - name: Checkout
+        uses: actions/checkout@v6.0.1
 
-      - name: Deploy to Bump.sh
+      - name: Deploy API documentation
+        uses: bump-sh/github-action@v1.0.0
+        with:
+          doc: v1
+          hub: amina
+          token: ${{ secrets.BUMP_TOKEN }}
+          file: docs/openapi.yaml
+
+  # Check API diff on Bump.sh for pull requests
+  api-diff:
+    if: ${{ github.event_name == 'pull_request' }}
+    name: Check API diff on Bump.sh
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.1
+
+      - name: Comment pull request with API diff
         uses: bump-sh/github-action@v1.0.0
         with:
           doc: amina-api
+          hub: amina
           token: ${{ secrets.BUMP_TOKEN }}
           file: docs/openapi.yaml
+          command: diff
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
