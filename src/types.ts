@@ -1,25 +1,24 @@
 // Cloudflare Workers environment bindings
 export interface Env {
-  // Environment
-  ENVIRONMENT: string;
+  // Doppler environment (dev/prd)
+  DOPPLER_ENVIRONMENT?: string;
 
-  // External API URLs
-  UPTIME_KUMA_URL?: string;
-  UPTIME_KUMA_SLUG?: string;
-  BOT_API_URL?: string;
+  // Discord OAuth
+  CLIENT_ID?: string;
+  CLIENT_SECRET?: string;
 
-  // Discord OAuth (for auth endpoints)
-  DISCORD_CLIENT_ID?: string;
-  DISCORD_CLIENT_SECRET?: string;
-  DISCORD_BOT_TOKEN?: string;
+  // MongoDB (native driver - requires nodejs_compat flag)
+  // Database name is extracted from the URI path
+  MONGO_CONNECTION?: string;
 
-  // MongoDB connection (if using external)
-  MONGODB_URI?: string;
+  // Session secret (optional - falls back to CLIENT_SECRET)
+  SESSION_SECRET?: string;
 
-  // KV Namespace for caching (optional)
-  CACHE?: KVNamespace;
+  // KV Namespace for rate limiting and caching
+  RATE_LIMIT?: KVNamespace;
+  CACHE?: KVNamespace; // Alias for backward compatibility
 
-  // D1 Database (optional)
+  // D1 Database (optional future use)
   // DB?: D1Database;
 }
 

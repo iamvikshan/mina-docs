@@ -1,0 +1,47 @@
+name: Deploy API
+
+on:
+  push:
+    branches: [api]
+  pull_request:
+    branches: [api]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # Deploy to Cloudflare Workers
+  deploy:
+    name: Deploy to Cloudflare
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/api' && github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4.0.0
+
+      - name: Setup Bun and install dependencies
+        uses: iamvikshan/.github/.github/actions/setup-node-bun@main
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: 2876f82607ce6dfdbd424448a00d69c6
+          command: deploy --env production
+
+  # Update API documentation on Bump.sh
+  docs:
+    name: Update Documentation
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/api' && github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4.0.0
+
+      - name: Deploy to Bump.sh
+        uses: bump-sh/github-action@v1.0.0
+        with:
+          doc: amina-api
+          token: ${{ secrets.BUMP_TOKEN }}
+          file: docs/openapi.yaml

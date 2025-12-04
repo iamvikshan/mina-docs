@@ -1,18 +1,34 @@
 import type { BotStats, Env } from '../types';
 
 // In-memory cache for edge (per isolate)
-let botStatsCache: { data: BotStats; timestamp: number } | null = null;
+let botStatsCache: { data: BotStats; timestamp: number; key: string } | null =
+  null;
 const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
+
+export interface BotStatsOptions {
+  url?: string; // Bot API URL
+}
 
 /**
  * Fetch bot statistics from external bot API or database
  * The bot updates stats every 10 minutes via presence handler
+ *
+ * @param env - Environment bindings
+ * @param options - Optional URL (can be passed via query params)
  */
 export async function getBotStats(
-  env: Env
+  env: Env,
+  options?: BotStatsOptions
 ): Promise<BotStats & { cached: boolean; cacheAge?: number }> {
+  const botApiUrl = options?.url;
+  const cacheKey = botApiUrl || 'default';
+
   // Check in-memory cache first
-  if (botStatsCache && Date.now() - botStatsCache.timestamp < CACHE_DURATION) {
+  if (
+    botStatsCache &&
+    botStatsCache.key === cacheKey &&
+    Date.now() - botStatsCache.timestamp < CACHE_DURATION
+  ) {
     return {
       ...botStatsCache.data,
       cached: true,
@@ -22,12 +38,12 @@ export async function getBotStats(
 
   // Check KV cache if available
   if (env.CACHE) {
-    const cached = await env.CACHE.get('bot-stats', 'json');
+    const cached = await env.CACHE.get(`bot-stats:${cacheKey}`, 'json');
     if (cached) {
       const data = cached as BotStats & { timestamp: number };
       const age = Date.now() - data.timestamp;
       if (age < CACHE_DURATION) {
-        botStatsCache = { data, timestamp: data.timestamp };
+        botStatsCache = { data, timestamp: data.timestamp, key: cacheKey };
         return {
           ...data,
           cached: true,
@@ -36,10 +52,6 @@ export async function getBotStats(
       }
     }
   }
-
-  // Fetch from bot API endpoint (the bot exposes this)
-  // In production, this would be your bot's stats endpoint
-  const botApiUrl = env.BOT_API_URL;
 
   if (!botApiUrl) {
     // Return default/fallback stats if no bot API configured
@@ -95,11 +107,11 @@ export async function getBotStats(
     };
 
     // Update caches
-    botStatsCache = { data: stats, timestamp: Date.now() };
+    botStatsCache = { data: stats, timestamp: Date.now(), key: cacheKey };
 
     if (env.CACHE) {
       await env.CACHE.put(
-        'bot-stats',
+        `bot-stats:${cacheKey}`,
         JSON.stringify({ ...stats, timestamp: Date.now() }),
         {
           expirationTtl: 600, // 10 minutes
@@ -112,7 +124,7 @@ export async function getBotStats(
     console.error('Failed to fetch bot stats:', error);
 
     // Return cached data if available, even if stale
-    if (botStatsCache) {
+    if (botStatsCache && botStatsCache.key === cacheKey) {
       return {
         ...botStatsCache.data,
         cached: true,

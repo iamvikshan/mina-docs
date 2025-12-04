@@ -7,6 +7,8 @@ import { success } from './lib/response';
 import botRoutes from './routes/bot';
 import guildRoutes from './routes/guild';
 import imagesRoutes from './routes/images';
+import v1Routes from './routes/v1';
+import dashboardRoutes from './dashboard';
 
 // Create main app
 const app = new Hono<{ Bindings: Env }>();
@@ -22,12 +24,14 @@ app.get('/', (c) => {
   return success(c, {
     name: 'Amina API',
     version: '1.0.0',
-    description: 'API for Amina Discord Bot',
+    description: 'Image generation & utilities API for Amina Discord Bot',
     documentation: 'https://docs.4mina.app/api',
+    dashboard: 'https://api.4mina.app/dashboard',
     endpoints: {
+      v1: '/v1/* (authenticated)',
       bot: '/bot/*',
       guild: '/guild/*',
-      images: '/images/*',
+      images: '/images/* (legacy)',
     },
   });
 });
@@ -37,15 +41,17 @@ app.get('/health', (c) => {
   return success(c, {
     status: 'healthy',
     service: 'amina-api',
-    environment: c.env.ENVIRONMENT || 'development',
+    environment: c.env.DOPPLER_ENVIRONMENT || 'dev',
     timestamp: new Date().toISOString(),
   });
 });
 
 // Mount routes
+app.route('/v1', v1Routes);
+app.route('/dashboard', dashboardRoutes);
 app.route('/bot', botRoutes);
 app.route('/guild', guildRoutes);
-app.route('/images', imagesRoutes);
+app.route('/images', imagesRoutes); // Legacy, no auth
 
 // 404 handler
 app.notFound((c) => {

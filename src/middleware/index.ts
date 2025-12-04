@@ -2,6 +2,9 @@ import type { Context, Next } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
 import type { Env } from '../types';
 
+// Re-export auth middleware
+export * from './auth';
+
 /**
  * CORS middleware for handling cross-origin requests
  * Allows requests from Amina dashboard and local development
@@ -14,9 +17,12 @@ export async function cors(c: Context<{ Bindings: Env }>, next: Next) {
     'https://4mina.app',
     'https://www.4mina.app',
     'https://dash.4mina.app',
+    'https://api.4mina.app',
     'http://localhost:4321', // Astro dev
     'http://localhost:3000',
+    'http://localhost:8787', // Wrangler dev
     'http://127.0.0.1:4321',
+    'http://127.0.0.1:8787',
   ];
 
   // Check if origin is allowed or if it's a same-origin request

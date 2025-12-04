@@ -10,13 +10,22 @@ const bot = new Hono<{ Bindings: Env }>();
  * GET /bot/metrics
  * Combined bot statistics and uptime metrics
  * Used by the dashboard homepage
+ *
+ * Query params (optional):
+ * - uptime_url: Uptime Kuma base URL (default: https://status.vikshan.me)
+ * - uptime_slug: Status page slug (default: amina)
+ * - bot_url: Bot API URL for stats
  */
 bot.get('/metrics', async (c) => {
   try {
+    const uptimeUrl = c.req.query('uptime_url');
+    const uptimeSlug = c.req.query('uptime_slug');
+    const botUrl = c.req.query('bot_url');
+
     // Fetch both in parallel
     const [botStats, uptimeStats] = await Promise.all([
-      getBotStats(c.env),
-      getUptimeStats(c.env),
+      getBotStats(c.env, { url: botUrl }),
+      getUptimeStats(c.env, { url: uptimeUrl, slug: uptimeSlug }),
     ]);
 
     const payload = {
@@ -43,10 +52,17 @@ bot.get('/metrics', async (c) => {
 /**
  * GET /bot/status
  * Uptime and monitor status information
+ *
+ * Query params (optional):
+ * - url: Uptime Kuma base URL (default: https://status.vikshan.me)
+ * - slug: Status page slug (default: amina)
  */
 bot.get('/status', async (c) => {
   try {
-    const stats = await getUptimeStats(c.env);
+    const url = c.req.query('url');
+    const slug = c.req.query('slug');
+
+    const stats = await getUptimeStats(c.env, { url, slug });
 
     const payload = {
       uptime: stats.uptime,
@@ -68,10 +84,14 @@ bot.get('/status', async (c) => {
 /**
  * GET /bot/stats
  * Raw bot statistics only
+ *
+ * Query params (optional):
+ * - url: Bot API URL
  */
 bot.get('/stats', async (c) => {
   try {
-    const stats = await getBotStats(c.env);
+    const url = c.req.query('url');
+    const stats = await getBotStats(c.env, { url });
 
     return success(c, stats, {
       cached: stats.cached,

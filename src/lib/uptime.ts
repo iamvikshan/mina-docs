@@ -1,7 +1,8 @@
 import type { Env, Monitor, UptimeStats } from '../types';
 
 // In-memory cache for edge (per isolate)
-let uptimeCache: { data: UptimeStats; timestamp: number } | null = null;
+let uptimeCache: { data: UptimeStats; timestamp: number; key: string } | null =
+  null;
 const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
 
 // Default fallback when Uptime Kuma is unavailable
@@ -12,17 +13,34 @@ const FALLBACK_STATS: UptimeStats = {
   downMonitors: 0,
 };
 
+export interface UptimeOptions {
+  url?: string; // Uptime Kuma base URL
+  slug?: string; // Status page slug
+}
+
 /**
  * Fetch uptime statistics from Uptime Kuma Status Page API
  * Gracefully handles when Uptime Kuma is down/unavailable
+ *
+ * @param env - Environment bindings
+ * @param options - Optional URL and slug (can be passed via query params)
  */
 export async function getUptimeStats(
-  env: Env
+  env: Env,
+  options?: UptimeOptions
 ): Promise<
   UptimeStats & { cached: boolean; cacheAge?: number; unavailable?: boolean }
 > {
+  const uptimeKumaUrl = options?.url || 'https://status.vikshan.me';
+  const statusPageSlug = options?.slug || 'amina';
+  const cacheKey = `${uptimeKumaUrl}:${statusPageSlug}`;
+
   // Check in-memory cache first
-  if (uptimeCache && Date.now() - uptimeCache.timestamp < CACHE_DURATION) {
+  if (
+    uptimeCache &&
+    uptimeCache.key === cacheKey &&
+    Date.now() - uptimeCache.timestamp < CACHE_DURATION
+  ) {
     return {
       ...uptimeCache.data,
       cached: true,
@@ -32,12 +50,12 @@ export async function getUptimeStats(
 
   // Check KV cache if available
   if (env.CACHE) {
-    const cached = await env.CACHE.get('uptime-stats', 'json');
+    const cached = await env.CACHE.get(`uptime-stats:${cacheKey}`, 'json');
     if (cached) {
       const data = cached as UptimeStats & { timestamp: number };
       const age = Date.now() - data.timestamp;
       if (age < CACHE_DURATION) {
-        uptimeCache = { data, timestamp: data.timestamp };
+        uptimeCache = { data, timestamp: data.timestamp, key: cacheKey };
         return {
           ...data,
           cached: true,
@@ -46,10 +64,6 @@ export async function getUptimeStats(
       }
     }
   }
-
-  // Fetch fresh data
-  const uptimeKumaUrl = env.UPTIME_KUMA_URL || 'https://status.vikshan.me';
-  const statusPageSlug = env.UPTIME_KUMA_SLUG || 'amina';
 
   try {
     // Create abort controller for timeout (10 seconds)
@@ -167,11 +181,11 @@ export async function getUptimeStats(
     };
 
     // Update caches
-    uptimeCache = { data: result, timestamp: Date.now() };
+    uptimeCache = { data: result, timestamp: Date.now(), key: cacheKey };
 
     if (env.CACHE) {
       await env.CACHE.put(
-        'uptime-stats',
+        `uptime-stats:${cacheKey}`,
         JSON.stringify({ ...result, timestamp: Date.now() }),
         { expirationTtl: 600 }
       );
@@ -187,7 +201,7 @@ export async function getUptimeStats(
     );
 
     // Return cached data if available (even if stale)
-    if (uptimeCache) {
+    if (uptimeCache && uptimeCache.key === cacheKey) {
       return {
         ...uptimeCache.data,
         cached: true,

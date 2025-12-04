@@ -1,37 +1,56 @@
 # Amina API - Cloudflare Workers Configuration
 # Domain: api.4mina.app
+# Uses Doppler for environment management
 
 name = "amina-api"
 main = "src/index.ts"
-compatibility_date = "2024-11-01"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
 
 # Development settings
 [dev]
 port = 8787
 local_protocol = "http"
 
-# Environment variables (secrets should be set via `wrangler secret put`)
+# Environment variables (Doppler injects these automatically)
+# DOPPLER_ENVIRONMENT, MONGO_CONNECTION, CLIENT_ID, CLIENT_SECRET
 [vars]
-ENVIRONMENT = "development"
-# API_VERSION = "v1"
+# Fallback if not using Doppler
+DOPPLER_ENVIRONMENT = "dev"
 
 # Production environment
 [env.production]
 name = "amina-api"
-vars = { ENVIRONMENT = "production" }
+vars = { DOPPLER_ENVIRONMENT = "prd" }
+
+[[env.production.kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "05c78dd8175a46d79d5b6e4dfe06f7ad"
+
+[[env.production.kv_namespaces]]
+binding = "CACHE"
+id = "05c78dd8175a46d79d5b6e4dfe06f7ad"
+
+# KV Namespace for rate limiting and caching
+# Create with: wrangler kv:namespace create "RATE_LIMIT"
+# Then add the ID below
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "05c78dd8175a46d79d5b6e4dfe06f7ad"
+preview_id = "YOUR_PREVIEW_KV_NAMESPACE_ID"
+
+# Also bind as CACHE for backward compatibility
+[[kv_namespaces]]
+binding = "CACHE"
+id = "05c78dd8175a46d79d5b6e4dfe06f7ad"
+preview_id = "YOUR_PREVIEW_KV_NAMESPACE_ID"
+
+# Secrets (set via `wrangler secret put <NAME>`):
+# - MONGODB_URI (connection string with database name in path)
+# - DISCORD_CLIENT_ID
+# - DISCORD_CLIENT_SECRET
 
 # Custom domain routing (configure in Cloudflare dashboard)
 # routes = [
 #   { pattern = "api.4mina.app/*", zone_name = "4mina.app" }
 # ]
-
-# KV Namespaces (for caching)
-# [[kv_namespaces]]
-# binding = "CACHE"
-# id = "your-kv-namespace-id"
-
-# D1 Database (if needed instead of MongoDB)
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "amina-db"
-# database_id = "your-d1-database-id"

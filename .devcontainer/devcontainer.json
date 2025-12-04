@@ -18,10 +18,11 @@
     "vscode": {
       "extensions": [
         "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
+        "prettier.prettier-vscode",
         "eamodio.gitlens",
         "oven.bun-vscode",
-        "WakaTime.vscode-wakatime"
+        "WakaTime.vscode-wakatime",
+        "mongodb.mongodb-vscode"
       ]
     }
   },
