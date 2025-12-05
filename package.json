@@ -18,7 +18,7 @@
   "dependencies": {
     "@astrojs/react": "4.4.2",
     "@astrojs/sitemap": "^3.6.0",
-    "@astrojs/starlight": "0.36.1",
+    "@astrojs/starlight": "0.37.0",
     "@astrojs/tailwind": "6.0.2",
     "@preline/accordion": "^2.6.0",
     "@preline/collapse": "^2.6.0",
