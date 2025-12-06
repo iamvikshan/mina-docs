@@ -11,11 +11,17 @@ import { checkRateLimit, rateLimitHeaders } from '../lib/rate-limit';
 import { HTTPException } from 'hono/http-exception';
 
 // Per-instance cryptographically random salt for secure hashing when no secret is configured.
-// This is generated once at module startup and reused for all requests.
 // WARNING: This provides weaker security than a configured secret. works for now.
-const PER_INSTANCE_SALT = crypto
-  .getRandomValues(new Uint8Array(32))
-  .reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
+let PER_INSTANCE_SALT: string | null = null;
+
+function getInstanceSalt(): string {
+  if (!PER_INSTANCE_SALT) {
+    PER_INSTANCE_SALT = crypto
+      .getRandomValues(new Uint8Array(32))
+      .reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
+  }
+  return PER_INSTANCE_SALT;
+}
 
 /**
  * Create a rate limiting middleware with given config
@@ -100,7 +106,7 @@ async function defaultKeyGenerator(
 
     // Use the same per-instance salt as botKeyGenerator for consistency
     const salt =
-      c.env.SESSION_SECRET || c.env.CLIENT_SECRET || PER_INSTANCE_SALT;
+      c.env.SESSION_SECRET || c.env.CLIENT_SECRET || getInstanceSalt();
     const hash = await sha256(`${identifiers}:${salt}`);
     return `unknown:${hash.slice(0, 16)}:${path}`;
   }
@@ -191,7 +197,7 @@ export async function botKeyGenerator(
     const normalizedUa = ua.trim().toLowerCase();
     // Use the same per-instance salt as defaultKeyGenerator for consistency
     const salt =
-      c.env.SESSION_SECRET || c.env.CLIENT_SECRET || PER_INSTANCE_SALT;
+      c.env.SESSION_SECRET || c.env.CLIENT_SECRET || getInstanceSalt();
     const hash = await sha256(`${normalizedUa}:${salt}`);
     // Use first 16 chars of hash for brevity
     return `bot:missing-client-id:uaHash:${hash.slice(0, 16)}:${path}`;
