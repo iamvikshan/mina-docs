@@ -5,23 +5,7 @@
  * Can be converted to PNG via downstream processing or browser.
  */
 
-export interface RankCardOptions {
-  // Required
-  username: string;
-  level: number;
-  xp: number;
-  requiredXp: number;
-  rank: number;
-
-  // Optional customization
-  avatar?: string;
-  discriminator?: string;
-  status?: 'online' | 'idle' | 'dnd' | 'offline';
-  background?: string; // URL or hex color
-  progressColor?: string; // Hex color for progress bar
-  textColor?: string; // Hex color for text
-  theme?: 'dark' | 'light' | 'amina';
-}
+import { RankCardOptions } from '../../../types/cards';
 
 // Amina theme colors
 const themes = {

@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
-import type { Env, GuildSettings } from '../types';
 import { success, errors } from '../lib/response';
+import { createLogger } from '../lib/logger';
+import { GuildSettings } from '../../types/database';
 
 const guild = new Hono<{ Bindings: Env }>();
 
@@ -52,7 +53,15 @@ guild.get('/:id', async (c) => {
     // Placeholder response
     return errors.notFound(c, 'Guild not found or database not configured');
   } catch (error) {
-    console.error(`[/guild/${guildId}] Error:`, error);
+    const logger = createLogger(c);
+    logger.error(
+      'Failed to fetch guild data',
+      error instanceof Error ? error : undefined,
+      {
+        endpoint: '/guild/:id',
+        guildId,
+      }
+    );
     return errors.internal(c, 'Failed to fetch guild data');
   }
 });
@@ -89,7 +98,15 @@ guild.patch('/:id', async (c) => {
       'Guild update not implemented - database not configured'
     );
   } catch (error) {
-    console.error(`[PATCH /guild/${guildId}] Error:`, error);
+    const logger = createLogger(c);
+    logger.error(
+      'Failed to update guild data',
+      error instanceof Error ? error : undefined,
+      {
+        endpoint: 'PATCH /guild/:id',
+        guildId,
+      }
+    );
     return errors.internal(c, 'Failed to update guild data');
   }
 });
@@ -118,7 +135,15 @@ guild.post('/:id/refresh', async (c) => {
       guildId,
     });
   } catch (error) {
-    console.error(`[POST /guild/${guildId}/refresh] Error:`, error);
+    const logger = createLogger(c);
+    logger.error(
+      'Failed to refresh guild data',
+      error instanceof Error ? error : undefined,
+      {
+        endpoint: 'POST /guild/:id/refresh',
+        guildId,
+      }
+    );
     return errors.internal(c, 'Failed to refresh guild data');
   }
 });

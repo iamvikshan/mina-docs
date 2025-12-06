@@ -2,6 +2,6 @@
  * Card Generators - Index
  */
 
-export { generateRankCard, type RankCardOptions } from './rank-card';
-export { generateWelcomeCard, type WelcomeCardOptions } from './welcome-card';
-export { generateSpotifyCard, type SpotifyCardOptions } from './spotify-card';
+export { generateRankCard } from './rank-card';
+export { generateWelcomeCard } from './welcome-card';
+export { generateSpotifyCard } from './spotify-card';

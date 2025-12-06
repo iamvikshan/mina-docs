@@ -9,34 +9,10 @@
  */
 
 import type { MongoDB } from './mongodb';
-
-export interface ApiKey {
-  id: string; // Short identifier (for reference)
-  name: string; // User-defined name
-  keyHash: string; // SHA-256 hash of the full key
-  prefix: string; // First 12 chars for display (amina_xxxx)
-  permissions: string[]; // Scopes: 'images', 'stats', 'all'
-  rateLimit: {
-    requests: number; // Max requests per window
-    window: number; // Window in seconds
-  };
-  usage: {
-    total: number; // Total requests made
-    lastUsed: Date | null; // Last request timestamp
-  };
-  createdAt: Date;
-  expiresAt: Date | null; // Optional expiration
-  revoked: boolean;
-}
-
-export interface UserWithApiKeys {
-  _id: string; // Discord user ID
-  username?: string;
-  apiKeys?: ApiKey[];
-}
+import { ApiKey, UserWithApiKeys } from '../../types/database';
 
 // Default rate limit: 60 requests per minute
-const DEFAULT_RATE_LIMIT = {
+const DEFAULT_RATE_LIMIT: RateLimitConfig = {
   requests: 60,
   window: 60,
 };
@@ -87,7 +63,7 @@ export async function createApiKeyForUser(
   options: {
     name: string;
     permissions?: string[];
-    rateLimit?: { requests: number; window: number };
+    rateLimit?: RateLimitConfig;
     expiresAt?: Date | null;
   }
 ): Promise<{ key: string; apiKey: ApiKey }> {

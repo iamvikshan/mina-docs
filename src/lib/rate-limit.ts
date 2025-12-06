@@ -5,18 +5,6 @@
  * Falls back to in-memory if KV is not available.
  */
 
-export interface RateLimitConfig {
-  requests: number; // Max requests allowed
-  window: number; // Time window in seconds
-}
-
-export interface RateLimitResult {
-  allowed: boolean;
-  remaining: number;
-  reset: number; // Unix timestamp when limit resets
-  limit: number;
-}
-
 // In-memory fallback store (per-isolate, not distributed)
 const memoryStore = new Map<string, { count: number; resetAt: number }>();
 
@@ -34,7 +22,7 @@ export async function checkRateLimit(
   const kvKey = `ratelimit:${key}:${windowStart}`;
 
   if (kv) {
-    return checkRateLimitKV(kv, kvKey, config, now, resetAt);
+    return checkRateLimitKV(kv, kvKey, config, resetAt);
   }
 
   return checkRateLimitMemory(kvKey, config, now, resetAt);
@@ -47,7 +35,6 @@ async function checkRateLimitKV(
   kv: KVNamespace,
   key: string,
   config: RateLimitConfig,
-  now: number,
   resetAt: number
 ): Promise<RateLimitResult> {
   // Get current count

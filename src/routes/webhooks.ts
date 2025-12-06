@@ -10,30 +10,22 @@
 
 import { Hono } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
-import type { Env } from '../types';
 import { error, success } from '../lib/response';
-import { transformDopplerPayload } from '../lib/webhooks/doppler';
+import { createLogger } from '../lib/logger';
+import {
+  transformDopplerPayload,
+  dopplerSchema,
+} from '../lib/webhooks/doppler';
 import { webhookTransformerPage } from '../lib/webhooks/templates';
 import { validateWebhookParams } from '../middleware/webhooks';
-import { z } from 'zod';
 
-const dopplerSchema = z.object({
-  config: z.object({
-    name: z.string(),
-    environment: z.string(),
-  }),
-  diff: z.object({
-    added: z.array(z.string()),
-    updated: z.array(z.string()),
-    removed: z.array(z.string()),
-  }),
-  project: z.object({
-    name: z.string(),
-    id: z.string(),
-    workspace: z.string().optional(),
-    workplace: z.string().optional(),
-  }),
-});
+export const SUPPORTED_PROVIDERS = [
+  {
+    name: 'doppler',
+    description: 'Doppler config change webhooks',
+    docs: 'https://docs.doppler.com/docs/webhooks',
+  },
+];
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -80,7 +72,9 @@ app.post('/:id/:token/:provider', validateWebhookParams, async (c) => {
       default:
         return error(c, `Unsupported provider: ${provider}`, {
           status: 400,
-          details: { supportedProviders: ['doppler'] },
+          details: {
+            supportedProviders: SUPPORTED_PROVIDERS.map((p) => p.name),
+          },
         });
     }
 
@@ -119,24 +113,13 @@ app.post('/:id/:token/:provider', validateWebhookParams, async (c) => {
         c.env.DOPPLER_ENVIRONMENT === 'prd' ||
         c.env.DOPPLER_ENVIRONMENT === 'production';
 
-      if (isProduction) {
-        console.error(
-          'Discord webhook error:',
-          response.status,
-          'Request failed'
-        );
-      } else {
-        // Log truncated error in non-production
-        const truncatedError =
-          errorText.length > 1000
-            ? errorText.substring(0, 1000) + '...'
-            : errorText;
-        console.error(
-          'Discord webhook error:',
-          response.status,
-          truncatedError
-        );
-      }
+      // Log full error on server side for debugging
+      const logger = createLogger(c);
+      logger.error('Discord webhook error', undefined, {
+        status: response.status,
+        provider,
+        errorDetails: isProduction ? 'Hidden in production' : errorText,
+      });
 
       // Normalize status code to ensure it matches ContentfulStatusCode
       const statusMap: Record<number, ContentfulStatusCode> = {
@@ -154,13 +137,16 @@ app.post('/:id/:token/:provider', validateWebhookParams, async (c) => {
 
       const status = statusMap[response.status] || 502;
 
+      // Only return raw error details in non-production environments
+      const details = {
+        status: response.status,
+        message: isProduction ? 'Discord webhook failed' : errorText,
+      };
+
       return error(c, 'Failed to send webhook to Discord', {
         status,
         code: 'DISCORD_WEBHOOK_ERROR',
-        details: {
-          status: response.status,
-          message: errorText,
-        },
+        details,
       });
     }
 
@@ -175,7 +161,14 @@ app.post('/:id/:token/:provider', validateWebhookParams, async (c) => {
       { status: 200 }
     );
   } catch (err) {
-    console.error('Webhook processing error:', err);
+    const logger = createLogger(c);
+    logger.error(
+      'Webhook processing error',
+      err instanceof Error ? err : undefined,
+      {
+        provider,
+      }
+    );
 
     return error(c, 'Failed to process webhook', {
       status: 500,
@@ -190,25 +183,6 @@ app.post('/:id/:token/:provider', validateWebhookParams, async (c) => {
  */
 app.get('/', (c) => {
   return c.html(webhookTransformerPage());
-});
-
-/**
- * GET endpoint for JSON API info (for programmatic access)
- */
-app.get('/api', (c) => {
-  return success(c, {
-    name: 'Webhook Transformer',
-    description: 'Transforms webhooks from various providers to Discord format',
-    usage: 'POST /webhooks/:id/:token/:provider',
-    example: 'POST /webhooks/1234567890/abcdef123456/doppler',
-    supportedProviders: [
-      {
-        name: 'doppler',
-        description: 'Doppler config change webhooks',
-        docs: 'https://docs.doppler.com/docs/webhooks',
-      },
-    ],
-  });
 });
 
 export default app;

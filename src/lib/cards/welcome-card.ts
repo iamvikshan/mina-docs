@@ -4,20 +4,7 @@
  * Generates SVG welcome/farewell cards with Amina's design system.
  */
 
-export interface WelcomeCardOptions {
-  // Required
-  username: string;
-  memberCount: number;
-  guildName: string;
-
-  // Optional
-  avatar?: string;
-  type?: 'welcome' | 'farewell';
-  message?: string; // Custom message
-  background?: string; // URL or hex color
-  accentColor?: string;
-  textColor?: string;
-}
+import { WelcomeCardOptions } from '../../../types/cards';
 
 /**
  * Generate a welcome/farewell card SVG

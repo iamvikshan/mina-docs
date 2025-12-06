@@ -278,6 +278,23 @@ export function webhookTransformerPage(): string {
     const resultUrl = document.getElementById('resultUrl');
     const copyBtn = document.getElementById('copyBtn');
 
+    // Track reset timeout to prevent overlapping timers
+    let resetTimeout = null;
+
+    // Helper to schedule button reset and avoid duplicate timers
+    function scheduleReset() {
+      // Clear any existing timeout
+      if (resetTimeout) {
+        clearTimeout(resetTimeout);
+      }
+      // Schedule new reset
+      resetTimeout = setTimeout(() => {
+        copyBtn.textContent = '📋 Copy to Clipboard';
+        copyBtn.classList.remove('copied');
+        resetTimeout = null; // Clear reference once executed
+      }, 2000);
+    }
+
     function transformWebhook() {
       const webhookUrl = webhookInput.value.trim();
       const provider = providerSelect.value;
@@ -306,15 +323,18 @@ export function webhookTransformerPage(): string {
     form.addEventListener('submit', (e) => e.preventDefault());
 
     copyBtn.addEventListener('click', async () => {
+      // Clear any existing timeout immediately to prevent overlapping
+      if (resetTimeout) {
+        clearTimeout(resetTimeout);
+        resetTimeout = null;
+      }
+
       const url = resultUrl.textContent;
       try {
         await navigator.clipboard.writeText(url);
         copyBtn.textContent = '✓ Copied!';
         copyBtn.classList.add('copied');
-        setTimeout(() => {
-          copyBtn.textContent = '📋 Copy to Clipboard';
-          copyBtn.classList.remove('copied');
-        }, 2000);
+        scheduleReset();
       } catch (err) {
         // Fallback for older browsers
         const textArea = document.createElement('textarea');
@@ -326,17 +346,16 @@ export function webhookTransformerPage(): string {
           if (successful) {
             copyBtn.textContent = '✓ Copied!';
             copyBtn.classList.add('copied');
-            setTimeout(() => {
-              copyBtn.textContent = '📋 Copy to Clipboard';
-              copyBtn.classList.remove('copied');
-            }, 2000);
+            scheduleReset();
           } else {
             copyBtn.textContent = 'Copy failed';
             copyBtn.classList.remove('copied');
+            scheduleReset();
           }
         } catch (e) {
           copyBtn.textContent = 'Copy failed';
           copyBtn.classList.remove('copied');
+          scheduleReset();
         } finally {
           document.body.removeChild(textArea);
         }

@@ -5,7 +5,6 @@
  */
 
 import { Hono } from 'hono';
-import type { Env } from '../../types';
 import { requireApiKey, requirePermission } from '../../middleware/auth';
 import { errors } from '../../lib/response';
 

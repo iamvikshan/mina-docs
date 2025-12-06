@@ -1,5 +1,4 @@
 import { Hono } from 'hono';
-import type { Env } from './types';
 import { cors, logger, cacheControl, errorHandler } from './middleware';
 import { success } from './lib/response';
 
@@ -8,6 +7,7 @@ import botRoutes from './routes/bot';
 import guildRoutes from './routes/guild';
 import imagesRoutes from './routes/images';
 import v1Routes from './routes/v1';
+import internalRoutes from './routes/internal';
 import dashboardRoutes from './dashboard';
 import webhookRoutes from './routes/webhooks';
 
@@ -30,7 +30,8 @@ app.get('/', (c) => {
     dashboard: 'https://api.4mina.app/dashboard',
     endpoints: {
       v1: '/v1/* (authenticated)',
-      bot: '/bot/*',
+      internal: '/internal/* (bot secret auth)',
+      bot: '/bot/stats, /bot/health',
       guild: '/guild/*',
       images: '/images/* (legacy)',
       webhooks: '/webhooks/:id/:token/:provider',
@@ -50,6 +51,7 @@ app.get('/health', (c) => {
 
 // Mount routes
 app.route('/v1', v1Routes);
+app.route('/internal', internalRoutes);
 app.route('/dashboard', dashboardRoutes);
 app.route('/bot', botRoutes);
 app.route('/guild', guildRoutes);

@@ -1,13 +1,7 @@
-import type { BotStats, Env } from '../types';
-
 // In-memory cache for edge (per isolate)
 let botStatsCache: { data: BotStats; timestamp: number; key: string } | null =
   null;
 const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
-
-export interface BotStatsOptions {
-  url?: string; // Bot API URL
-}
 
 /**
  * Fetch bot statistics from external bot API or database

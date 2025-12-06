@@ -17,11 +17,14 @@ info:
 
     ## Rate Limiting
 
+    All endpoints, including status checks (e.g. `/v1/bots/{clientId}/status`), are subject to rate limits:
     - **60 requests per minute** per API key
     - Rate limit headers included in responses:
       - `X-RateLimit-Limit`: Maximum requests per window
       - `X-RateLimit-Remaining`: Requests remaining
       - `X-RateLimit-Reset`: Unix timestamp when limit resets
+
+    If you exceed the limit, you will receive a `429 Rate Limited` response. Status endpoints are lightweight but still count toward your quota.
 
     ## Response Format
 
@@ -52,6 +55,8 @@ servers:
     description: Production
 
 tags:
+  - name: Bots
+    description: Bot information and discovery endpoints
   - name: Cards
     description: Generate various card images (rank, welcome, spotify)
   - name: Filters
@@ -84,6 +89,27 @@ components:
         type: string
         format: uri
       description: URL of the image to process
+
+    page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 1
+        minimum: 1
+      description: Page number for paginated results
+
+    limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 20
+        minimum: 1
+        maximum: 100
+      description: 'Number of bots per page (default: 20, max: 100)'
 
     width:
       name: width
@@ -167,8 +193,423 @@ components:
             generatedAt:
               type: string
               format: date-time
+    PaginationMetaPage:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total number of public bots
+          example: 123
+        page:
+          type: integer
+          description: Current page number
+          example: 1
+        limit:
+          type: integer
+          description: Number of bots per page
+          example: 20
+        pages:
+          type: integer
+          description: Total number of pages
+          example: 7
+        hasMore:
+          type: boolean
+          description: Whether more pages are available
+          example: true
+    PaginationMetaCursor:
+      type: object
+      properties:
+        nextCursor:
+          type: string
+          description: Cursor for next page (null if no more results)
+          example: 'eyJpZCI6IjEyMzQ1NiJ9'
+        hasMore:
+          type: boolean
+          description: Whether more results are available
+          example: true
+    BotMeta:
+      type: object
+      properties:
+        clientId:
+          type: string
+          description: Discord bot client ID
+          example: '1234567890123456789'
+        name:
+          type: string
+          description: Bot display name
+          example: 'Amina'
+        avatar:
+          type: string
+          nullable: true
+          description: Bot avatar URL (Discord CDN)
+          example: 'https://cdn.discordapp.com/avatars/...'
+        ownerId:
+          type: string
+          description: Discord user ID of bot owner
+          example: '9876543210987654321'
+        registeredAt:
+          type: string
+          format: date-time
+          description: When the bot was registered with the API
+        lastSeen:
+          type: string
+          format: date-time
+          description: Last heartbeat timestamp
+        version:
+          type: string
+          description: Bot version string
+          example: '1.0.0'
+        inviteUrl:
+          type: string
+          format: uri
+          description: Bot invite URL
+          example: 'https://discord.com/oauth2/authorize?client_id=...'
+        supportServer:
+          type: string
+          format: uri
+          description: Support server invite link
+          example: 'https://discord.gg/...'
+        website:
+          type: string
+          format: uri
+          description: Bot website URL
+          example: 'https://example.com'
+        isPublic:
+          type: boolean
+          description: Whether the bot is listed publicly
+          example: true
+        features:
+          type: array
+          items:
+            type: string
+          description: Bot feature tags
+          example: ['moderation', 'music', 'leveling']
+
+    BotStats:
+      type: object
+      properties:
+        guilds:
+          type: integer
+          description: Number of guilds
+          example: 150
+        members:
+          type: integer
+          description: Total member count
+          example: 50000
+        channels:
+          type: integer
+          description: Total channel count
+          example: 3000
+        commands:
+          type: integer
+          description: Total command count
+          example: 50
+        ping:
+          type: integer
+          description: WebSocket ping in milliseconds
+          example: 45
+        uptime:
+          type: integer
+          description: Bot uptime in seconds
+          example: 86400
+        memoryUsage:
+          type: integer
+          description: Memory usage in MB
+          example: 512
+        status:
+          type: string
+          enum: [online, idle, dnd, invisible, offline]
+          description: Bot presence status
+          example: 'online'
+        presence:
+          type: object
+          properties:
+            type:
+              type: string
+              example: 'Playing'
+            name:
+              type: string
+              example: 'with commands'
+            url:
+              type: string
+              format: uri
+        lastUpdated:
+          type: string
+          format: date-time
+          nullable: true
+          description: When stats were last pushed, null if no stats have been reported
+        hasStats:
+          type: boolean
+          description: Whether real stats have been reported (false means default fallback values)
+          example: true
 
 paths:
+  # ========== Bots ==========
+  /v1/bots:
+    get:
+      tags: [Bots]
+      summary: List all public bots (paginated)
+      description: |
+        Returns a paginated list of all bots registered with the API that are marked as public.
+
+        - Default limit: 20
+        - Maximum limit: 100
+        - Pagination metadata is returned under `meta`.
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: Paginated list of public bots
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      bots:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/BotMeta'
+                  meta:
+                    type: object
+                    description: Pagination metadata
+                    $ref: '#/components/schemas/PaginationMetaPage'
+
+  /v1/bots/{clientId}:
+    get:
+      tags: [Bots]
+      summary: Get bot information
+      description: Returns detailed information about a specific bot (public bots only)
+      security: []
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discord bot client ID
+      responses:
+        '200':
+          description: Bot information with current stats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      bot:
+                        allOf:
+                          - $ref: '#/components/schemas/BotMeta'
+                          - type: object
+                            properties:
+                              stats:
+                                $ref: '#/components/schemas/BotStats'
+                  meta:
+                    type: object
+                    properties:
+                      generatedAt:
+                        type: string
+                        format: date-time
+        '404':
+          description: Bot not found or not public
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/bots/{clientId}/stats:
+    get:
+      tags: [Bots]
+      summary: Get bot statistics
+      description: Returns current statistics for a specific bot (public bots only)
+      security: []
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discord bot client ID
+      responses:
+        '200':
+          description: Bot statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      stats:
+                        $ref: '#/components/schemas/BotStats'
+                  meta:
+                    type: object
+                    properties:
+                      generatedAt:
+                        type: string
+                        format: date-time
+        '404':
+          description: Bot not found, not public, or stats not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/bots/{clientId}/commands:
+    get:
+      tags: [Bots]
+      summary: Get bot commands
+      description: Returns list of commands for a specific bot (public bots only)
+      security: []
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discord bot client ID
+      responses:
+        '200':
+          description: Bot commands
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      commands:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              example: 'ping'
+                            description:
+                              type: string
+                              example: 'Check bot latency'
+                            category:
+                              type: string
+                              example: 'Utilities'
+                            usage:
+                              type: string
+                              example: '/ping'
+                            examples:
+                              type: array
+                              items:
+                                type: string
+                            aliases:
+                              type: array
+                              items:
+                                type: string
+                            cooldown:
+                              type: integer
+                              description: Cooldown in seconds
+                            permissions:
+                              type: array
+                              items:
+                                type: string
+                            botPermissions:
+                              type: array
+                              items:
+                                type: string
+                            nsfw:
+                              type: boolean
+                            ownerOnly:
+                              type: boolean
+                      categories:
+                        type: array
+                        items:
+                          type: string
+                        example: ['Moderation', 'Utilities', 'Fun']
+                      totalCommands:
+                        type: integer
+                        example: 50
+                      lastUpdated:
+                        type: string
+                        format: date-time
+                  meta:
+                    type: object
+                    properties:
+                      generatedAt:
+                        type: string
+                        format: date-time
+        '404':
+          description: Bot not found, not public, or commands not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/bots/{clientId}/status:
+    get:
+      tags: [Bots]
+      summary: Check bot online status
+      description: Quick check if a bot is currently online (public bots only)
+      security: []
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discord bot client ID
+      responses:
+        '200':
+          description: Bot status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      online:
+                        type: boolean
+                        description: Whether bot is online (heartbeat within 5 minutes)
+                        example: true
+                      lastSeen:
+                        type: string
+                        format: date-time
+                        description: Last heartbeat timestamp
+                  meta:
+                    type: object
+                    properties:
+                      generatedAt:
+                        type: string
+                        format: date-time
+        '404':
+          description: Bot not found or not public
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   # ========== Cards ==========
   /v1/images/rank-card:
     get:
@@ -684,7 +1125,9 @@ paths:
 
         **Usage:**
         1. Get your Discord webhook URL: `https://discord.com/api/webhooks/ID/TOKEN`
-        2. Configure your provider to send webhooks to: `https://api.4mina.app/webhooks/ID/TOKEN/provider`
+        2. Configure your provider to send webhooks to: `https://api.4mina.app/webhooks/ID/TOKEN/provider`. 
+
+          - You can simply paste your Discord webhook URL into the transformer UI at ([webhooks](https://api.4mina.app/webhooks)) to get the correct URL.
 
         **Example:**
         ```
@@ -715,11 +1158,8 @@ paths:
           description: |
             Webhook provider name.
 
-            To extend providers:
-            1. Add the new provider value to the enum here.
-            2. Implement provider handling in the webhook handler at `src/routes/webhooks.ts`.
-            3. Update any related validation, tests, and examples.
-            4. Update OpenAPI docs and deployment/versioning if needed.
+            If you need more providers:
+            - Contact support to request new integrations.
           example: 'doppler'
       requestBody:
         required: true
@@ -745,7 +1185,7 @@ paths:
                     id: 'proj_abc123'
       responses:
         '200':
-          description: Webhook successfully forwarded to Discord
+          description: Webhook received and processed
           content:
             application/json:
               schema:
@@ -754,55 +1194,13 @@ paths:
                   success:
                     type: boolean
                     example: true
-                  data:
-                    type: object
-                    properties:
-                      message:
-                        type: string
-                        example: 'Webhook successfully forwarded to Discord'
-                      provider:
-                        type: string
-                        example: 'doppler'
-                      discordStatus:
-                        type: integer
-                        example: 204
-                  meta:
-                    type: object
-                    properties:
-                      generatedAt:
-                        type: string
-                        format: date-time
+                  message:
+                    type: string
+                    example: 'Webhook forwarded to Discord successfully.'
         '400':
-          description: Bad request - invalid parameters or unsupported provider
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-              examples:
-                missingParams:
-                  summary: Missing webhook parameters
-                  value:
-                    success: false
-                    error:
-                      message: 'Missing Discord webhook ID or token'
-                    meta:
-                      generatedAt: '2024-01-01T00:00:00.000Z'
-                unsupportedProvider:
-                  summary: Unsupported provider
-                  value:
-                    success: false
-                    error:
-                      message: 'Unsupported provider: github'
-                      details:
-                        supportedProviders: ['doppler']
-                    meta:
-                      generatedAt: '2024-01-01T00:00:00.000Z'
-        '500':
-          description: Server error - failed to process or forward webhook
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
 
   /webhooks:
     get:
@@ -827,49 +1225,3 @@ paths:
               schema:
                 type: string
                 example: '<!DOCTYPE html>...'
-
-  /webhooks/api:
-    get:
-      tags: [Webhooks]
-      summary: Get webhook API information (JSON)
-      description: Returns JSON information about supported providers and usage (for programmatic access)
-      security: []
-      responses:
-        '200':
-          description: Webhook service information
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      name:
-                        type: string
-                        example: 'Webhook Transformer'
-                      description:
-                        type: string
-                        example: 'Transforms webhooks from various providers to Discord format'
-                      usage:
-                        type: string
-                        example: 'POST /webhooks/:id/:token/:provider'
-                      supportedProviders:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            name:
-                              type: string
-                            description:
-                              type: string
-                            docs:
-                              type: string
-                              format: uri
-                        example:
-                          - name: 'doppler'
-                            description: 'Doppler config change webhooks'
-                            docs: 'https://docs.doppler.com/docs/webhooks'

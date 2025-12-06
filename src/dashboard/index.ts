@@ -6,13 +6,11 @@
  */
 
 import { Hono } from 'hono';
-import type { Env } from '../types';
 import { createMongoClient } from '../lib/mongodb';
 import {
   getOAuthUrl,
   exchangeCode,
   getDiscordUser,
-  getAvatarUrl,
   generateState,
   createSessionToken,
   verifySessionToken,

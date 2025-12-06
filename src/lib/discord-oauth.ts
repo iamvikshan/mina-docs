@@ -5,24 +5,6 @@
  * Uses Discord's OAuth2 endpoints to authenticate users.
  */
 
-export interface DiscordUser {
-  id: string;
-  username: string;
-  discriminator: string;
-  global_name?: string;
-  avatar?: string;
-  email?: string;
-  verified?: boolean;
-}
-
-export interface DiscordTokenResponse {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
-  refresh_token: string;
-  scope: string;
-}
-
 const DISCORD_API = 'https://discord.com/api/v10';
 const DISCORD_CDN = 'https://cdn.discordapp.com';
 

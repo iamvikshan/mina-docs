@@ -11,14 +11,10 @@
  */
 
 import { MongoClient, Db, Collection, Document, ObjectId } from 'mongodb';
+import { MongoDBConfig } from '../../types/database';
 
 let cachedClient: MongoClient | null = null;
 let cachedDb: Db | null = null;
-
-export interface MongoDBConfig {
-  connectionString: string;
-  database: string;
-}
 
 /**
  * Get a MongoDB client instance (cached for connection reuse)

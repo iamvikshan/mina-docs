@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
-import type { Env } from '../types';
-import { success, errors } from '../lib/response';
+import { errors } from '../lib/response';
+import { createLogger } from '../lib/logger';
 
 const images = new Hono<{ Bindings: Env }>();
 
@@ -94,7 +94,14 @@ images.get('/rank-card', async (c) => {
       },
     });
   } catch (error) {
-    console.error('[/images/rank-card] Error:', error);
+    const logger = createLogger(c);
+    logger.error(
+      'Failed to generate rank card',
+      error instanceof Error ? error : undefined,
+      {
+        endpoint: '/images/rank-card',
+      }
+    );
     return errors.internal(c, 'Failed to generate rank card');
   }
 });
@@ -140,8 +147,15 @@ images.get('/welcome', async (c) => {
       },
     });
   } catch (error) {
-    console.error('[/images/welcome] Error:', error);
-    return errors.internal(c, 'Failed to generate welcome image');
+    const logger = createLogger(c);
+    logger.error(
+      'Failed to generate welcome card',
+      error instanceof Error ? error : undefined,
+      {
+        endpoint: '/images/welcome',
+      }
+    );
+    return errors.internal(c, 'Failed to generate welcome card');
   }
 });
 

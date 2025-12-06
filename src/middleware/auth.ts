@@ -5,17 +5,12 @@
  */
 
 import type { Context, Next } from 'hono';
-import type { Env } from '../types';
 import { createMongoClient } from '../lib/mongodb';
-import {
-  findUserByApiKey,
-  updateApiKeyUsage,
-  type ApiKey,
-  type UserWithApiKeys,
-} from '../lib/api-keys';
+import { findUserByApiKey, updateApiKeyUsage } from '../lib/api-keys';
 import { checkRateLimit, rateLimitHeaders } from '../lib/rate-limit';
 import { verifySessionToken } from '../lib/discord-oauth';
 import { errors } from '../lib/response';
+import { ApiKey, UserWithApiKeys } from '../../types/database';
 
 // Extend Hono context with auth info
 declare module 'hono' {

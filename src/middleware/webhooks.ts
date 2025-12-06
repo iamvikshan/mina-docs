@@ -1,6 +1,5 @@
 import type { Context, Next } from 'hono';
 import { error } from '../lib/response';
-import type { Env } from '../types';
 
 export const ALLOWED_PROVIDERS = ['doppler'];
 

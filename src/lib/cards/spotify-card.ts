@@ -4,25 +4,17 @@
  * Generates a Spotify "Now Playing" style card.
  */
 
-export interface SpotifyCardOptions {
-  // Required
-  title: string;
-  artist: string;
-
-  // Optional
-  album?: string;
-  albumArt?: string;
-  progress?: number; // 0-100
-  duration?: string; // e.g., "3:45"
-  currentTime?: string; // e.g., "1:23"
-  isPlaying?: boolean;
-}
+import { SpotifyCardOptions } from '../../../types/cards';
 
 /**
  * Generate a Spotify card SVG
  */
 export function generateSpotifyCard(options: SpotifyCardOptions): string {
-  const progress = options.progress ?? 50;
+  // Normalize and clamp progress to [0, 100]
+  let progress = 50; // default
+  if (options.progress !== undefined && Number.isFinite(options.progress)) {
+    progress = Math.max(0, Math.min(100, Number(options.progress)));
+  }
   const progressWidth = Math.floor(progress * 4.5); // 450px max
 
   return `<svg width="600" height="200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

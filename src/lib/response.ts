@@ -1,12 +1,11 @@
 import type { Context } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
-import type { ApiResponse, Env } from '../types';
 
 /**
  * Create a successful API response
  */
 export function success<T>(
-  c: Context<{ Bindings: Env }>,
+  c: Context,
   data: T,
   options?: {
     status?: ContentfulStatusCode;
@@ -14,7 +13,7 @@ export function success<T>(
     cacheAge?: number;
   }
 ): Response {
-  const meta: ApiResponse<T>['meta'] = {
+  const meta: Extract<ApiResponse<T>, { success: true }>['meta'] = {
     generatedAt: new Date().toISOString(),
   };
   if (options?.cached !== undefined) meta.cached = options.cached;
@@ -33,7 +32,7 @@ export function success<T>(
  * Create an error API response
  */
 export function error(
-  c: Context<{ Bindings: Env }>,
+  c: Context,
   message: string,
   options?: {
     status?: ContentfulStatusCode;
@@ -41,7 +40,9 @@ export function error(
     details?: unknown;
   }
 ): Response {
-  const errorObj: NonNullable<ApiResponse['error']> = { message };
+  const errorObj: Extract<ApiResponse, { success: false }>['error'] = {
+    message,
+  };
   if (options?.code) errorObj.code = options.code;
   if (options?.details) errorObj.details = options.details;
 
@@ -60,23 +61,21 @@ export function error(
  * Common error responses
  */
 export const errors = {
-  badRequest: (c: Context<{ Bindings: Env }>, message = 'Bad request') =>
+  badRequest: (c: Context, message = 'Bad request') =>
     error(c, message, { status: 400, code: 'BAD_REQUEST' }),
 
-  unauthorized: (c: Context<{ Bindings: Env }>, message = 'Unauthorized') =>
+  unauthorized: (c: Context, message = 'Unauthorized') =>
     error(c, message, { status: 401, code: 'UNAUTHORIZED' }),
 
-  forbidden: (c: Context<{ Bindings: Env }>, message = 'Forbidden') =>
+  forbidden: (c: Context, message = 'Forbidden') =>
     error(c, message, { status: 403, code: 'FORBIDDEN' }),
 
-  notFound: (c: Context<{ Bindings: Env }>, message = 'Not found') =>
+  notFound: (c: Context, message = 'Not found') =>
     error(c, message, { status: 404, code: 'NOT_FOUND' }),
 
-  rateLimit: (c: Context<{ Bindings: Env }>, message = 'Rate limit exceeded') =>
-    error(c, message, { status: 429, code: 'RATE_LIMIT' }),
+  rateLimit: (c: Context, message = 'Rate limit exceeded') =>
+    error(c, message, { status: 429, code: 'RATE_LIMIT_EXCEEDED' }),
 
-  internal: (
-    c: Context<{ Bindings: Env }>,
-    message = 'Internal server error'
-  ) => error(c, message, { status: 500, code: 'INTERNAL_ERROR' }),
+  internal: (c: Context, message = 'Internal server error') =>
+    error(c, message, { status: 500, code: 'INTERNAL_ERROR' }),
 };

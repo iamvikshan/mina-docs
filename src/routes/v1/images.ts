@@ -5,9 +5,9 @@
  */
 
 import { Hono } from 'hono';
-import type { Env } from '../../types';
 import { requireApiKey, requirePermission } from '../../middleware/auth';
 import { errors } from '../../lib/response';
+import { createLogger } from '../../lib/logger';
 import { generateRankCard } from '../../lib/cards/rank-card';
 import { generateWelcomeCard } from '../../lib/cards/welcome-card';
 import { generateSpotifyCard } from '../../lib/cards/spotify-card';
@@ -62,7 +62,14 @@ images.get('/rank-card', async (c) => {
       },
     });
   } catch (error) {
-    console.error('[/v1/images/rank-card] Error:', error);
+    const logger = createLogger(c);
+    logger.error(
+      'Failed to generate rank card',
+      error instanceof Error ? error : undefined,
+      {
+        endpoint: '/v1/images/rank-card',
+      }
+    );
     return errors.internal(c, 'Failed to generate rank card');
   }
 });
@@ -105,7 +112,14 @@ images.get('/welcome-card', async (c) => {
       },
     });
   } catch (error) {
-    console.error('[/v1/images/welcome-card] Error:', error);
+    const logger = createLogger(c);
+    logger.error(
+      'Failed to generate welcome card',
+      error instanceof Error ? error : undefined,
+      {
+        endpoint: '/v1/images/welcome-card',
+      }
+    );
     return errors.internal(c, 'Failed to generate welcome card');
   }
 });
@@ -148,7 +162,14 @@ images.get('/farewell-card', async (c) => {
       },
     });
   } catch (error) {
-    console.error('[/v1/images/farewell-card] Error:', error);
+    const logger = createLogger(c);
+    logger.error(
+      'Failed to generate farewell card',
+      error instanceof Error ? error : undefined,
+      {
+        endpoint: '/v1/images/farewell-card',
+      }
+    );
     return errors.internal(c, 'Failed to generate farewell card');
   }
 });
@@ -182,12 +203,19 @@ images.get('/spotify-card', async (c) => {
     return new Response(svg, {
       headers: {
         'Content-Type': 'image/svg+xml',
-        'Cache-Control': 'public, max-age=30, stale-while-revalidate=60',
+        'Cache-Control': 'public, max-age=60, stale-while-revalidate=300',
       },
     });
   } catch (error) {
-    console.error('[/v1/images/spotify-card] Error:', error);
-    return errors.internal(c, 'Failed to generate spotify card');
+    const logger = createLogger(c);
+    logger.error(
+      'Failed to generate Spotify card',
+      error instanceof Error ? error : undefined,
+      {
+        endpoint: '/v1/images/spotify-card',
+      }
+    );
+    return errors.internal(c, 'Failed to generate Spotify card');
   }
 });
 

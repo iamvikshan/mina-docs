@@ -1,18 +1,13 @@
-/**
- * V1 API Routes
- *
- * All authenticated API endpoints under /v1
- */
-
 import { Hono } from 'hono';
-import type { Env } from '../../types';
 import { success } from '../../lib/response';
+import { publicRateLimit } from '../../middleware/rateLimit';
 
 // Import route modules
 import images from './images';
 import filters from './filters';
 import overlays from './overlays';
 import generators from './generators';
+import bots from './bots';
 
 const v1 = new Hono<{ Bindings: Env }>();
 
@@ -29,6 +24,13 @@ v1.get('/', (c) => {
         'spotify-card': 'GET /v1/images/spotify-card',
         color: 'GET /v1/images/color',
         circle: 'GET /v1/images/circle',
+      },
+      bots: {
+        list: 'GET /v1/bots',
+        info: 'GET /v1/bots/:clientId',
+        stats: 'GET /v1/bots/:clientId/stats',
+        commands: 'GET /v1/bots/:clientId/commands',
+        status: 'GET /v1/bots/:clientId/status',
       },
       filters: {
         greyscale: 'GET /v1/images/filters/greyscale',
@@ -78,6 +80,10 @@ v1.get('/', (c) => {
     },
   });
 });
+
+// Bot routes - public, rate-limited
+v1.use('/bots/*', publicRateLimit);
+v1.route('/bots', bots);
 
 // Mount route modules
 v1.route('/images', images);

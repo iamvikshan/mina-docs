@@ -37,6 +37,11 @@
         {
           "binding": "CACHE",
           "id": "dafc1b7b5e07470f8b9ba0f3af75d852"
+        },
+        {
+          "binding": "BOTS",
+          "id": "ca59b3551e4442a2a50f092f699ddaaa",
+          "remote": true
         }
       ]
     }
@@ -50,6 +55,11 @@
     {
       "binding": "CACHE",
       "id": "d6cfd41bcd6e40688e603212460e358e",
+      "remote": true
+    },
+    {
+      "binding": "BOTS",
+      "id": "53a87e261e2846d0b69be3b31a3f9201",
       "remote": true
     }
   ]

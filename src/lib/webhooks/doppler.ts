@@ -5,52 +5,29 @@
  * Docs: https://docs.doppler.com/docs/webhooks
  */
 
+import { z } from 'zod';
+
 // --- TYPES ---
 
-export interface DopplerPayload {
-  config: {
-    name: string;
-    environment: string;
-  };
-  diff: {
-    added: string[];
-    updated: string[];
-    removed: string[];
-  };
-  project: {
-    name: string;
-    id: string;
-    workspace?: string;
-    workplace?: string;
-  };
-}
+export const dopplerSchema = z.object({
+  config: z.object({
+    name: z.string(),
+    environment: z.string(),
+  }),
+  diff: z.object({
+    added: z.array(z.string()),
+    updated: z.array(z.string()),
+    removed: z.array(z.string()),
+  }),
+  project: z.object({
+    name: z.string(),
+    id: z.string(),
+    workspace: z.string().optional(),
+    workplace: z.string().optional(),
+  }),
+});
 
-export interface DiscordEmbed {
-  author?: {
-    name: string;
-    icon_url: string;
-    url?: string;
-  };
-  title: string;
-  description: string;
-  color: number;
-  fields: {
-    name: string;
-    value: string;
-    inline: boolean;
-  }[];
-  footer: {
-    text: string;
-    icon_url: string;
-  };
-  timestamp: string;
-}
-
-export interface DiscordWebhookPayload {
-  username: string;
-  avatar_url: string;
-  embeds: DiscordEmbed[];
-}
+type DopplerPayload = z.infer<typeof dopplerSchema>;
 
 // --- CONFIGURATION ---
 const DOPPLER_ICON =
@@ -150,6 +127,7 @@ export function transformDopplerPayload(
 
   // --- CONSTRUCT EMBED ---
   const workspace = project.workspace || project.workplace;
+  const ts = new Date();
 
   const embed: DiscordEmbed = {
     // "Author" slot used for Project Name to visually group it at the top
@@ -171,10 +149,10 @@ export function transformDopplerPayload(
     color: embedColor,
     fields: fields,
     footer: {
-      text: `Doppler • ${new Date().toISOString().slice(11, 19)} UTC`,
+      text: `Doppler • ${ts.toISOString().slice(11, 19)} UTC`,
       icon_url: DOPPLER_ICON,
     },
-    timestamp: new Date().toISOString(),
+    timestamp: ts.toISOString(),
   };
 
   // --- RETURN DISCORD WEBHOOK PAYLOAD ---

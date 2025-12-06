@@ -28,10 +28,9 @@ jobs:
       - name: Deploy API documentation
         uses: bump-sh/github-action@v1.2.7
         with:
-          doc: v1
           hub: amina
           token: ${{ secrets.BUMP_TOKEN }}
-          file: docs/openapi.yaml
+          file: docs/
 
   # Check API diff on Bump.sh for pull requests
   api-diff:
@@ -46,10 +45,9 @@ jobs:
       - name: Comment pull request with API diff
         uses: bump-sh/github-action@v1.2.7
         with:
-          doc: amina-api
           hub: amina
           token: ${{ secrets.BUMP_TOKEN }}
-          file: docs/openapi.yaml
+          file: docs/
           command: diff
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

@@ -49,9 +49,7 @@ A unified API service built with [Hono](https://hono.dev/) framework on Cloudfla
 
 ### Bot Statistics (Public)
 
-- `GET /bot/metrics` - Combined bot stats and uptime
-- `GET /bot/status` - Uptime monitor status
-- `GET /bot/stats` - Raw bot statistics
+- `GET /bot/stats` - Raw bot statistics (includes process uptime)
 - `GET /bot/health` - Health check
 
 ### Dashboard
