@@ -15,25 +15,6 @@ env:
   NODE_VERSION: '20'
 
 jobs:
-  # Deploy to Cloudflare Workers
-  deploy:
-    name: Deploy to Cloudflare
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/api' && github.event_name == 'push'
-
-    steps:
-      - uses: actions/checkout@v6.0.1
-
-      - name: Setup Bun and install dependencies
-        uses: iamvikshan/.github/.github/actions/setup-node-bun@main
-
-      - name: Deploy to Cloudflare Workers
-        uses: cloudflare/wrangler-action@v3.14.1
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: 2876f82607ce6dfdbd424448a00d69c6
-          command: deploy --env production
-
   # Deploy API documentation to Bump.sh
   deploy-doc:
     if: ${{ github.event_name == 'push' }}

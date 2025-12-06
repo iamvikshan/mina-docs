@@ -1,0 +1,56 @@
+{
+  "name": "amina-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-04-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "dev": {
+    "port": 8787,
+    "local_protocol": "http"
+  },
+  "vars": {
+    "DOPPLER_ENVIRONMENT": "dev"
+  },
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 0.1,
+      "persist": true,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": false,
+      "head_sampling_rate": 0.1,
+      "persist": true
+    }
+  },
+  "env": {
+    "production": {
+      "name": "amina-api",
+      "vars": {
+        "DOPPLER_ENVIRONMENT": "prd"
+      },
+      "kv_namespaces": [
+        {
+          "binding": "RATE_LIMIT",
+          "id": "aadfc750bf594242bf1dde5f3cc8118d"
+        },
+        {
+          "binding": "CACHE",
+          "id": "dafc1b7b5e07470f8b9ba0f3af75d852"
+        }
+      ]
+    }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "RATE_LIMIT",
+      "id": "fe69971e70af4d2fb0fb5f3205ffdb1a",
+      "remote": true
+    },
+    {
+      "binding": "CACHE",
+      "id": "d6cfd41bcd6e40688e603212460e358e",
+      "remote": true
+    }
+  ]
+}

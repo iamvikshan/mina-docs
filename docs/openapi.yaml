@@ -62,6 +62,8 @@ tags:
     description: Meme generators
   - name: Utilities
     description: General utilities
+  - name: Webhooks
+    description: Transform webhooks from various providers to Discord format
 
 security:
   - bearerAuth: []
@@ -665,3 +667,209 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/SvgImage'
+
+  # ========== Webhooks ==========
+  /webhooks/{id}/{token}/{provider}:
+    post:
+      tags: [Webhooks]
+      summary: Transform and forward webhooks to Discord
+      description: |
+        Receives webhooks from various providers (Doppler, etc.) and transforms them 
+        into formatted Discord embeds before forwarding to your Discord channel.
+
+        Similar to skyhookapi.com - acts as a webhook transformation proxy.
+
+        **Supported Providers:**
+        - `doppler` - Doppler config change webhooks ([docs](https://docs.doppler.com/docs/webhooks))
+
+        **Usage:**
+        1. Get your Discord webhook URL: `https://discord.com/api/webhooks/ID/TOKEN`
+        2. Configure your provider to send webhooks to: `https://api.4mina.app/webhooks/ID/TOKEN/provider`
+
+        **Example:**
+        ```
+        Doppler webhook URL: https://api.4mina.app/webhooks/1234567890/abcdef.../doppler
+        ```
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discord webhook ID
+          example: '1438255873965673627'
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discord webhook token
+          example: 'YgshdkHJbsndKdkfHqDtFl4dqUv_dVtuXcHLT_Oez0WqBQnjPYzPvZ5lUXLLCzcEY'
+        - name: provider
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [doppler]
+          description: |
+            Webhook provider name.
+
+            To extend providers:
+            1. Add the new provider value to the enum here.
+            2. Implement provider handling in the webhook handler at `src/routes/webhooks.ts`.
+            3. Update any related validation, tests, and examples.
+            4. Update OpenAPI docs and deployment/versioning if needed.
+          example: 'doppler'
+      requestBody:
+        required: true
+        description: Provider-specific webhook payload (JSON)
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Payload varies by provider
+            examples:
+              doppler:
+                summary: Doppler webhook payload
+                value:
+                  config:
+                    name: 'production'
+                    environment: 'prd'
+                  diff:
+                    added: ['NEW_SECRET_KEY']
+                    updated: ['DATABASE_URL']
+                    removed: ['OLD_API_KEY']
+                  project:
+                    name: 'my-project'
+                    id: 'proj_abc123'
+      responses:
+        '200':
+          description: Webhook successfully forwarded to Discord
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: 'Webhook successfully forwarded to Discord'
+                      provider:
+                        type: string
+                        example: 'doppler'
+                      discordStatus:
+                        type: integer
+                        example: 204
+                  meta:
+                    type: object
+                    properties:
+                      generatedAt:
+                        type: string
+                        format: date-time
+        '400':
+          description: Bad request - invalid parameters or unsupported provider
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missingParams:
+                  summary: Missing webhook parameters
+                  value:
+                    success: false
+                    error:
+                      message: 'Missing Discord webhook ID or token'
+                    meta:
+                      generatedAt: '2024-01-01T00:00:00.000Z'
+                unsupportedProvider:
+                  summary: Unsupported provider
+                  value:
+                    success: false
+                    error:
+                      message: 'Unsupported provider: github'
+                      details:
+                        supportedProviders: ['doppler']
+                    meta:
+                      generatedAt: '2024-01-01T00:00:00.000Z'
+        '500':
+          description: Server error - failed to process or forward webhook
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /webhooks:
+    get:
+      tags: [Webhooks]
+      summary: Webhook transformer UI
+      description: |
+        Interactive web interface for transforming Discord webhook URLs to provider-specific formats.
+
+        Returns an HTML page where users can:
+        - Paste their Discord webhook URL
+        - Select a provider (Doppler, etc.)
+        - Get the transformed URL instantly
+        - Copy the URL to clipboard
+
+        This is a static HTML page - no authentication required.
+      security: []
+      responses:
+        '200':
+          description: HTML page for webhook transformation
+          content:
+            text/html:
+              schema:
+                type: string
+                example: '<!DOCTYPE html>...'
+
+  /webhooks/api:
+    get:
+      tags: [Webhooks]
+      summary: Get webhook API information (JSON)
+      description: Returns JSON information about supported providers and usage (for programmatic access)
+      security: []
+      responses:
+        '200':
+          description: Webhook service information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: 'Webhook Transformer'
+                      description:
+                        type: string
+                        example: 'Transforms webhooks from various providers to Discord format'
+                      usage:
+                        type: string
+                        example: 'POST /webhooks/:id/:token/:provider'
+                      supportedProviders:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            description:
+                              type: string
+                            docs:
+                              type: string
+                              format: uri
+                        example:
+                          - name: 'doppler'
+                            description: 'Doppler config change webhooks'
+                            docs: 'https://docs.doppler.com/docs/webhooks'

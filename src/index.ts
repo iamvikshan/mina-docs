@@ -9,6 +9,7 @@ import guildRoutes from './routes/guild';
 import imagesRoutes from './routes/images';
 import v1Routes from './routes/v1';
 import dashboardRoutes from './dashboard';
+import webhookRoutes from './routes/webhooks';
 
 // Create main app
 const app = new Hono<{ Bindings: Env }>();
@@ -32,6 +33,7 @@ app.get('/', (c) => {
       bot: '/bot/*',
       guild: '/guild/*',
       images: '/images/* (legacy)',
+      webhooks: '/webhooks/:id/:token/:provider',
     },
   });
 });
@@ -52,6 +54,7 @@ app.route('/dashboard', dashboardRoutes);
 app.route('/bot', botRoutes);
 app.route('/guild', guildRoutes);
 app.route('/images', imagesRoutes); // Legacy, no auth
+app.route('/webhooks', webhookRoutes);
 
 // 404 handler
 app.notFound((c) => {
