@@ -11,12 +11,6 @@
 import type { MongoDB } from './mongodb';
 import { ApiKey, UserWithApiKeys } from '../../types/database';
 
-// Default rate limit: 60 requests per minute
-const DEFAULT_RATE_LIMIT: RateLimitConfig = {
-  requests: 60,
-  window: 60,
-};
-
 /**
  * Generate a secure random API key
  * Format: amina_<32 random chars>
@@ -55,52 +49,6 @@ export async function hashApiKey(key: string): Promise<string> {
 }
 
 /**
- * Create a new API key for a user
- */
-export async function createApiKeyForUser(
-  db: MongoDB,
-  userId: string,
-  options: {
-    name: string;
-    permissions?: string[];
-    rateLimit?: RateLimitConfig;
-    expiresAt?: Date | null;
-  }
-): Promise<{ key: string; apiKey: ApiKey }> {
-  const { key, prefix, hash } = await generateApiKey();
-
-  const apiKey: ApiKey = {
-    id: `key_${crypto.randomUUID().slice(0, 8)}`,
-    name: options.name,
-    keyHash: hash,
-    prefix,
-    permissions: options.permissions || ['all'],
-    rateLimit: options.rateLimit || DEFAULT_RATE_LIMIT,
-    usage: {
-      total: 0,
-      lastUsed: null,
-    },
-    createdAt: new Date(),
-    expiresAt: options.expiresAt || null,
-    revoked: false,
-  };
-
-  // Add key to user's apiKeys array
-  await db.updateOne(
-    'users',
-    { _id: userId },
-    {
-      $push: { apiKeys: apiKey },
-      $setOnInsert: { _id: userId, created_at: new Date() },
-      $set: { updated_at: new Date() },
-    },
-    { upsert: true }
-  );
-
-  return { key, apiKey };
-}
-
-/**
  * Find a user by API key hash
  */
 export async function findUserByApiKey(
@@ -127,49 +75,6 @@ export async function findUserByApiKey(
 }
 
 /**
- * Revoke an API key
- */
-export async function revokeApiKey(
-  db: MongoDB,
-  userId: string,
-  keyId: string
-): Promise<boolean> {
-  const result = await db.updateOne(
-    'users',
-    { _id: userId, 'apiKeys.id': keyId },
-    {
-      $set: {
-        'apiKeys.$.revoked': true,
-        updated_at: new Date(),
-      },
-    }
-  );
-
-  return result.modifiedCount > 0;
-}
-
-/**
- * Get all API keys for a user (without hashes)
- */
-export async function getUserApiKeys(
-  db: MongoDB,
-  userId: string
-): Promise<Omit<ApiKey, 'keyHash'>[]> {
-  const user = await db.findOne<UserWithApiKeys>(
-    'users',
-    { _id: userId },
-    { projection: { apiKeys: 1 } }
-  );
-
-  if (!user?.apiKeys) {
-    return [];
-  }
-
-  // Remove keyHash from response for security
-  return user.apiKeys.map(({ keyHash, ...rest }) => rest);
-}
-
-/**
  * Update API key usage
  */
 export async function updateApiKeyUsage(
@@ -185,24 +90,4 @@ export async function updateApiKeyUsage(
       $set: { 'apiKeys.$.usage.lastUsed': new Date() },
     }
   );
-}
-
-/**
- * Delete an API key permanently
- */
-export async function deleteApiKey(
-  db: MongoDB,
-  userId: string,
-  keyId: string
-): Promise<boolean> {
-  const result = await db.updateOne(
-    'users',
-    { _id: userId },
-    {
-      $pull: { apiKeys: { id: keyId } },
-      $set: { updated_at: new Date() },
-    }
-  );
-
-  return result.modifiedCount > 0;
 }

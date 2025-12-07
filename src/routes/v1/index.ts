@@ -15,7 +15,7 @@ const v1 = new Hono<{ Bindings: Env }>();
 v1.get('/', (c) => {
   return success(c, {
     version: 'v1',
-    documentation: 'https://docs.4mina.app/api',
+    documentation: 'https://api.docs.api.4mina.app',
     endpoints: {
       images: {
         'rank-card': 'GET /v1/images/rank-card',
@@ -67,7 +67,7 @@ v1.get('/', (c) => {
     authentication: {
       type: 'Bearer',
       header: 'Authorization: Bearer <api_key>',
-      getKey: 'https://api.4mina.app/dashboard',
+      getKey: 'https://4mina.app/dash/user',
     },
     rateLimit: {
       requests: 60,

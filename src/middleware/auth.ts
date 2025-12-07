@@ -8,9 +8,9 @@ import type { Context, Next } from 'hono';
 import { createMongoClient } from '../lib/mongodb';
 import { findUserByApiKey, updateApiKeyUsage } from '../lib/api-keys';
 import { checkRateLimit, rateLimitHeaders } from '../lib/rate-limit';
-import { verifySessionToken } from '../lib/discord-oauth';
 import { errors } from '../lib/response';
 import { ApiKey, UserWithApiKeys } from '../../types/database';
+import { createLogger } from '../lib/logger';
 
 // Extend Hono context with auth info
 declare module 'hono' {
@@ -48,7 +48,11 @@ export async function requireApiKey(c: Context<{ Bindings: Env }>, next: Next) {
   // Get MongoDB client
   const db = createMongoClient(c.env);
   if (!db) {
-    console.error('MongoDB not configured');
+    const logger = createLogger(c);
+    logger.error('MongoDB not configured for authentication', undefined, {
+      path: c.req.path,
+      method: c.req.method,
+    });
     return errors.internal(c, 'Authentication service unavailable');
   }
 
@@ -98,48 +102,17 @@ export async function requireApiKey(c: Context<{ Bindings: Env }>, next: Next) {
     // Update usage stats after successful request (non-blocking)
     c.executionCtx.waitUntil(updateApiKeyUsage(db, user._id, key.id));
   } catch (error) {
-    console.error('Auth error:', error);
+    const logger = createLogger(c);
+    logger.error(
+      'API key authentication failed',
+      error instanceof Error ? error : undefined,
+      {
+        path: c.req.path,
+        method: c.req.method,
+      }
+    );
     return errors.internal(c, 'Authentication failed');
   }
-}
-
-/**
- * Middleware to require session authentication (for dashboard)
- * Uses cookie-based session token
- */
-export async function requireSession(
-  c: Context<{ Bindings: Env }>,
-  next: Next
-) {
-  const sessionCookie = c.req
-    .header('Cookie')
-    ?.split(';')
-    .find((c) => c.trim().startsWith('session='))
-    ?.split('=')[1];
-
-  if (!sessionCookie) {
-    // Redirect to login
-    return c.redirect('/dashboard/login');
-  }
-
-  const secret = c.env.SESSION_SECRET || c.env.CLIENT_SECRET;
-  if (!secret) {
-    return errors.internal(c, 'Session configuration error');
-  }
-
-  const payload = await verifySessionToken(sessionCookie, secret);
-
-  if (!payload) {
-    // Clear invalid cookie and redirect
-    c.header(
-      'Set-Cookie',
-      'session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0'
-    );
-    return c.redirect('/dashboard/login');
-  }
-
-  c.set('userId', payload.sub);
-  await next();
 }
 
 /**
@@ -172,7 +145,11 @@ export async function optionalApiKey(
             }
           }
         } catch (error) {
-          console.warn('Optional auth failed:', error);
+          const logger = createLogger(c);
+          logger.warn('Optional API key authentication failed', {
+            path: c.req.path,
+            error: error instanceof Error ? error.message : String(error),
+          });
         }
       }
     }

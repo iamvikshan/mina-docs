@@ -9,6 +9,7 @@ import type { Context, Next } from 'hono';
 import { errors } from '../lib/response';
 import { checkRateLimit, rateLimitHeaders } from '../lib/rate-limit';
 import { HTTPException } from 'hono/http-exception';
+import { createLogger } from '../lib/logger';
 
 // Per-instance cryptographically random salt for secure hashing when no secret is configured.
 // WARNING: This provides weaker security than a configured secret. works for now.
@@ -42,7 +43,11 @@ export function rateLimit(config: RateLimitMiddlewareConfig) {
 
     if (!kv) {
       // No KV configured, skip rate limiting
-      console.warn('[rateLimit] RATE_LIMIT KV not configured');
+      const logger = createLogger(c);
+      logger.warn('RATE_LIMIT KV namespace not configured', {
+        path: c.req.path,
+        method: c.req.method,
+      });
       await next();
       return;
     }
@@ -105,8 +110,7 @@ async function defaultKeyGenerator(
     }
 
     // Use the same per-instance salt as botKeyGenerator for consistency
-    const salt =
-      c.env.SESSION_SECRET || c.env.CLIENT_SECRET || getInstanceSalt();
+    const salt = c.env.CLIENT_SECRET || getInstanceSalt();
     const hash = await sha256(`${identifiers}:${salt}`);
     return `unknown:${hash.slice(0, 16)}:${path}`;
   }
@@ -196,8 +200,7 @@ export async function botKeyGenerator(
     // Normalize UA and hash with salt to prevent collision attacks / leaking UA
     const normalizedUa = ua.trim().toLowerCase();
     // Use the same per-instance salt as defaultKeyGenerator for consistency
-    const salt =
-      c.env.SESSION_SECRET || c.env.CLIENT_SECRET || getInstanceSalt();
+    const salt = c.env.CLIENT_SECRET || getInstanceSalt();
     const hash = await sha256(`${normalizedUa}:${salt}`);
     // Use first 16 chars of hash for brevity
     return `bot:missing-client-id:uaHash:${hash.slice(0, 16)}:${path}`;

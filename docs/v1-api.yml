@@ -13,7 +13,7 @@ info:
     curl -H "Authorization: Bearer amina_YOUR_API_KEY" https://api.4mina.app/v1/images/rank-card?...
     ```
 
-    Get your API key at [api.4mina.app/dashboard](https://api.4mina.app/dashboard)
+    Get your API key at [4mina.app/dash](https://4mina.app/dash)
 
     ## Rate Limiting
 
@@ -44,7 +44,11 @@ info:
 
   contact:
     name: Amina Support
-    url: https://discord.gg/4mina
+    url: https://discord.gg/uMgS9evnmv
+
+  dashboard:
+    name: Amina Dashboard
+    url: https://4mina.app/dash
 
   license:
     name: MIT
@@ -344,272 +348,6 @@ components:
           example: true
 
 paths:
-  # ========== Bots ==========
-  /v1/bots:
-    get:
-      tags: [Bots]
-      summary: List all public bots (paginated)
-      description: |
-        Returns a paginated list of all bots registered with the API that are marked as public.
-
-        - Default limit: 20
-        - Maximum limit: 100
-        - Pagination metadata is returned under `meta`.
-      security: []
-      parameters:
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/limit'
-      responses:
-        '200':
-          description: Paginated list of public bots
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      bots:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/BotMeta'
-                  meta:
-                    type: object
-                    description: Pagination metadata
-                    $ref: '#/components/schemas/PaginationMetaPage'
-
-  /v1/bots/{clientId}:
-    get:
-      tags: [Bots]
-      summary: Get bot information
-      description: Returns detailed information about a specific bot (public bots only)
-      security: []
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-          description: Discord bot client ID
-      responses:
-        '200':
-          description: Bot information with current stats
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      bot:
-                        allOf:
-                          - $ref: '#/components/schemas/BotMeta'
-                          - type: object
-                            properties:
-                              stats:
-                                $ref: '#/components/schemas/BotStats'
-                  meta:
-                    type: object
-                    properties:
-                      generatedAt:
-                        type: string
-                        format: date-time
-        '404':
-          description: Bot not found or not public
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  /v1/bots/{clientId}/stats:
-    get:
-      tags: [Bots]
-      summary: Get bot statistics
-      description: Returns current statistics for a specific bot (public bots only)
-      security: []
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-          description: Discord bot client ID
-      responses:
-        '200':
-          description: Bot statistics
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      stats:
-                        $ref: '#/components/schemas/BotStats'
-                  meta:
-                    type: object
-                    properties:
-                      generatedAt:
-                        type: string
-                        format: date-time
-        '404':
-          description: Bot not found, not public, or stats not available
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  /v1/bots/{clientId}/commands:
-    get:
-      tags: [Bots]
-      summary: Get bot commands
-      description: Returns list of commands for a specific bot (public bots only)
-      security: []
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-          description: Discord bot client ID
-      responses:
-        '200':
-          description: Bot commands
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      commands:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            name:
-                              type: string
-                              example: 'ping'
-                            description:
-                              type: string
-                              example: 'Check bot latency'
-                            category:
-                              type: string
-                              example: 'Utilities'
-                            usage:
-                              type: string
-                              example: '/ping'
-                            examples:
-                              type: array
-                              items:
-                                type: string
-                            aliases:
-                              type: array
-                              items:
-                                type: string
-                            cooldown:
-                              type: integer
-                              description: Cooldown in seconds
-                            permissions:
-                              type: array
-                              items:
-                                type: string
-                            botPermissions:
-                              type: array
-                              items:
-                                type: string
-                            nsfw:
-                              type: boolean
-                            ownerOnly:
-                              type: boolean
-                      categories:
-                        type: array
-                        items:
-                          type: string
-                        example: ['Moderation', 'Utilities', 'Fun']
-                      totalCommands:
-                        type: integer
-                        example: 50
-                      lastUpdated:
-                        type: string
-                        format: date-time
-                  meta:
-                    type: object
-                    properties:
-                      generatedAt:
-                        type: string
-                        format: date-time
-        '404':
-          description: Bot not found, not public, or commands not available
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  /v1/bots/{clientId}/status:
-    get:
-      tags: [Bots]
-      summary: Check bot online status
-      description: Quick check if a bot is currently online (public bots only)
-      security: []
-      parameters:
-        - name: clientId
-          in: path
-          required: true
-          schema:
-            type: string
-          description: Discord bot client ID
-      responses:
-        '200':
-          description: Bot status
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      online:
-                        type: boolean
-                        description: Whether bot is online (heartbeat within 5 minutes)
-                        example: true
-                      lastSeen:
-                        type: string
-                        format: date-time
-                        description: Last heartbeat timestamp
-                  meta:
-                    type: object
-                    properties:
-                      generatedAt:
-                        type: string
-                        format: date-time
-        '404':
-          description: Bot not found or not public
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
   # ========== Cards ==========
   /v1/images/rank-card:
     get:
@@ -941,6 +679,82 @@ paths:
         '200':
           $ref: '#/components/responses/SvgImage'
 
+  /v1/images/filters/contrast:
+    get:
+      tags: [Filters]
+      summary: Adjust contrast
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+        - name: amount
+          in: query
+          schema:
+            type: number
+            minimum: 0
+            maximum: 3
+            default: 1.5
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/filters/pixelate:
+    get:
+      tags: [Filters]
+      summary: Pixelate effect
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+        - name: pixels
+          in: query
+          schema:
+            type: integer
+            minimum: 2
+            maximum: 50
+            default: 10
+          description: Pixel size
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/filters/saturate:
+    get:
+      tags: [Filters]
+      summary: Adjust saturation
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+        - name: amount
+          in: query
+          schema:
+            type: number
+            minimum: 0
+            maximum: 3
+            default: 1.5
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/filters/hue-rotate:
+    get:
+      tags: [Filters]
+      summary: Rotate hue
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+        - name: degrees
+          in: query
+          schema:
+            type: number
+            default: 90
+          description: Rotation angle in degrees
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
   # ========== Overlays ==========
   /v1/images/overlays/approved:
     get:
@@ -994,6 +808,37 @@ paths:
     get:
       tags: [Overlays]
       summary: Prison bars overlay
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/overlays/gay:
+    get:
+      tags: [Overlays]
+      summary: Rainbow pride overlay
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+        - name: opacity
+          in: query
+          schema:
+            type: number
+            minimum: 0
+            maximum: 1
+            default: 0.5
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/overlays/rip:
+    get:
+      tags: [Overlays]
+      summary: R.I.P. gravestone effect
       parameters:
         - $ref: '#/components/parameters/imageUrl'
         - $ref: '#/components/parameters/width'
@@ -1072,6 +917,50 @@ paths:
         '200':
           $ref: '#/components/responses/SvgImage'
 
+  /v1/images/generators/delete:
+    get:
+      tags: [Generators]
+      summary: '"Delet this" meme'
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/generators/trash:
+    get:
+      tags: [Generators]
+      summary: '"It''s Trash" meme'
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/generators/distracted:
+    get:
+      tags: [Generators]
+      summary: Distracted boyfriend meme labels
+      parameters:
+        - name: boyfriend
+          in: query
+          schema:
+            type: string
+            default: 'Me'
+        - name: girlfriend
+          in: query
+          schema:
+            type: string
+            default: 'My responsibilities'
+        - name: other
+          in: query
+          schema:
+            type: string
+            default: 'Literally anything else'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
   # ========== Utilities ==========
   /v1/images/color:
     get:
@@ -1108,6 +997,272 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/SvgImage'
+
+    # ========== Bots ==========
+  /v1/bots:
+    get:
+      tags: [Bots]
+      summary: List all public bots (paginated)
+      description: |
+        Returns a paginated list of all bots registered with the API that are marked as public.
+
+        - Default limit: 20
+        - Maximum limit: 100
+        - Pagination metadata is returned under `meta`.
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: Paginated list of public bots
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      bots:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/BotMeta'
+                  meta:
+                    type: object
+                    description: Pagination metadata
+                    $ref: '#/components/schemas/PaginationMetaPage'
+
+  /v1/bots/{clientId}:
+    get:
+      tags: [Bots]
+      summary: Get bot information
+      description: Returns detailed information about a specific bot (public bots only)
+      security: []
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discord bot client ID
+      responses:
+        '200':
+          description: Bot information with current stats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      bot:
+                        allOf:
+                          - $ref: '#/components/schemas/BotMeta'
+                          - type: object
+                            properties:
+                              stats:
+                                $ref: '#/components/schemas/BotStats'
+                  meta:
+                    type: object
+                    properties:
+                      generatedAt:
+                        type: string
+                        format: date-time
+        '404':
+          description: Bot not found or not public
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/bots/{clientId}/stats:
+    get:
+      tags: [Bots]
+      summary: Get bot statistics
+      description: Returns current statistics for a specific bot (public bots only)
+      security: []
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discord bot client ID
+      responses:
+        '200':
+          description: Bot statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      stats:
+                        $ref: '#/components/schemas/BotStats'
+                  meta:
+                    type: object
+                    properties:
+                      generatedAt:
+                        type: string
+                        format: date-time
+        '404':
+          description: Bot not found, not public, or stats not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/bots/{clientId}/commands:
+    get:
+      tags: [Bots]
+      summary: Get bot commands
+      description: Returns list of commands for a specific bot (public bots only)
+      security: []
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discord bot client ID
+      responses:
+        '200':
+          description: Bot commands
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      commands:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              example: 'ping'
+                            description:
+                              type: string
+                              example: 'Check bot latency'
+                            category:
+                              type: string
+                              example: 'Utilities'
+                            usage:
+                              type: string
+                              example: '/ping'
+                            examples:
+                              type: array
+                              items:
+                                type: string
+                            aliases:
+                              type: array
+                              items:
+                                type: string
+                            cooldown:
+                              type: integer
+                              description: Cooldown in seconds
+                            permissions:
+                              type: array
+                              items:
+                                type: string
+                            botPermissions:
+                              type: array
+                              items:
+                                type: string
+                            nsfw:
+                              type: boolean
+                            ownerOnly:
+                              type: boolean
+                      categories:
+                        type: array
+                        items:
+                          type: string
+                        example: ['Moderation', 'Utilities', 'Fun']
+                      totalCommands:
+                        type: integer
+                        example: 50
+                      lastUpdated:
+                        type: string
+                        format: date-time
+                  meta:
+                    type: object
+                    properties:
+                      generatedAt:
+                        type: string
+                        format: date-time
+        '404':
+          description: Bot not found, not public, or commands not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/bots/{clientId}/status:
+    get:
+      tags: [Bots]
+      summary: Check bot online status
+      description: Quick check if a bot is currently online (public bots only)
+      security: []
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discord bot client ID
+      responses:
+        '200':
+          description: Bot status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      online:
+                        type: boolean
+                        description: Whether bot is online (heartbeat within 5 minutes)
+                        example: true
+                      lastSeen:
+                        type: string
+                        format: date-time
+                        description: Last heartbeat timestamp
+                  meta:
+                    type: object
+                    properties:
+                      generatedAt:
+                        type: string
+                        format: date-time
+        '404':
+          description: Bot not found or not public
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   # ========== Webhooks ==========
   /webhooks/{id}/{token}/{provider}:

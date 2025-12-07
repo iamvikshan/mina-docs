@@ -3,7 +3,7 @@
  */
 
 /**
- * Discord user object from OAuth
+ * Discord user object (used by webhooks/logging)
  */
 declare interface DiscordUser {
   id: string;
@@ -22,7 +22,7 @@ declare interface DiscordUser {
 }
 
 /**
- * Discord OAuth token response
+ * Discord OAuth token response (kept for type completeness)
  */
 declare interface DiscordTokenResponse {
   access_token: string;

@@ -49,7 +49,12 @@ export async function botAuthMiddleware(
   const kv = c.env.BOTS;
 
   if (!kv) {
-    console.error('[botAuth] BOTS KV namespace not configured');
+    const logger = createLogger(c);
+    logger.error('BOTS KV namespace not configured', undefined, {
+      path: c.req.path,
+      method: c.req.method,
+      clientId,
+    });
     return errors.internal(c, 'Bot authentication unavailable');
   }
 

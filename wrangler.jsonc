@@ -7,9 +7,6 @@
     "port": 8787,
     "local_protocol": "http"
   },
-  "vars": {
-    "DOPPLER_ENVIRONMENT": "dev"
-  },
   "observability": {
     "logs": {
       "enabled": true,
@@ -26,9 +23,6 @@
   "env": {
     "production": {
       "name": "amina-api",
-      "vars": {
-        "DOPPLER_ENVIRONMENT": "prd"
-      },
       "kv_namespaces": [
         {
           "binding": "RATE_LIMIT",

@@ -1,5 +1,6 @@
 import type { Context, Next } from 'hono';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
+import { createLogger } from '../lib/logger';
 
 // Re-export auth middleware
 export * from './auth';
@@ -106,7 +107,15 @@ export async function errorHandler(c: Context<{ Bindings: Env }>, next: Next) {
   try {
     await next();
   } catch (error) {
-    console.error('Unhandled error:', error);
+    const logger = createLogger(c);
+    logger.error(
+      'Unhandled error in API',
+      error instanceof Error ? error : undefined,
+      {
+        path: c.req.path,
+        method: c.req.method,
+      }
+    );
 
     const message =
       error instanceof Error ? error.message : 'Internal server error';

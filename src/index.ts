@@ -8,7 +8,6 @@ import guildRoutes from './routes/guild';
 import imagesRoutes from './routes/images';
 import v1Routes from './routes/v1';
 import internalRoutes from './routes/internal';
-import dashboardRoutes from './dashboard';
 import webhookRoutes from './routes/webhooks';
 
 // Create main app
@@ -26,8 +25,8 @@ app.get('/', (c) => {
     name: 'Amina API',
     version: '1.0.0',
     description: 'Image generation & utilities API for Amina Discord Bot',
-    documentation: 'https://docs.4mina.app/api',
-    dashboard: 'https://api.4mina.app/dashboard',
+    documentation: 'https://api.docs.api.4mina.app',
+    dashboard: 'https://4mina.app/dash/user',
     endpoints: {
       v1: '/v1/* (authenticated)',
       internal: '/internal/* (bot secret auth)',
@@ -44,7 +43,7 @@ app.get('/health', (c) => {
   return success(c, {
     status: 'healthy',
     service: 'amina-api',
-    environment: c.env.DOPPLER_ENVIRONMENT || 'dev',
+    environment: c.env.DOPPLER_ENVIRONMENT || 'prd',
     timestamp: new Date().toISOString(),
   });
 });
@@ -52,7 +51,6 @@ app.get('/health', (c) => {
 // Mount routes
 app.route('/v1', v1Routes);
 app.route('/internal', internalRoutes);
-app.route('/dashboard', dashboardRoutes);
 app.route('/bot', botRoutes);
 app.route('/guild', guildRoutes);
 app.route('/images', imagesRoutes); // Legacy, no auth
