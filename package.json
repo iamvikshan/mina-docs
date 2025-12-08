@@ -54,7 +54,7 @@
     "astro-icon": "^1.1.5",
     "depcheck": "^1.4.7",
     "fs": "^0.0.1-security",
-    "globby": "^14.1.0",
+    "globby": "^16.0.0",
     "html-minifier-terser": "^7.2.0",
     "minify": "^11.4.1",
     "path": "^0.12.7",
