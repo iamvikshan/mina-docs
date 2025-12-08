@@ -8,6 +8,7 @@ import filters from './filters';
 import overlays from './overlays';
 import generators from './generators';
 import bots from './bots';
+import user from './user';
 
 const v1 = new Hono<{ Bindings: Env }>();
 
@@ -31,6 +32,12 @@ v1.get('/', (c) => {
         stats: 'GET /v1/bots/:clientId/stats',
         commands: 'GET /v1/bots/:clientId/commands',
         status: 'GET /v1/bots/:clientId/status',
+      },
+      user: {
+        'header-data': 'GET /v1/user/header-data',
+        profile: 'GET /v1/user/profile',
+        guilds: 'GET /v1/user/guilds',
+        achievements: 'GET /v1/user/achievements',
       },
       filters: {
         greyscale: 'GET /v1/images/filters/greyscale',
@@ -84,6 +91,9 @@ v1.get('/', (c) => {
 // Bot routes - public, rate-limited
 v1.use('/bots/*', publicRateLimit);
 v1.route('/bots', bots);
+
+// User routes - requires authentication
+v1.route('/user', user);
 
 // Mount route modules
 v1.route('/images', images);
