@@ -9,7 +9,7 @@
         "@astrojs/sitemap": "^3.6.0",
         "@astrojs/starlight": "0.37.0",
         "@astrojs/tailwind": "6.0.2",
-        "@preline/accordion": "^2.6.0",
+        "@preline/accordion": "^3.0.0",
         "@preline/collapse": "^2.6.0",
         "@preline/dropdown": "^2.6.0",
         "@preline/overlay": "^2.6.0",
@@ -313,7 +313,7 @@
 
     "@popperjs/core": ["@popperjs/core@2.11.8", "", {}, "sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A=="],
 
-    "@preline/accordion": ["@preline/accordion@2.6.0", "", {}, "sha512-MWZrV1RC0urfG9KuaKTd316gXK8yc8vIq3XtABCVbEf43hNRYUqLFbRPD3JTbdHtYiD/xT53NZkFC0CIvGj1yg=="],
+    "@preline/accordion": ["@preline/accordion@3.2.3", "", {}, "sha512-bxD40aYgnsyuxPNmFN5+4EKAna9PCXpxpA/MrY3j5zpkTyBRxcEykucLE/aPTL0LrUd8/ifwoIERRSVcL7GTFA=="],
 
     "@preline/collapse": ["@preline/collapse@2.6.0", "", {}, "sha512-0w/Gd5g2N81atuMhEikAyW/88yIk/Gt7wnrIMB5NZQry5CWj8SAf0kksb2wtFF5uakA/tnbSuXzeCcabbZe0uw=="],
 
