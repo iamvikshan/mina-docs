@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "api",
+      "name": "amina-api",
       "dependencies": {
         "@hono/node-server": "^1.19.6",
         "hono": "^4.10.7",
