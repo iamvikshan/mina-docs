@@ -67,8 +67,8 @@ This documentation site is built with modern web technologies:
 
 ```bash
 # Clone the repository
-git clone https://github.com/iamvikshan/amina-docs.git
-cd amina-docs
+git clone https://github.com/iamvikshan/mina-docs.git
+cd mina-docs
 
 # Install dependencies
 bun install
@@ -166,4 +166,4 @@ This documentation is part of the Amina project. Please refer to the [main repos
 
 ---
 
-**Note**: This documentation is actively maintained. If you find any issues or outdated information, please [open an issue](https://github.com/iamvikshan/amina-docs/issues) or join our [Discord server](https://discord.gg/uMgS9evnmv) for assistance.
+**Note**: This documentation is actively maintained. If you find any issues or outdated information, please [open an issue](https://github.com/iamvikshan/mina-docs/issues) or join our [Discord server](https://discord.gg/uMgS9evnmv) for assistance.
