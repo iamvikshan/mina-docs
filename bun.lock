@@ -16,7 +16,7 @@
         "@preline/tabs": "^3.0.0",
         "@tailwindcss/forms": "^0.5.10",
         "astro": "5.16.4",
-        "astro-vtbot": "^1.10.7",
+        "astro-vtbot": "^2.0.0",
         "clipboard": "^2.0.11",
         "compression": "^1.8.1",
         "dotenv": "^16.6.1",
@@ -567,6 +567,8 @@
 
     "@vtbag/turn-signal": ["@vtbag/turn-signal@1.3.1", "", {}, "sha512-6rWkG+ik3U+KQGI94yNOrOh5QedB9zmP/8H51X5WQwrJz8m2MAU5YwGRRcweO/dJ6wW/Bn7OsgC1vRURnwrvCg=="],
 
+    "@vtbag/utensil-drawer": ["@vtbag/utensil-drawer@1.2.14", "", {}, "sha512-M/mABCYeWi2768jEmCEtfBGTWFG0Dczaf8XTA91WUJTML8AzJc3/s6A2xlDM9xi+ZrYgxeaOLfJVGikA6u7GuA=="],
+
     "@vue/compiler-core": ["@vue/compiler-core@3.5.22", "", { "dependencies": { "@babel/parser": "^7.28.4", "@vue/shared": "3.5.22", "entities": "^4.5.0", "estree-walker": "^2.0.2", "source-map-js": "^1.2.1" } }, "sha512-jQ0pFPmZwTEiRNSb+i9Ow/I/cHv2tXYqsnHKKyCQ08irI2kdF5qmYedmF8si8mA7zepUFmJ2hqzS8CQmNOWOkQ=="],
 
     "@vue/compiler-dom": ["@vue/compiler-dom@3.5.22", "", { "dependencies": { "@vue/compiler-core": "3.5.22", "@vue/shared": "3.5.22" } }, "sha512-W8RknzUM1BLkypvdz10OVsGxnMAuSIZs9Wdx1vzA3mL5fNMN15rhrSCLiTm6blWeACwUwizzPVqGJgOGBEN/hA=="],
@@ -623,7 +625,7 @@
 
     "astro-integration-kit": ["astro-integration-kit@0.18.0", "", { "dependencies": { "pathe": "^1.1.2", "recast": "^0.23.7" }, "peerDependencies": { "astro": "^4.12.0 || ^5.0.0" } }, "sha512-Z0QW5IQjosuKQDEGYYkvUX6EhEtrmE4/oViqWz23QveV8U7AuyFsTdg00WRNPevWZl/5a4lLUeDpv4bCRynRRg=="],
 
-    "astro-vtbot": ["astro-vtbot@1.10.7", "", { "dependencies": { "@vtbag/cam-shaft": "^1.0.1", "@vtbag/element-crossing": "^1.0.4", "@vtbag/inspection-chamber": "^1.0.17", "@vtbag/turn-signal": "^1.1.0" } }, "sha512-lwCMq+ruuTbHooJ/ZYL2tA99KXDXqbmD5JNBtlnuO7EsEp7FBpwIVBOHt/lDkqUtDt+vQkWRPA5cLZ3tEny48g=="],
+    "astro-vtbot": ["astro-vtbot@2.1.9", "", { "dependencies": { "@vtbag/cam-shaft": "^1.0.6", "@vtbag/element-crossing": "^1.1.0", "@vtbag/inspection-chamber": "^1.0.22", "@vtbag/turn-signal": "^1.3.1", "@vtbag/utensil-drawer": "^1.2.13" } }, "sha512-7YfeHtUwyajC1TLxpKwETLpO7oGGXWazVTkGjRpjXCKRxQDYfExeuUGzU7GNqN/gsOqUtL5EEjojVpjPPhjBqQ=="],
 
     "asynckit": ["asynckit@0.4.0", "", {}, "sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q=="],
 
