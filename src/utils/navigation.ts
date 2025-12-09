@@ -1,7 +1,6 @@
 // An array of links for navigation bar
 const navBarLinks = [
   { name: 'Home', url: 'https://4mina.app' },
-  { name: 'Blog', url: '/blog' },
   { name: 'Docs', url: '/' },
   /* { name: 'Products', url: '/products' },
   { name: 'Services', url: '/services' },

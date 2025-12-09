@@ -100,7 +100,7 @@ bun f            # Format code with Prettier
 Key configuration files:
 
 - `astro.config.mjs` - Astro and integration settings
-- `tailwind.config.mjs` - Tailwind CSS configuration (v4 compatible)
+- `tailwind.config.mts` - Tailwind CSS configuration (v4 compatible)
 - `postcss.config.mjs` - PostCSS with @tailwindcss/postcss plugin
 - `tsconfig.json` - TypeScript compiler options
 - `process-html.mjs` - Custom HTML minification script

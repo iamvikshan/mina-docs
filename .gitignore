@@ -14,5 +14,7 @@ dist/
 
 # macOS-specific files
 .DS_Store
+
+# IDE / editor files
 .vscode/
 .codesandbox/

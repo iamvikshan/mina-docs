@@ -81,7 +81,7 @@ const { pricing } = Astro.props;
         </div>
 
         <span
-          class="order-first inline-block rounded-full bg-fuchsia-200 bg-opacity-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-center text-fuchsia-600 lg:order-none"
+          class="order-first inline-block rounded-full bg-fuchsia-200/50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-center text-fuchsia-600 lg:order-none"
           >{pricing.badge}</span
         >
       </div>
@@ -112,7 +112,7 @@ const { pricing } = Astro.props;
       <!-- CTA for purchasing the product -->
       <a
         href={pricing.professionalToolbox.purchaseLink}
-        class="block rounded-lg bg-fuchsia-200 bg-opacity-50 px-8 py-3 text-center text-sm font-bold text-neutral-100 outline-none ring-fuchsia-300 transition duration-100 hover:bg-cyan-300 hover:bg-opacity-50 focus-visible:ring active:bg-fuchsia-400 md:text-base"
+        class="block rounded-lg bg-fuchsia-200/50 px-8 py-3 text-center text-sm font-bold text-neutral-100 outline-none ring-fuchsia-300 transition duration-100 hover:bg-cyan-300/50 focus-visible:ring active:bg-fuchsia-400 md:text-base"
         >{pricing.professionalToolbox.purchaseBtnTitle}</a
       >
     </div>
