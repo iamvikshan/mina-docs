@@ -1,17 +1,19 @@
+@import './tailwind.css';
+
 /* Dark mode colors. */
 :root {
   --border: hsla(var(--border-cyan), 0.4);
   --backdrop-color: #272727cc;
   --background-overlay: linear-gradient(
     135deg,
-    rgba(6, 182, 212, 0.05),    /* Cyan */
-    rgba(51, 65, 85, 0.05),     /* Slate */
-    rgba(217, 70, 239, 0.05)    /* Fuchsia */
+    rgba(6, 182, 212, 0.05),
+    /* Cyan */ rgba(51, 65, 85, 0.05),
+    /* Slate */ rgba(217, 70, 239, 0.05) /* Fuchsia */
   );
   --base-background: #1a1a1a;
-  --sl-color-accent: #06b6d4;        /* Cyan primary */
-  --sl-color-accent-high: #67e8f9;   /* Cyan lighter */
-  --sl-color-accent-low: #164e63;    /* Cyan darker */
+  --sl-color-accent: #06b6d4; /* Cyan primary */
+  --sl-color-accent-high: #67e8f9; /* Cyan lighter */
+  --sl-color-accent-low: #164e63; /* Cyan darker */
   --sl-color-black: #1c1917;
   --sl-color-gray-1: #eee;
   --sl-color-gray-2: #c2c2c2;
@@ -20,7 +22,7 @@
   --sl-color-gray-5: #383838;
   --sl-color-gray-6: #272727;
   --sl-color-white: #fff;
-  --list-marker-color: #0891b2;      /* Cyan marker */
+  --list-marker-color: #0891b2; /* Cyan marker */
   --border-cyan: 180, 0%, 25.1%;
 }
 
@@ -30,14 +32,14 @@
   --backdrop-color: #f6f6f699;
   --background-overlay: linear-gradient(
     135deg,
-    rgba(6, 182, 212, 0.03),    /* Cyan */
-    rgba(51, 65, 85, 0.03),     /* Slate */
-    rgba(217, 70, 239, 0.03)    /* Fuchsia */
+    rgba(6, 182, 212, 0.03),
+    /* Cyan */ rgba(51, 65, 85, 0.03),
+    /* Slate */ rgba(217, 70, 239, 0.03) /* Fuchsia */
   );
   --base-background: #ffffff;
-  --sl-color-accent: #0e7490;        /* Cyan primary for light */
-  --sl-color-accent-high: #164e63;   /* Cyan darker */
-  --sl-color-accent-low: #67e8f9;    /* Cyan lighter */
+  --sl-color-accent: #0e7490; /* Cyan primary for light */
+  --sl-color-accent-high: #164e63; /* Cyan darker */
+  --sl-color-accent-low: #67e8f9; /* Cyan lighter */
   --sl-color-black: #fff;
   --sl-color-gray-1: #272727;
   --sl-color-gray-2: #383838;
@@ -47,7 +49,7 @@
   --sl-color-gray-6: #eee;
   --sl-color-gray-7: #f6f6f6;
   --sl-color-white: #1c1917;
-  --list-marker-color: #0891b2;      /* Cyan marker */
+  --list-marker-color: #0891b2; /* Cyan marker */
   --border-cyan: 180, 96.7%, 88%;
 }
 
@@ -139,17 +141,17 @@ article.card {
 }
 
 .starlight-aside--tip {
-  background: linear-gradient(45deg, #0891b2, #22d3ee);  /* Cyan gradient */
+  background: linear-gradient(45deg, #0891b2, #22d3ee); /* Cyan gradient */
   border: none;
   border-radius: 0.5rem;
-  color: #164e63;  /* Darker cyan for text */
+  color: #164e63; /* Darker cyan for text */
 }
 
 .starlight-aside--note {
-  background: linear-gradient(45deg, #64748b, #94a3b8);  /* Slate gradient */
+  background: linear-gradient(45deg, #64748b, #94a3b8); /* Slate gradient */
   border: none;
   border-radius: 0.5rem;
-  color: #1e293b;  /* Darker slate for text */
+  color: #1e293b; /* Darker slate for text */
 }
 
 .starlight-aside__icon {
@@ -157,11 +159,11 @@ article.card {
 }
 
 .starlight-aside--tip .starlight-aside__title {
-  color: #ecfeff;  /* Very light cyan */
+  color: #ecfeff; /* Very light cyan */
 }
 
 .starlight-aside--note .starlight-aside__title {
-  color: #f8fafc;  /* Very light slate */
+  color: #f8fafc; /* Very light slate */
 }
 
 .sl-markdown-content ul:not(:where(.not-content *)) {

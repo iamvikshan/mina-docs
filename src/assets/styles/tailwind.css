@@ -1,0 +1,9 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Custom color palette - Tailwind v4 CSS-based configuration */
+  --color-discord-blurple: #5865f2;
+}
+
+/* Support for class-based dark mode */
+@variant dark (&:where(.dark, .dark *));

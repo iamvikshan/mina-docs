@@ -9,12 +9,12 @@ interface Props {
 const { icon, title } = Astro.props;
 ---
 
-<article class='card sl-flex'>
-  <p class='title sl-flex'>
-    {icon && <Icon name={icon} class='icon' width='1.333em' height='1.333em' />}
+<article class="card sl-flex">
+  <p class="title sl-flex">
+    {icon && <Icon name={icon} class="icon" width="1.333em" height="1.333em" />}
     <span set:html={title} />
   </p>
-  <div class='body'><slot /></div>
+  <div class="body"><slot /></div>
 </article>
 
 <style>

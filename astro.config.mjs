@@ -1,6 +1,4 @@
 import { defineConfig } from 'astro/config';
-import starlightSiteGraph from 'starlight-site-graph';
-import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import compressor from 'astro-compressor';
 import starlight from '@astrojs/starlight';
@@ -12,7 +10,7 @@ import icon from 'astro-icon';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  site: 'https://docs.vikshan.me',
+  site: 'https://docs.4mina.app',
   image: { domains: ['images.unsplash.com'] },
   prefetch: {
     prefetchAll: false,
@@ -27,7 +25,6 @@ export default defineConfig({
       },
     }),
     react(),
-    tailwind(),
     sitemap(),
     starlight({
       title: 'Amina Docs',
@@ -107,19 +104,19 @@ export default defineConfig({
           tag: 'meta',
           attrs: {
             property: 'og:image',
-            content: 'https://amina.vikshan.me' + '/social.webp',
+            content: 'https://4mina.app' + '/social.webp',
           },
         },
         {
           tag: 'meta',
           attrs: {
             property: 'twitter:image',
-            content: 'https://amina.vikshan.me' + '/social.webp',
+            content: 'https://4mina.app' + '/social.webp',
           },
         },
       ],
       editLink: {
-        baseUrl: 'https://github.com/iamvikshan/amina-docs/edit/main/',
+        baseUrl: 'https://github.com/iamvikshan/mina-docs/edit/main/',
       },
       expressiveCode: {
         styleOverrides: { borderRadius: '0.5rem' },
@@ -127,19 +124,41 @@ export default defineConfig({
       lastUpdated: true,
       plugins: [],
     }),
-    compressor({ gzip: true, brotli: true }),
+    compressor({
+      gzip: true,
+      brotli: true,
+      zstd: true, // Enable zstd compression as well
+    }),
   ],
   vite: {
-    build: {
-      cssMinify: true,
-      minify: true,
+    css: {
+      postcss: './postcss.config.mjs',
     },
+    build: {
+      cssMinify: 'lightningcss', // Use lightningcss for faster CSS minification
+      minify: 'esbuild', // Explicitly use esbuild (default, but good to specify)
+      cssCodeSplit: true, // Split CSS per page for better caching
+      rollupOptions: {
+        onwarn(warning, warn) {
+          // Suppress "Module level directives cause errors when bundled" warnings
+          if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
+          // Suppress unused imports from Astro internals
+          if (
+            warning.code === 'UNUSED_EXTERNAL_IMPORT' &&
+            warning.message.includes('@astrojs/internal-helpers')
+          )
+            return;
+          warn(warning);
+        },
+      },
+    },
+    logLevel: 'warn',
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
         '@components': path.resolve(__dirname, './src/components'),
         '@content': path.resolve(__dirname, './src/content'),
-        '@data': path.resolve(__dirname, './src/data_files'),
+        '@data': path.resolve(__dirname, './src/data'),
         '@images': path.resolve(__dirname, './src/images'),
         '@scripts': path.resolve(__dirname, './src/assets/scripts'),
         '@styles': path.resolve(__dirname, './src/assets/styles'),

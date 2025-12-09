@@ -10,7 +10,7 @@ import { Image } from 'astro:assets';
 import { capitalize, formatDate } from '@utils/utils';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import { SITE } from '@data/constants';
+import { SITE } from '@/data/constants';
 
 // Get all blog posts
 export async function getStaticPaths() {

@@ -1,7 +1,7 @@
 // An array of links for navigation bar
 const navBarLinks = [
-  { name: 'Home', url: 'https://mina.vikshan.me' },
-   { name: 'Blog', url: '/blog' },
+  { name: 'Home', url: 'https://4mina.app' },
+  { name: 'Blog', url: '/blog' },
   { name: 'Docs', url: '/' },
   /* { name: 'Products', url: '/products' },
   { name: 'Services', url: '/services' },
@@ -18,7 +18,7 @@ const footerLinks = [
         name: 'Invite Amina',
         url: 'https://discord.com/oauth2/authorize?client_id=1035629678632915055',
       },
-      { name: 'Dashboard', url: '/dash'}
+      { name: 'Dashboard', url: '/dash' },
     ],
   },
   {

@@ -1,7 +1,7 @@
 ---
 // Import the required modules
-import { Image } from "astro:assets";
-import PrimaryCTA from "@components/ui/buttons/PrimaryCTA.astro";
+import { Image } from 'astro:assets';
+import PrimaryCTA from '@components/ui/buttons/PrimaryCTA.astro';
 // Extract properties from Astro.props
 const {
   title,
@@ -29,6 +29,7 @@ interface Props {
   imgTwoAlt?: any;
 }
 ---
+
 <!-- Root section of the component -->
 <section
   class="mx-auto max-w-[85rem] items-center gap-16 px-4 py-10 sm:px-6 lg:grid lg:grid-cols-2 lg:px-8 lg:py-14 2xl:max-w-full"
@@ -53,31 +54,31 @@ interface Props {
   {
     single ? (
       <div class="mt-8">
-        <!-- Single image -->
+        {/* Single image */}
         <Image
           class="w-full rounded-lg"
           src={imgOne}
           alt={imgOneAlt}
-          format={"avif"}
+          format={'avif'}
         />
       </div>
     ) : (
       <div class="mt-8 grid grid-cols-2 gap-4">
-        <!-- First image in a two-image layout -->
+        {/* First image in a two-image layout */}
         <Image
           class="w-full rounded-xl"
           src={imgOne}
           alt={imgOneAlt}
-          draggable={"false"}
-          format={"avif"}
+          draggable={'false'}
+          format={'avif'}
         />
-        <!-- Second image in a two-image layout -->
+        {/* Second image in a two-image layout */}
         <Image
           class="mt-4 w-full rounded-xl lg:mt-10"
           src={imgTwo}
           alt={imgTwoAlt}
-          draggable={"false"}
-          format={"avif"}
+          draggable={'false'}
+          format={'avif'}
         />
       </div>
     )

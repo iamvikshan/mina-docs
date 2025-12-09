@@ -1,30 +1,29 @@
 ---
 import mainLogo from '@images/starlight/screwfast_logo_dark.svg?raw';
 import docsLogo from '@images/starlight/docs_logo.svg?raw';
-import type { Props } from '@astrojs/starlight/props';
 
-const main = 'https://mina.vikshan.me';
+const main = 'https://4mina.app';
 const docs = '/';
 const blog = '/blog/';
 ---
 
-<span class='site-title flex'>
+<span class="site-title flex">
   <a
-    class='main-logo'
+    class="main-logo"
     href={main}
-    rel='noopener noreferer'
-    target='_blank'
+    rel="noopener noreferer"
+    target="_blank"
     set:html={mainLogo}
-    aria-label='Amina'
+    aria-label="Amina"
   />
   <a
-    class='docs-logo'
+    class="docs-logo"
     href={docs}
     set:html={docsLogo}
-    aria-label='Amina Docs'
+    aria-label="Amina Docs"
   />
-  <span class='divider'>|</span>
-  <a class='blog-link' href={blog} aria-label='Amina Blog'>blog</a>
+  <span class="divider">|</span>
+  <a class="blog-link" href={blog} aria-label="Amina Blog">blog</a>
 </span>
 
 <style>
@@ -61,7 +60,7 @@ const blog = '/blog/';
     text-decoration: none;
     color: inherit;
     font-size: 1.5rem;
-    font-family:inherit;
+    font-family: inherit;
     display: flex;
     align-items: center;
   }

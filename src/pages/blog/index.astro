@@ -6,7 +6,7 @@ import CardBlogRecent from '@components/ui/cards/CardBlogRecent.astro';
 import CardInsight from '@components/ui/cards/CardInsight.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import { SITE } from '@data/constants';
+import { SITE } from '@/data/constants';
 
 // Get all blog posts and sort them based on publish date
 const blogPosts: CollectionEntry<'blog'>[] = (await getCollection('blog')).sort(

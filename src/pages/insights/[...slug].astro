@@ -1,6 +1,6 @@
 ---
 // Import section components
-import { SITE } from '@data/constants';
+import { SITE } from '@/data/constants';
 import MainLayout from '@/layouts/MainLayout.astro';
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
@@ -171,7 +171,7 @@ const pageTitle: string = `${post.data.title} | ${SITE.title}`;
     }
   };
 
-  document.addEventListener('DOMContentLoaded', (event) => {
+  document.addEventListener('DOMContentLoaded', () => {
     window.onscroll = onScroll;
 
     // Set initial width of progress bar

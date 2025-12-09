@@ -8,7 +8,7 @@ const CLIENT_DIR = './dist';
 
 const minifyOptions = {
   removeComments: true,
-  preserveLineBreaks: true,
+  preserveLineBreaks: false, // Remove line breaks for better compression
   collapseWhitespace: true,
   minifyJS: true,
   minifyCSS: true,
@@ -19,6 +19,13 @@ const minifyOptions = {
   removeEmptyAttributes: true,
   sortClassName: true,
   sortAttributes: true,
+  // Additional optimizations
+  collapseBooleanAttributes: true,
+  decodeEntities: true,
+  minifyURLs: 'https://docs.4mina.app',
+  removeAttributeQuotes: false,
+  removeOptionalTags: false,
+  removeEmptyElements: false, // Keep false for Astro components
 };
 
 async function checkDirectory(dir) {
