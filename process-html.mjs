@@ -28,6 +28,11 @@ const minifyOptions = {
   removeEmptyElements: false, // Keep false for Astro components
 };
 
+/**
+ * Check whether a directory exists and is accessible.
+ * @param {string} dir - Path to the directory to verify.
+ * @returns {boolean} `true` if the directory is accessible, `false` otherwise.
+ */
 async function checkDirectory(dir) {
   try {
     await fs.access(dir);
