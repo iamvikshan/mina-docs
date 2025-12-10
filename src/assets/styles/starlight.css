@@ -1,67 +1,77 @@
 @import './tailwind.css';
 
-/* Dark mode colors. */
+/* ==================== AMINA DESIGN SYSTEM - STARLIGHT OVERRIDES ==================== */
+/* Dark mode colors - consolidated from dash/global.css */
 :root {
-  /* Amina Design System - Core Colors */
+  /* === AKAME'S CRIMSON === */
   --amina-crimson: #dc143c;
   --blood-red: #8b0000;
-  --electric-blue: #1e90ff;
-  --cyber-blue: #00ced1;
-  --imperial-gold: #ffd700;
+  --rose-red: #e63946;
+
+  /* === NIGHT RAID'S DARKNESS === */
   --midnight-black: #0a0a0a;
   --shadow-gray: #1a1a1a;
   --steel-gray: #2d2d2d;
   --slate-gray: #3d3d3d;
+
+  /* === IMPERIAL GOLD === */
+  --imperial-gold: #ffd700;
+  --amber-gold: #ffa500;
+  --bronze: #cd7f32;
+
+  /* === DIGITAL BLUE === */
+  --electric-blue: #1e90ff;
+  --cyber-blue: #00ced1;
+  --ice-blue: #87ceeb;
+
+  /* === DISCORD INTEGRATION === */
+  --discord-blurple: #5865f2;
+  --discord-green: #57f287;
+  --discord-red: #ed4245;
+  --discord-gray: #36393f;
+
+  /* === NEUTRAL/UTILITY === */
+  --pure-white: #ffffff;
   --off-white: #f5f5f5;
 
-  /* Amina Typography System */
+  /* === TYPOGRAPHY === */
   --font-heading: 'Rajdhani', 'Orbitron', 'Space Grotesk', sans-serif;
   --font-body: 'Inter', 'Poppins', sans-serif;
   --font-dialogue: 'Quicksand', 'Comfortaa', cursive;
   --font-mono: 'Fira Code', 'JetBrains Mono', monospace;
 
-  /* Font sizes - responsive scale */
-  --text-xs: 0.75rem; /* 12px */
-  --text-sm: 0.875rem; /* 14px */
-  --text-base: 1rem; /* 16px */
-  --text-lg: 1.125rem; /* 18px */
-  --text-xl: 1.25rem; /* 20px */
-  --text-2xl: 1.5rem; /* 24px */
-  --text-3xl: 1.875rem; /* 30px */
-  --text-4xl: 2.25rem; /* 36px */
-  --text-5xl: 3rem; /* 48px */
+  /* === SHADOWS & GLOWS === */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
 
-  /* Line heights */
-  --leading-tight: 1.25;
-  --leading-normal: 1.5;
-  --leading-relaxed: 1.75;
-
-  /* Letter spacing */
-  --tracking-tight: -0.025em;
-  --tracking-normal: 0em;
-  --tracking-wide: 0.025em;
-  --tracking-wider: 0.05em;
-
-  /* Visual Effects - Glows */
   --glow-crimson: 0 0 20px rgba(220, 20, 60, 0.6);
-  --glow-crimson-intense: 0 0 30px rgba(220, 20, 60, 0.8);
   --glow-blue: 0 0 20px rgba(30, 144, 255, 0.6);
-  --glow-blue-intense: 0 0 30px rgba(30, 144, 255, 0.8);
   --glow-gold: 0 0 20px rgba(255, 215, 0, 0.6);
-  --glow-gold-intense: 0 0 30px rgba(255, 215, 0, 0.8);
+  --glow-green: 0 0 20px rgba(87, 242, 135, 0.6);
 
-  /* Shadows - Dark mode optimized */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md:
-    0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-  --shadow-lg:
-    0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  --shadow-xl:
-    0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+  /* Extended glow variants (docs-specific) */
+  --glow-crimson-intense: 0 0 30px rgba(220, 20, 60, 0.8);
+  --glow-blue-intense: 0 0 30px rgba(30, 144, 255, 0.8);
+  --glow-gold-intense: 0 0 30px rgba(255, 215, 0, 0.8);
   --shadow-crimson: 0 4px 14px rgba(220, 20, 60, 0.4);
   --shadow-blue: 0 4px 14px rgba(30, 144, 255, 0.4);
 
-  /* Border radius */
+  /* === SPACING === */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  /* === TRANSITIONS === */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* === BORDER RADIUS === */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
@@ -69,14 +79,9 @@
   --radius-2xl: 1.5rem;
   --radius-full: 9999px;
 
-  /* Transitions */
-  --transition-fast: 150ms ease;
-  --transition-base: 300ms ease;
-  --transition-slow: 500ms ease;
-  --transition-all: all 300ms ease;
-
+  /* === STARLIGHT THEME INTEGRATION === */
   --border: hsla(348, 83%, 47%, 0.3); /* Crimson border */
-  --backdrop-color: #1a1a1acc; /* Shadow gray with alpha */
+  --backdrop-color: #1a1a1acc; /* shadow-gray with alpha */
   --crimson-hsl: 348, 83%, 47%; /* Amina Crimson HSL */
   --overlay-crimson: hsla(var(--crimson-hsl), 0.15);
   --background-overlay: linear-gradient(
@@ -85,7 +90,7 @@
     /* Amina Crimson */ rgba(30, 144, 255, 0.03),
     /* Electric Blue */ rgba(139, 0, 0, 0.05) /* Blood Red */
   );
-  --base-background: #0a0a0a; /* Midnight black */
+  --base-background: #0a0a0a; /* midnight-black */
   --sl-color-accent: #dc143c; /* Amina Crimson */
   --sl-color-accent-high: #e63946; /* Rose Red (lighter) */
   --sl-color-accent-low: #8b0000; /* Blood Red (darker) */
@@ -94,8 +99,8 @@
   --sl-color-gray-2: #c2c2c2;
   --sl-color-gray-3: #8b8b8b;
   --sl-color-gray-4: #585858;
-  --sl-color-gray-5: #2d2d2d; /* Steel gray */
-  --sl-color-gray-6: #1a1a1a; /* Shadow gray */
+  --sl-color-gray-5: #2d2d2d; /* steel-gray */
+  --sl-color-gray-6: #1a1a1a; /* shadow-gray */
   --sl-color-white: #fff;
   --list-marker-color: #dc143c; /* Amina Crimson marker */
 }
@@ -117,14 +122,14 @@
   --sl-color-accent-high: #dc143c; /* Amina Crimson (lighter for light mode) */
   --sl-color-accent-low: #e63946; /* Rose Red (lightest) */
   --sl-color-black: #fff;
-  --sl-color-gray-1: #1a1a1a; /* Shadow gray */
-  --sl-color-gray-2: #2d2d2d; /* Steel gray */
+  --sl-color-gray-1: #1a1a1a; /* shadow-gray */
+  --sl-color-gray-2: #2d2d2d; /* steel-gray */
   --sl-color-gray-3: #585858;
   --sl-color-gray-4: #8b8b8b;
   --sl-color-gray-5: #c2c2c2;
   --sl-color-gray-6: #eee;
   --sl-color-gray-7: #f5f5f5; /* Off-white */
-  --sl-color-white: #0a0a0a; /* Midnight black */
+  --sl-color-white: #0a0a0a; /* midnight-black */
   --list-marker-color: #dc143c; /* Amina Crimson marker */
 }
 
@@ -138,6 +143,8 @@
       center / cover;
   background-blend-mode: overlay;
 }
+
+/* ==================== STARLIGHT LAYOUT OVERRIDES ==================== */
 
 header {
   border: none !important;
@@ -221,11 +228,16 @@ main {
 }
 
 article.card {
-  border-radius: 0.5rem;
+  border-radius: var(--radius-md);
   background: var(--backdrop-color);
   backdrop-filter: blur(8px);
 }
 
+/* ==================== STARLIGHT COMPONENTS ==================== */
+
+/* ==================== STARLIGHT COMPONENTS ==================== */
+
+/* Starlight Asides */
 .starlight-aside--tip {
   background: var(--electric-blue); /* Fallback */
   background: linear-gradient(
@@ -234,8 +246,8 @@ article.card {
     var(--cyber-blue)
   ); /* Electric Blue to Cyber Blue */
   border: none;
-  border-radius: 0.5rem;
-  color: var(--midnight-black); /* Midnight black for text */
+  border-radius: var(--radius-md);
+  color: var(--midnight-black); /* midnight-black for text */
 }
 
 .starlight-aside--note {
@@ -244,9 +256,9 @@ article.card {
     45deg,
     var(--steel-gray),
     var(--slate-gray)
-  ); /* Steel gray to Slate gray */
+  ); /* steel-gray to slate-gray */
   border: none;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-md);
   color: var(--off-white); /* Off-white for text */
 }
 
@@ -255,7 +267,7 @@ article.card {
 }
 
 .starlight-aside--tip .starlight-aside__title {
-  color: var(--midnight-black); /* Midnight black - high contrast */
+  color: var(--midnight-black); /* midnight-black - high contrast */
 }
 
 .starlight-aside--note .starlight-aside__title {

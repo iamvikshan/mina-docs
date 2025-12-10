@@ -1,53 +1,94 @@
-/* Dark mode colors. */
+/* ==================== AMINA DESIGN SYSTEM - STARLIGHT THEMING ==================== */
+/* Dark mode colors - using consolidated Amina color palette */
 :root {
-  /* Amina Design System - Core Colors */
+  /* === AKAME'S CRIMSON === */
   --amina-crimson: #dc143c;
   --blood-red: #8b0000;
-  --electric-blue: #1e90ff;
-  --imperial-gold: #ffd700;
+  --rose-red: #e63946;
+
+  /* === NIGHT RAID'S DARKNESS === */
   --midnight-black: #0a0a0a;
   --shadow-gray: #1a1a1a;
+  --steel-gray: #2d2d2d;
+  --slate-gray: #3d3d3d;
 
-  --primary-button-hover: #e63946; /* Rose Red (lighter crimson) */
-  --backdrop-color: #1a1a1acc; /* Shadow gray with alpha */
+  /* === IMPERIAL GOLD === */
+  --imperial-gold: #ffd700;
+  --amber-gold: #ffa500;
+
+  /* === DIGITAL BLUE === */
+  --electric-blue: #1e90ff;
+  --cyber-blue: #00ced1;
+
+  /* === DISCORD INTEGRATION === */
+  --discord-blurple: #5865f2;
+  --discord-green: #57f287;
+  --discord-red: #ed4245;
+  --discord-gray: #36393f;
+
+  /* === NEUTRAL/UTILITY === */
+  --pure-white: #ffffff;
+  --off-white: #f5f5f5;
+
+  /* === SHADOWS & GLOWS === */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+
+  --glow-crimson: 0 0 20px rgba(220, 20, 60, 0.6);
+  --glow-blue: 0 0 20px rgba(30, 144, 255, 0.6);
+  --glow-gold: 0 0 20px rgba(255, 215, 0, 0.6);
+  --glow-green: 0 0 20px rgba(87, 242, 135, 0.6);
+
+  /* === TRANSITIONS === */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* === STARLIGHT INTEGRATION === */
+  --backdrop-color: #1a1a1acc; /* Night shadow with alpha */
+  --crimson-hsl: 348, 83%, 47%; /* Amina Crimson HSL */
+  --overlay-crimson: hsla(var(--crimson-hsl), 0.15);
+  --border: hsla(348, 83%, 47%, 0.3); /* Crimson border */
+
   --sl-color-accent: #dc143c; /* Amina Crimson */
   --sl-color-accent-high: #e63946; /* Rose Red (lighter) */
   --sl-color-accent-low: #8b0000; /* Blood Red (darker) */
-  --sl-color-black: #0a0a0a; /* Midnight black */
+  --sl-color-black: #0a0a0a;
   --sl-color-gray-1: #eee;
   --sl-color-gray-2: #c2c2c2;
   --sl-color-gray-3: #8b8b8b;
   --sl-color-gray-4: #585858;
-  --sl-color-gray-5: #2d2d2d; /* Steel gray */
-  --sl-color-gray-6: #1a1a1a; /* Shadow gray */
+  --sl-color-gray-5: #2d2d2d; /* Night steel */
+  --sl-color-gray-6: #1a1a1a; /* Night shadow */
   --sl-color-white: #fff;
-  --crimson-hsl: 348, 83%, 47%; /* Amina Crimson HSL */
-  --overlay-crimson: hsla(var(--crimson-hsl), 0.15);
-  --border: hsla(348, 83%, 47%, 0.3); /* Crimson border */
+  --list-marker-color: #dc143c; /* Amina Crimson marker */
 }
 
 /* Light mode colors (optional - dark first approach) */
 :root[data-theme='light'] {
-  --primary-button-hover: #8b0000; /* Blood Red */
   --backdrop-color: #f5f5f599; /* Off-white with alpha */
+  --crimson-hsl: 348, 83%, 47%; /* Amina Crimson HSL */
+  --overlay-crimson: hsla(var(--crimson-hsl), 0.08);
+  --border: hsla(348, 83%, 47%, 0.3); /* Crimson border */
+
   --sl-color-accent: #8b0000; /* Blood Red for light mode */
-  --sl-color-accent-high: #dc143c; /* Amina Crimson */
-  --sl-color-accent-low: #e63946; /* Rose Red */
+  --sl-color-accent-high: #dc143c; /* Amina Crimson (lighter for light mode) */
+  --sl-color-accent-low: #e63946; /* Rose Red (lightest) */
   /* NOTE: Semantic colors are deliberately inverted here for light mode theme switching.
      --sl-color-black gets a light value and --sl-color-white gets a dark value
      so that text/bg contrast remains correct when the theme toggles. */
   --sl-color-black: #fff;
-  --sl-color-gray-1: #1a1a1a; /* Shadow gray */
-  --sl-color-gray-2: #2d2d2d; /* Steel gray */
+  --sl-color-gray-1: #1a1a1a; /* Night shadow */
+  --sl-color-gray-2: #2d2d2d; /* Night steel */
   --sl-color-gray-3: #585858;
   --sl-color-gray-4: #8b8b8b;
   --sl-color-gray-5: #c2c2c2;
   --sl-color-gray-6: #eee;
   --sl-color-gray-7: #f5f5f5; /* Off-white */
-  --sl-color-white: #0a0a0a; /* Midnight black */
-  --crimson-hsl: 348, 83%, 47%;
-  --overlay-crimson: hsla(var(--crimson-hsl), 0.08);
-  --border: hsla(348, 83%, 47%, 0.3); /* Crimson border */
+  --sl-color-white: #0a0a0a; /* Night black */
+  --list-marker-color: #dc143c; /* Amina Crimson marker */
 }
 
 .page {
@@ -92,7 +133,7 @@ select {
 }
 
 .sl-flex.action.primary:hover {
-  background-color: var(--primary-button-hover);
+  background-color: var(--rose-red);
   transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -131,10 +172,10 @@ select {
 
 /* Social - Rose Red */
 .category-icon.rose-icon {
-  color: #e63946;
+  color: var(--rose-red);
 }
 
-/* Admin/Bot - Steel Gray */
+/* Admin/Bot - Gray */
 .category-icon.gray-icon {
   color: var(--sl-color-gray-3);
 }
@@ -146,7 +187,7 @@ select {
 
 /* Success - Discord Green */
 .category-icon.success-icon {
-  color: #57f287;
+  color: var(--discord-green);
 }
 
 /* Hover effects for category icons */

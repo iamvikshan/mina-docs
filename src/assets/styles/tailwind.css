@@ -1,8 +1,77 @@
 @import 'tailwindcss';
 
+/* ==================== AMINA DESIGN SYSTEM - TAILWIND V4 THEME ==================== */
 @theme {
-  /* Custom color palette - Tailwind v4 CSS-based configuration */
+  /* === AKAME'S CRIMSON === */
+  --color-amina-crimson: #dc143c;
+  --color-blood-red: #8b0000;
+  --color-rose-red: #e63946;
+
+  /* === NIGHT RAID'S DARKNESS === */
+  --color-midnight-black: #0a0a0a;
+  --color-shadow-gray: #1a1a1a;
+  --color-steel-gray: #2d2d2d;
+  --color-slate-gray: #3d3d3d;
+
+  /* === IMPERIAL GOLD === */
+  --color-imperial-gold: #ffd700;
+  --color-amber-gold: #ffa500;
+  --color-bronze: #cd7f32;
+
+  /* === DIGITAL BLUE === */
+  --color-electric-blue: #1e90ff;
+  --color-cyber-blue: #00ced1;
+  --color-ice-blue: #87ceeb;
+
+  /* === DISCORD INTEGRATION === */
   --color-discord-blurple: #5865f2;
+  --color-discord-green: #57f287;
+  --color-discord-red: #ed4245;
+  --color-discord-gray: #36393f;
+
+  /* === NEUTRAL/UTILITY === */
+  --color-pure-white: #ffffff;
+  --color-off-white: #f5f5f5;
+
+  /* === FONT FAMILIES === */
+  --font-family-heading:
+    Rajdhani, Orbitron, 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-family-body: Inter, Poppins, ui-sans-serif, system-ui, sans-serif;
+  --font-family-dialogue: Quicksand, Comfortaa, cursive;
+  --font-family-mono: 'Fira Code', 'JetBrains Mono', ui-monospace, monospace;
+
+  /* === BOX SHADOWS === */
+  --shadow-glow-crimson: 0 0 20px rgba(220, 20, 60, 0.6);
+  --shadow-glow-blue: 0 0 20px rgba(30, 144, 255, 0.6);
+  --shadow-glow-gold: 0 0 20px rgba(255, 215, 0, 0.6);
+  --shadow-glow-green: 0 0 20px rgba(87, 242, 135, 0.6);
+  --shadow-glow-red: 0 0 20px rgba(220, 20, 60, 0.6);
+
+  /* === ANIMATIONS === */
+  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+  --animate-portrait-breathe: portrait-breathe 4s ease-in-out infinite;
+  --animate-spin-slow: spin 3s linear infinite;
+  --animate-bounce-slow: bounce 3s ease-in-out infinite;
+
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.6;
+    }
+  }
+
+  @keyframes portrait-breathe {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
 }
 
 /* Support for class-based dark mode */

@@ -39,20 +39,20 @@ if (image) {
 // Map Starlight icon names to lucide icons
 function mapIcon(iconName?: string): string {
   const iconMap: Record<string, string> = {
-    'right-arrow': 'lucide:arrow-right',
     'arrow-right': 'lucide:arrow-right',
     'arrow-left': 'lucide:arrow-left',
-    external: 'lucide:external-link',
+    external: 'discord',
     rocket: 'lucide:rocket',
     document: 'lucide:file-text',
     github: 'lucide:github',
     discord: 'discord',
+    play: 'lucide:play',
   };
   return iconMap[iconName || ''] || `lucide:${iconName || 'arrow-right'}`;
 }
 ---
 
-<div class="hero">
+<div class='hero'>
   {
     darkImage && (
       <Image
@@ -64,33 +64,36 @@ function mapIcon(iconName?: string): string {
   }
   {
     lightImage && (
-      <Image src={lightImage} {...imageAttrs} class="dark:sl-hidden" />
+      <Image src={lightImage} {...imageAttrs} class='dark:sl-hidden' />
     )
   }
-  {rawHtml && <div class="hero-html sl-flex" set:html={rawHtml} />}
-  <div class="sl-flex stack">
-    <div class="sl-flex copy">
+  {rawHtml && <div class='hero-html sl-flex' set:html={rawHtml} />}
+  <div class='sl-flex stack'>
+    <div class='sl-flex copy'>
       <h1 id={PAGE_TITLE_ID} data-page-title set:html={title} />
-      {tagline && <div class="tagline" set:html={tagline} />}
+      {tagline && <div class='tagline' set:html={tagline} />}
     </div>
     {
       actions.length > 0 && (
-        <div class="sl-flex actions">
+        <div class='sl-flex actions'>
           {actions.map((action, index) => {
             const icon = mapIcon(action.icon?.name);
-            const isExternal = action.link?.startsWith('http');
 
             // First action = Primary, rest = Secondary
             if (index === 0) {
               return (
-                <PrimaryBtn text={action.text} url={action.link} icon={icon} />
+                <PrimaryBtn
+                  text={action.text}
+                  url={action.link}
+                  icon={'lucide:play'}
+                />
               );
             } else {
               return (
                 <SecondaryBtn
                   text={action.text}
                   url={action.link}
-                  icon={isExternal ? 'lucide:external-link' : icon}
+                  icon={icon}
                 />
               );
             }

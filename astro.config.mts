@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import compressor from 'astro-compressor';
 import starlight from '@astrojs/starlight';
+import starlightSiteGraph from 'starlight-site-graph';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import react from '@astrojs/react';
@@ -97,14 +98,6 @@ export default defineConfig({
         {
           tag: 'meta',
           attrs: {
-            name: 'description',
-            content:
-              "your server's guardian, mod tool, and vibe keeper. comprehensive command reference and setup guides for Amina Discord bot.",
-          },
-        },
-        {
-          tag: 'meta',
-          attrs: {
             property: 'og:image',
             content: 'https://4mina.app/social.webp',
           },
@@ -125,7 +118,7 @@ export default defineConfig({
         styleOverrides: { borderRadius: '0.5rem' },
       },
       lastUpdated: true,
-      plugins: [],
+      plugins: [starlightSiteGraph()],
     }),
     compressor({
       gzip: true,
@@ -141,7 +134,17 @@ export default defineConfig({
       cssMinify: 'lightningcss', // Use lightningcss for faster CSS minification
       minify: 'esbuild', // Explicitly use esbuild (default, but good to specify)
       cssCodeSplit: true, // Split CSS per page for better caching
+      chunkSizeWarningLimit: 1000,
       rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('react') || id.includes('react-dom')) {
+                return 'react-vendor';
+              }
+            }
+          },
+        },
         onwarn(warning, warn) {
           // Suppress "Module level directives cause errors when bundled" warnings
           if (warning.code === 'MODULE_LEVEL_DIRECTIVE') return;
@@ -158,6 +161,7 @@ export default defineConfig({
     logLevel: 'warn',
     resolve: {
       alias: {
+        path: 'path-browserify',
         '@': path.resolve(__dirname, './src'),
         '@components': path.resolve(__dirname, './src/components'),
         '@content': path.resolve(__dirname, './src/content'),

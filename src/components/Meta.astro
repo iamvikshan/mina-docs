@@ -50,7 +50,11 @@ const appleTouchIcon = await getImage({
 <!-- Inject structured data into the page if provided. This data is formatted as JSON-LD, a method recommended by Google for structured data pass:
      https://developers.google.com/search/docs/advanced/structured-data/intro-structured-data -->{
   structuredData && (
-    <script type="application/ld+json" type="application/ld+json" is:inline />
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(structuredData)}
+    />
   )
 }
 <!-- Define the character set, description, author, and viewport settings -->
