@@ -18,7 +18,7 @@ export const GET: APIRoute = async () => {
   // Convert the image to an ICO file
   const icoBuffer = ico.encode(buffers);
 
-  return new Response(Buffer.from(icoBuffer), {
+  return new Response(icoBuffer as unknown as BodyInit, {
     headers: { 'Content-Type': 'image/x-icon' },
   });
 };

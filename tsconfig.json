@@ -4,6 +4,7 @@
     "module": "ESNext",
     "target": "es6",
     "baseUrl": ".",
+    "typeRoots": ["./types", "./node_modules/@types"],
     "paths": {
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
@@ -15,7 +16,10 @@
       "@utils/*": ["src/utils/*"],
       "@layouts/*": ["src/layouts/*"],
       "@root/*": ["/*"],
-      "@docs/*": ["@content/docs/*"]
+      "@docs/*": ["@content/docs/*"],
+      "@types": ["types"],
+      "@types/*": ["types/*"]
     }
-  }
+  },
+  "include": ["src/**/*", "types/**/*", "*.mts"]
 }

@@ -1,48 +1,81 @@
 ---
-title: Self-Hosting Amina
-description: Learn how to set up and run Amina on your own machine or server.
+title: self-hosting
+description: developer docs for running your own instance of amina.
 sidebar:
-  label: Self-Hosting
+  label: self-hosting
   order: 1
 ---
 
 import {
-  Card,
-  CardGrid,
   LinkCard,
-  Steps,
   Aside,
-  Tabs,
-  TabItem,
 } from "@astrojs/starlight/components";
+import { Card } from '@components/ui/starlight/components';
 
-Welcome to the self-hosting guide for Amina! This document will walk you through the process of setting up and running Amina on your own machine or server. Let's get started with the installation and configuration.
-
-## Setup Options
-
-<CardGrid>
-  <Card title="Heroku Deployment" icon="seti:heroku">
-    Deploy Amina to Heroku for easy cloud hosting.
-    <LinkCard title="Heroku Guide" href="./installation/heroku" />
-  </Card>
-  <Card title="Replit Setup" icon="seti:replit">
-    Set up Amina on Replit for quick online development.
-    <LinkCard title="Replit Guide" href="./installation/replit" />
-  </Card>
-  <Card title="Local Machine" icon="seti:config">
-    Install and run Amina on your own computer or server.
-    <LinkCard title="Local Setup" href="./installation/local" />
-  </Card>
-</CardGrid>
-
-## Requirements
+# self-hosting
 
 <Aside type="note">
-  Ensure you have the following installed before proceeding:
+looking to run your own instance of amina? that's cool, but this site is for end users.
 </Aside>
 
-- [Git](https://git-scm.com/downloads)
-- [MongoDB](https://www.mongodb.com)
-- [Nodejs](https://nodejs.org/en/) (version 18 or above)
-- Java v13 for Lavalink server
-- [pm2](https://pm2.io/docs/runtime/guide/installation/) (to keep your bot alive 24/7)
+## developer documentation
+
+all self-hosting, development, and technical docs live in the **[github wiki](https://github.com/iamvikshan/amina/wiki)**.
+
+<Card title="visit the wiki" icon="lucide:book-open">
+  **[github.com/iamvikshan/amina/wiki](https://github.com/iamvikshan/amina/wiki)**
+  
+  everything you need:
+  - installation guides (local, docker, heroku, replit)
+  - configuration setup
+  - database setup (mongodb)
+  - lavalink for music
+  - dashboard deployment
+  - troubleshooting
+  - contributing guidelines
+</Card>
+
+---
+
+## why the wiki?
+
+keeping developer docs separate makes sense:
+
+**this site** - end users who invite amina to their servers  
+**the wiki** - developers who self-host or contribute
+
+two different audiences, two different doc sets.
+
+---
+
+## quick links
+
+<LinkCard
+  title="github repository"
+  description="source code, issues, and pull requests"
+  href="https://github.com/iamvikshan/amina"
+/>
+
+<LinkCard
+  title="wiki (self-hosting)"
+  description="installation, config, and development docs"
+  href="https://github.com/iamvikshan/amina/wiki"
+/>
+
+<LinkCard
+  title="support server"
+  description="get help with self-hosting or development"
+  href="https://discord.gg/uMgS9evnmv"
+/>
+
+---
+
+## still here?
+
+if you're self-hosting amina:
+1. star the [repo](https://github.com/iamvikshan/amina) (appreciated)
+2. follow the [wiki](https://github.com/iamvikshan/amina/wiki) guides
+3. join the [support server](https://discord.gg/uMgS9evnmv) if you get stuck
+4. consider [supporting development](https://ko-fi.com/vikshan)
+
+ngl, running your own bot takes work. but if you're up for it, the wiki has everything you need.

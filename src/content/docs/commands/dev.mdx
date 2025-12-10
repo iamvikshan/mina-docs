@@ -1,0 +1,114 @@
+---
+title: "dev & debug"
+description: "developer-only commands for bot maintenance and diagnostics."
+sidebar:
+  label: dev (restricted)
+  order: 13
+---
+
+import { Aside, Card } from '@components/ui/starlight/components';
+import { Icon } from 'astro-icon/components';
+
+<div class="command-category-header">
+  <Icon name="lucide:terminal" size="2rem" class="category-icon" />
+  <div>
+    <h1>dev & debug</h1>
+    <p class="category-description">bot owner commands. not for you.</p>
+  </div>
+</div>
+
+---
+
+<Aside type="caution" title="restricted access">
+these commands are **bot owner only**. regular users, server admins, and even server owners cannot use them.
+
+if you're self-hosting amina, check the [wiki](https://github.com/iamvikshan/amina/wiki) for developer documentation.
+</Aside>
+
+---
+
+## what are dev commands?
+
+dev commands are internal tools used by amina's developer (vikshan) for:
+- diagnosing issues
+- testing new features
+- managing premium users
+- monitoring bot health across servers
+- emergency maintenance
+
+**you cannot access these.** they're hardcoded to specific developer discord ids.
+
+---
+
+## available dev commands
+
+for transparency, here's what exists (but you can't use):
+
+### `/dev`
+
+developer dashboard with subcommands for:
+- server list and stats
+- system diagnostics
+- feature flags and testing
+- database queries
+- error logs
+
+**access:** bot owner only  
+**why restricted:** full system access, could break things
+
+---
+
+### `/premium`
+
+manage premium subscriptions.
+
+**subcommands:**
+- `/premium add` - grant premium to a user/server
+- `/premium remove` - revoke premium access
+
+**access:** bot owner only  
+**why restricted:** controls paid features
+
+---
+
+### `/zzz`
+
+internal testing command for development.
+
+**access:** bot owner only  
+**why restricted:** experimental features, unstable
+
+---
+
+## for self-hosters
+
+if you're running your own instance of amina:
+
+1. **read the wiki** - [github.com/iamvikshan/amina/wiki](https://github.com/iamvikshan/amina/wiki)
+2. **set your dev id** - configure your discord id in the bot's environment
+3. **understand the risks** - dev commands have full bot access
+
+self-hosting documentation is kept separate from these user docs because:
+- different audience (developers vs server owners)
+- technical setup instructions don't belong here
+- keeps this site focused on using amina, not hosting it
+
+---
+
+## why not document these fully?
+
+these docs are for **people using amina in their servers**, not for:
+- bot developers
+- self-hosters
+- people running their own instance
+
+if you want to:
+- **use amina in your server** → you're in the right place
+- **self-host amina** → check the [wiki](https://github.com/iamvikshan/amina/wiki)
+- **contribute code** → see [github repo](https://github.com/iamvikshan/amina)
+
+---
+
+<Aside type="tip">
+need help with regular commands? check out the [admin & setup](/commands/admin) category - that's where the powerful (but accessible) commands live.
+</Aside>

@@ -167,3 +167,9 @@ This documentation is part of the Amina project. Please refer to the [main repos
 ---
 
 **Note**: This documentation is actively maintained. If you find any issues or outdated information, please [open an issue](https://github.com/iamvikshan/amina-docs/issues) or join our [Discord server](https://discord.gg/uMgS9evnmv) for assistance.
+
+# Set these in your shell profile (.bashrc, .zshrc, or .fish config)
+
+export CLAUDE_CODE_USE_VERTEX=1
+export ANTHROPIC_VERTEX_PROJECT_ID=YOUR-PROJECT-ID
+export CLOUD_ML_REGION=global

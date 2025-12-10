@@ -17,4 +17,6 @@ dist/
 
 # IDE / editor files
 .vscode/
-.codesandbox/
+.codesandbox/ 
+.codebuddy/
+.github/agents/

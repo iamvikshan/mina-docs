@@ -1,0 +1,215 @@
+---
+/**
+ * Custom Pagination - Amina Gradient Style
+ * Inspired by PrimaryBtn.astro from dashboard
+ * Prev: Gradient crimson left (stronger) → rose-red right (subtle)
+ * Next: Gradient rose-red left (subtle) → crimson right (stronger)
+ */
+import { Icon } from 'astro-icon/components';
+
+const { dir, pagination } = Astro.locals.starlightRoute;
+const { prev, next } = pagination;
+const isRtl = dir === 'rtl';
+---
+
+<div class="pagination-links print:hidden" dir={dir}>
+  {
+    prev && (
+      <a href={prev.href} rel="prev" class="mina-btn prev">
+        <Icon
+          name={isRtl ? 'lucide:chevron-right' : 'lucide:chevron-left'}
+          class="btn-icon"
+        />
+        <span class="btn-content">
+          <span class="btn-label">prev</span>
+          <span class="btn-title">{prev.label}</span>
+        </span>
+      </a>
+    )
+  }
+  {
+    next && (
+      <a href={next.href} rel="next" class="mina-btn next">
+        <span class="btn-content">
+          <span class="btn-label">next</span>
+          <span class="btn-title">{next.label}</span>
+        </span>
+        <Icon
+          name={isRtl ? 'lucide:chevron-left' : 'lucide:chevron-right'}
+          class="btn-icon"
+        />
+      </a>
+    )
+  }
+</div>
+
+<style>
+  .pagination-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  /* Base button style - gradient with subtle opacity */
+  .mina-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    font-family: var(--font-heading, 'Rajdhani', sans-serif);
+    font-weight: 700;
+    font-size: 1.125rem;
+    transition: all 0.3s ease;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+    border: none;
+    position: relative;
+  }
+
+  /* Dark mode (default) */
+  .mina-btn.prev {
+    /* Gradient: crimson left (stronger) → rose-red right (subtle) */
+    background: linear-gradient(
+      to right,
+      rgba(220, 20, 60, 0.25),
+      rgba(255, 105, 180, 0.15)
+    );
+    color: #fff;
+  }
+
+  .mina-btn.next {
+    /* Gradient: rose-red left (subtle) → crimson right (stronger) */
+    background: linear-gradient(
+      to right,
+      rgba(255, 105, 180, 0.15),
+      rgba(220, 20, 60, 0.25)
+    );
+    color: #fff;
+    justify-content: flex-end;
+    text-align: end;
+  }
+
+  /* Light mode adjustments - use Starlight's data-theme selector */
+  :root[data-theme='light'] .mina-btn.prev,
+  :root[data-theme='light'] .mina-btn.next {
+    color: var(--sl-color-white, #0a0a0a);
+  }
+
+  :root[data-theme='light'] .mina-btn.prev {
+    background: linear-gradient(
+      to right,
+      rgba(220, 20, 60, 0.2),
+      rgba(255, 105, 180, 0.1)
+    );
+  }
+
+  :root[data-theme='light'] .mina-btn.next {
+    background: linear-gradient(
+      to right,
+      rgba(255, 105, 180, 0.1),
+      rgba(220, 20, 60, 0.2)
+    );
+  }
+
+  :root[data-theme='light'] .btn-label,
+  :root[data-theme='light'] .btn-icon {
+    color: var(--sl-color-white, #0a0a0a);
+    opacity: 0.9;
+  }
+
+  /* Hover effects */
+  .mina-btn:hover {
+    transform: scale(1.05);
+  }
+
+  .mina-btn.prev:hover {
+    background: linear-gradient(
+      to right,
+      rgba(220, 20, 60, 0.4),
+      rgba(255, 105, 180, 0.25)
+    );
+    box-shadow: 0 0 30px rgba(220, 20, 60, 0.4);
+  }
+
+  .mina-btn.next:hover {
+    background: linear-gradient(
+      to right,
+      rgba(255, 105, 180, 0.25),
+      rgba(220, 20, 60, 0.4)
+    );
+    box-shadow: 0 0 30px rgba(220, 20, 60, 0.4);
+  }
+
+  /* Light mode hover */
+  :root[data-theme='light'] .mina-btn.prev:hover {
+    background: linear-gradient(
+      to right,
+      rgba(220, 20, 60, 0.3),
+      rgba(255, 105, 180, 0.18)
+    );
+    box-shadow: 0 0 20px rgba(220, 20, 60, 0.25);
+  }
+
+  :root[data-theme='light'] .mina-btn.next:hover {
+    background: linear-gradient(
+      to right,
+      rgba(255, 105, 180, 0.18),
+      rgba(220, 20, 60, 0.3)
+    );
+    box-shadow: 0 0 20px rgba(220, 20, 60, 0.25);
+  }
+
+  .mina-btn:active {
+    transform: scale(1);
+  }
+
+  .btn-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  /* "prev" / "next" label */
+  .btn-label {
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 500;
+    opacity: 0.8;
+    text-transform: lowercase;
+    letter-spacing: 0.02em;
+  }
+
+  /* Page title */
+  .btn-title {
+    font-family: var(--font-heading, 'Rajdhani', sans-serif);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  /* Icon styling */
+  .btn-icon {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+  }
+
+  .mina-btn.prev:hover .btn-icon {
+    transform: translateX(-4px);
+  }
+
+  .mina-btn.next:hover .btn-icon {
+    transform: translateX(4px);
+  }
+
+  @media print {
+    .pagination-links {
+      display: none;
+    }
+  }
+</style>

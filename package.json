@@ -7,8 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build && bun process-html.mjs",
+    "build": "astro build && bun process-html.mts",
     "preview": "astro preview",
     "astro": "astro",
     "f": "prettier -w .",
@@ -19,6 +18,7 @@
     "@astrojs/sitemap": "^3.6.0",
     "@astrojs/starlight": "0.37.0",
     "@astrojs/tailwind": "6.0.2",
+    "@iconify-json/lucide": "^1.2.79",
     "@preline/accordion": "^3.2.3",
     "@preline/collapse": "^3.2.3",
     "@preline/dropdown": "^3.2.3",
@@ -45,9 +45,6 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.6",
     "@astrojs/upgrade": "^0.6.2",
-    "@iconify-json/flat-color-icons": "^1.2.3",
-    "@iconify-json/fluent-color": "^1.2.21",
-    "@iconify-json/solar": "^1.2.5",
     "@tailwindcss/postcss": "^4.1.17",
     "@types/node": "^24.10.2",
     "astro-compressor": "^1.2.0",

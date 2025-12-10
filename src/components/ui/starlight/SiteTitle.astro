@@ -6,21 +6,21 @@ const main = 'https://4mina.app';
 const docs = '/';
 ---
 
-<span class='site-title flex'>
+<span class="site-title flex">
   <a
-    class='main-logo'
+    class="main-logo"
     href={main}
-    rel='noopener noreferer'
-    target='_blank'
-    aria-label='Amina'
+    rel="noopener noreferrer"
+    target="_blank"
+    aria-label="Amina"
   >
-    <BrandLogo class='h-8 w-auto' />
+    <BrandLogo class="h-8 w-auto" />
   </a>
   <a
-    class='docs-logo'
+    class="docs-logo"
     href={docs}
     set:html={docsLogo}
-    aria-label='Amina Docs'
+    aria-label="Amina Docs"
   />
 </span>
 
@@ -31,6 +31,7 @@ const docs = '/';
   }
   .site-title a {
     display: flex;
+    transition: transform var(--transition-base);
   }
 
   .flex {
@@ -43,6 +44,7 @@ const docs = '/';
   .site-title a:focus-visible > :global(*) {
     transform: translateY(calc(0.1rem * -1));
     transition: transform 250ms cubic-bezier(0.33, 1, 0.68, 1);
+    filter: drop-shadow(var(--glow-crimson));
   }
 
   .site-title :global(svg) {
@@ -52,5 +54,12 @@ const docs = '/';
   .site-title a:hover :global(svg) {
     transform: translateY(calc(0.1rem * -1));
     transition: transform 250ms cubic-bezier(0.33, 1, 0.68, 1);
+    filter: drop-shadow(var(--glow-crimson));
+  }
+
+  .site-title a:hover :global(img) {
+    transform: translateY(calc(0.1rem * -1));
+    transition: transform 250ms cubic-bezier(0.33, 1, 0.68, 1);
+    filter: drop-shadow(var(--glow-crimson));
   }
 </style>

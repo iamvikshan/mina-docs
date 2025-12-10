@@ -1,0 +1,233 @@
+---
+title: "utility"
+description: "helpful tools for everyday use. reminders, profiles, colors, and more."
+sidebar:
+  label: utility
+  order: 12
+---
+
+import { CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+import { Icon } from 'astro-icon/components';
+import { Card, Aside } from '@components/ui/starlight/components';
+
+<div class="command-category-header">
+  <Icon name="lucide:wrench" size="2rem" class="category-icon info-icon" />
+  <div>
+    <h1>utility</h1>
+    <p class="category-description">practical tools that just work. reminders, profiles, colors, weather.</p>
+  </div>
+</div>
+
+---
+
+## quick add
+
+### `/add`
+
+quick add for reminders, colors, and invites.
+
+| subcommand | description | options |
+|------------|-------------|---------|
+| `reminder` | set a reminder | `message`, `in` (optional, default 6h) |
+| `color` | create color option (admin) | `name`, `hex` |
+| `invites` | add invites to user (admin) | `user`, `invites` |
+
+**example:**
+```
+/add reminder message:check the oven in:30m
+/add color name:sunset hex:#FF6B35
+/add invites user:@member invites:10
+```
+
+---
+
+## help
+
+### `/help`
+
+browse available commands by category.
+
+| option | description | required |
+|--------|-------------|----------|
+| `command` | specific command name | no |
+
+**example:**
+```
+/help
+/help command:ban
+```
+
+---
+
+## status
+
+### `/afk`
+
+set an AFK status. mentions will notify you when you return.
+
+| option | description | required |
+|--------|-------------|----------|
+| `reason` | why you are going afk | yes |
+| `duration` | duration in minutes (1-43200) | no |
+
+**example:**
+```
+/afk reason:eating dinner
+/afk reason:sleeping duration:480
+```
+
+---
+
+## colors
+
+### `/color`
+
+pick a custom name color for yourself.
+
+| subcommand | description | options |
+|------------|-------------|---------|
+| `set` | apply a color role | `color` |
+| `remove` | remove your color | - |
+| `list` | show available colors | - |
+| `delete` | remove from palette (admin) | `name` |
+
+**example:**
+```
+/color list
+/color set color:sunset
+/color remove
+```
+
+---
+
+## profiles
+
+### `/profile`
+
+customize your bio, pronouns, and more.
+
+**usage:** opens interactive profile editor
+
+<Tabs>
+  <TabItem label="operations">
+    | operation | description |
+    |-----------|-------------|
+    | **edit profile** | update your profile information |
+    | **privacy settings** | control what others can see |
+    | **clear profile** | start fresh with a blank canvas |
+  </TabItem>
+  
+  <TabItem label="edit profile">
+    | category | fields |
+    |----------|--------|
+    | basic info | pronouns, birthdate, region, languages, timezone |
+    | misc info | bio, interests, socials, favorites, goals |
+    
+    **formats:**
+    - birthdate: DD/MM/YYYY or MM/YYYY
+    - languages: comma-separated list
+    - socials: platform:handle (e.g., twitter:username)
+  </TabItem>
+  
+  <TabItem label="privacy">
+    toggle visibility for:
+    - age
+    - region
+    - birthdate
+    - pronouns
+  </TabItem>
+</Tabs>
+
+**tip:** use `/info profile` to view your profile or someone else's.
+
+---
+
+## reminders
+
+### `/reminder`
+
+open the reminder management hub.
+
+**usage:** opens interactive hub
+
+| operation | description |
+|-----------|-------------|
+| **view reminders** | see all your active reminders |
+| **clear all** | delete all reminders (if any exist) |
+
+**notes:**
+- maximum 25 reminders per user
+- shows next upcoming reminder with relative time
+- set your timezone in `/profile` for accurate times
+
+**tip:** use `/add reminder` for quick creation.
+
+---
+
+## tools
+
+### `/paste`
+
+upload text to sourceb.in and get a shareable link.
+
+| option | description | required |
+|--------|-------------|----------|
+| `title` | title for your content | yes |
+| `content` | content to upload | yes |
+
+---
+
+### `/qrcode`
+
+generate a QR code from any URL.
+
+| option | description | required |
+|--------|-------------|----------|
+| `url` | url to encode | yes |
+
+---
+
+### `/weather`
+
+check current weather conditions.
+
+| option | description | required |
+|--------|-------------|----------|
+| `place` | city or country name | yes |
+
+**example:**
+```
+/weather place:tokyo
+/weather place:new york
+```
+
+---
+
+### `/urban`
+
+look up slang definitions from Urban Dictionary.
+
+| option | description | required |
+|--------|-------------|----------|
+| `word` | word to look up | yes |
+
+---
+
+## reporting
+
+### `/redflag`
+
+view crowd-sourced red flags on users.
+
+| subcommand | description | options |
+|------------|-------------|---------|
+| `check` | view flags on a user | `user` |
+| `clear` | remove flags (admin) | `user` |
+
+---
+
+### `/report`
+
+report bugs, suggest features, or report problematic servers/users.
+
+**usage:** opens interactive report menu

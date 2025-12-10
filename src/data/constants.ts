@@ -1,6 +1,7 @@
+import type { SiteConfig, SEOConfig, OpenGraphConfig } from '@types';
 import ogImageSrc from '@images/social.png';
 
-export const SITE = {
+export const SITE: SiteConfig = {
   title: 'Amina',
   tagline: 'Your Creative & Energetic Discord Companion!',
   description:
@@ -11,7 +12,7 @@ export const SITE = {
   author: 'Vikshan',
 };
 
-export const SEO = {
+export const SEO: SEOConfig = {
   title: SITE.title,
   description: SITE.description,
   structuredData: {
@@ -31,7 +32,7 @@ export const SEO = {
   },
 };
 
-export const OG = {
+export const OG: OpenGraphConfig = {
   locale: 'en_US',
   type: 'website',
   url: SITE.url,
