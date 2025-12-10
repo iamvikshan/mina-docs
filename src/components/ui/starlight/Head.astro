@@ -1,9 +1,6 @@
 ---
 import StarlightHead from '@astrojs/starlight/components/Head.astro';
-import {
-  default as VtbotStarlight,
-  type Props,
-} from 'astro-vtbot/components/starlight/Base.astro';
+import { default as VtbotStarlight } from 'astro-vtbot/components/starlight/Base.astro';
 
 // https://docs.astro.build/en/guides/view-transitions/#fallback-control
 Astro.props.viewTransitionsFallback = 'animate';
@@ -11,6 +8,20 @@ Astro.props.viewTransitionsFallback = 'animate';
 
 <VtbotStarlight {...Astro.props}>
   <StarlightHead {...Astro.props} />
+
+  <!-- Amina Typography - Google Fonts (optimized with only used weights) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin="anonymous"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Quicksand:wght@500&family=Fira+Code:wght@400;500;600&display=swap"
+    rel="stylesheet"
+    crossorigin="anonymous"
+  />
+
   <script>
     import '@scripts/lenisSmoothScroll.js';
   </script>

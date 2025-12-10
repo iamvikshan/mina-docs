@@ -1,8 +1,7 @@
 {
   "name": "Ubuntu + Bun",
   "image": "ghcr.io/iamvikshan/devcontainers/ubuntu-bun:latest",
-    "features": {
-
+  "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {
       "installDirectlyFromGitHubRelease": true,
       "version": "latest"

@@ -1,93 +1,86 @@
 ---
-title: "Getting Started with Amina!"
-description: "Ready for an adventure? Let's get Amina set up in your server and unleash the fun! ✨"
+title: "getting started"
+description: "here's how to set up amina. won't take long."
 sidebar:
-  label: Getting Started
-  order: 1
+  label: getting started
+  order: 2
 ---
 
 import {
   CardGrid,
   LinkCard,
   Steps,
-  Aside,
   Tabs,
   TabItem,
 } from "@astrojs/starlight/components";
 
-import { Card } from '@components/ui/starlight/components';
+import { Aside, Card } from '@components/ui/starlight/components';
 
-<Aside type="danger">
-  ⚠️ Please note that this documentation is a work in progress and may be incomplete or outdated. Always check the latest information on our [discord server](https://discord.gg/uMgS9evnmv) and/or [blog](/blog).
-</Aside>
+## so you like me and want me?
 
-### Hey there, future friend!
+cool. here's what you need to know.
 
-*Bounce bounce!* Super excited to have you here! I'm Amina, and I can't wait to bring some sparkle and fun to your Discord server! Setting me up is as easy as painting with sparkles (and way less messy! 🎨)
-
-## Quick Start Adventure! 
+## quick start
 
 <CardGrid stagger>
-  <Card title="Can we..." icon="flat-color-icons:data-configuration">
-    **...be friends?**
-    Got the **Manage Server** permission? That's your golden ticket to adding me to your awesome space!
-    <LinkCard title="Sure!" href="https://discord.com/api/oauth2/authorize?client_id=1035629678632915055" />
+  <Card title="invite me" icon="lucide:user-plus">
+    need **Manage Server** permission. that's it.
+    <LinkCard title="invite link" href="https://discord.com/api/oauth2/authorize?client_id=1035629678632915055" />
   </Card>
-  <Card title="Server Management" icon="flat-color-icons:multiple-devices">
-    Customize which of my tricks and treats you want available in your server(s)!
-    <LinkCard title="Explore Dashboard" href="https://mina.vikshan.me/dash" />
+  <Card title="dashboard" icon="lucide:layout-dashboard">
+    configure everything from the web dashboard. easier than typing commands.
+    <LinkCard title="open dashboard" href="https://4mina.app/dash" />
   </Card>
-  <Card title="Fun & Games" icon="solar:emoji-funny-circle-broken">
-    From soundboards to reputation systems - let's make your server pop!
-    <LinkCard title="Discover Features" href="../../commands/commands" />
+  <Card title="commands" icon="lucide:terminal">
+    check out what i can do. moderation, music, economy, fun stuff.
+    <LinkCard title="command list" href="../../commands/commands" />
   </Card>
 </CardGrid>
 
-## Let's Get This Party Started! 
+## setup steps
 
 <Steps>
-1. **First Stop: My Home Base!**
-   Zoom over to [the Dashboard](https://mina.vikshan.me) - that's where the magic begins!
+1. **go to the dashboard**  
+   head to [my website](https://4mina.app). that's where you configure stuff.
 
-2. **The Secret Handshake:**
-   Hit that shiny **Login** button and let me know which awesome servers you're part of!
+2. **login with discord**  
+   click **[login](https://4mina.app/dash)** and authorize with your discord account.
 
-3. **Pick Your Paradise :**
-   **Select a server** from the cards to choose where you want me to spread some joy!
+3. **select your server**  
+   pick which server you want to configure. you'll see all servers where you have Manage Server permission.
 </Steps>
 
-## Cool Things You Can Do! 
+## what you can do
 
 <Aside type="tip">
-  💡 Pro tip: I'm super customizable! You can turn features on and off like playing with light switches (but way more fun!)
+  everything is modular. turn features on/off as needed. no bloat.
 </Aside>
 
-### Awesome Features
+### core features
 
 <LinkCard
-  title="🚨  Moderation Tools"
-  description="Keep the peace with warning systems, mod logs, and more! I've got your back!"
+  title="moderation"
+  description="warnings, bans, kicks, purge commands, mod logs. the usual."
   href="../../commands/admin/moderation"
 />
 
 <LinkCard
-  title="🤖  Auto-Mod Magic"
-  description="Let me handle the tricky stuff - spam, bad words, invite links - I'm like your server's guardian angel!"
+  title="automod"
+  description="auto-delete spam, bad links, mass mentions. set it and forget it."
   href="../../commands/admin/automod"
 />
 
 <LinkCard
-  title="🎭  Role Management"
-  description="Auto-roles, self-assign roles, reaction roles - we've got all the role-y things!"
+  title="roles"
+  description="auto-roles, self-assign, reaction roles. role management made easy."
   href="../../commands/admin/server/#5-role-management"
 />
 
-### Need a Friend?
+### need help?
 
-If you're feeling stuck or just want to chat, our [discord server](https://discord.gg/uMgS9evnmv) is full of friendly faces! Just remember - I love enthusiasm, but keep it kind and cool! We're all here to help! 
+join the [discord server](https://discord.gg/uMgS9evnmv). people there actually know what they're talking about.
 
 <Aside type="note">
-  ✨ Want to help keep the magic going? Check out how you can support us on [Ko-fi](https://ko-fi.com/vikshan)!
+  wanna support development? check out [ko-fi](https://ko-fi.com/vikshan).
 </Aside>
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/vikshan)

@@ -1,0 +1,169 @@
+---
+title: "music"
+description: "play music in voice channels. youtube, spotify, soundcloud - all supported."
+sidebar:
+  label: music
+  order: 5
+---
+
+import { CardGrid } from '@astrojs/starlight/components';
+import { Icon } from 'astro-icon/components';
+import { Card, Aside } from '@components/ui/starlight/components';
+
+<div class="command-category-header">
+  <Icon name="lucide:music" size="2rem" class="category-icon info-icon" />
+  <div>
+    <h1>music</h1>
+    <p class="category-description">turn your server into a listening party. high-quality playback from multiple platforms.</p>
+  </div>
+</div>
+
+<Aside type="note">
+you need to be in a voice channel to use music commands. i'll join you there.
+</Aside>
+
+---
+
+## playback
+
+### `/play`
+
+play a song by name or URL.
+
+| option | description | required |
+|--------|-------------|----------|
+| `query` | song name or url | yes |
+
+**supported sources:** youtube, spotify, soundcloud, and more
+
+**example:**
+```
+/play query:lofi hip hop
+/play query:https://open.spotify.com/track/...
+```
+
+---
+
+### `/search`
+
+search youtube and pick from results.
+
+| option | description | required |
+|--------|-------------|----------|
+| `query` | song to search | yes |
+
+---
+
+### `/pause`
+
+pause the currently playing track.
+
+---
+
+### `/resume`
+
+resume playback of a paused track.
+
+---
+
+### `/skip`
+
+skip to the next track in the queue.
+
+---
+
+### `/stop`
+
+stop playback and clear the queue.
+
+---
+
+## queue
+
+### `/queue`
+
+view the list of upcoming tracks.
+
+| option | description | required |
+|--------|-------------|----------|
+| `page` | page number | no |
+
+---
+
+### `/shuffle`
+
+randomize the order of tracks in the queue.
+
+---
+
+### `/loop`
+
+loop the current track or queue.
+
+| option | description | required |
+|--------|-------------|----------|
+| `type` | loop type: track, queue, or off | no |
+
+---
+
+## playback control
+
+### `/seek`
+
+jump to a specific timestamp.
+
+| option | description | required |
+|--------|-------------|----------|
+| `time` | timestamp (e.g., "1:30", "90") | yes |
+
+---
+
+### `/volume`
+
+adjust playback volume.
+
+| option | description | required |
+|--------|-------------|----------|
+| `amount` | volume level (0-100) | no |
+
+---
+
+### `/np`
+
+show the currently playing track with progress bar.
+
+---
+
+### `/lyric`
+
+search for and display song lyrics.
+
+| option | description | required |
+|--------|-------------|----------|
+| `query` | song name to search | yes |
+
+---
+
+## audio effects
+
+### `/autoplay`
+
+toggle automatic song recommendations when queue ends.
+
+---
+
+### `/bassboost`
+
+adjust the bass level.
+
+| option | description | required |
+|--------|-------------|----------|
+| `level` | bass level: high, medium, low, or off | yes |
+
+---
+
+## session
+
+### `/leave`
+
+disconnect the bot from voice channel.

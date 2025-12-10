@@ -1,39 +1,41 @@
 ---
-import { Icons } from './icons.js';
+/**
+ * Lucide Icon Component
+ * =====================
+ * Wrapper for Lucide icons via Iconify for consistent styling.
+ * Supports lucide icons by default, or any other iconify set using prefix notation.
+ *
+ * Usage:
+ *   <Icon name="chevron-right" />           - Uses lucide:chevron-right
+ *   <Icon name="lucide:heart" />            - Explicit lucide prefix
+ *   <Icon name="solar:emoji-funny-circle-broken" /> - Other icon sets
+ */
 
-interface Path {
-  d: string;
+import { Icon as AstroIcon } from 'astro-icon/components';
+
+interface Props {
+  name: string;
   class?: string;
+  size?: number | string;
+  width?: number | string;
+  height?: number | string;
 }
 
-const { name } = Astro.props;
+const { name, class: className = '', size, width, height } = Astro.props;
 
-let icon = (Icons as any)[name] || {};
+// If the icon name already has a prefix (contains ':'), use it as-is
+// Otherwise, assume it's a lucide icon and add the prefix
+const iconName = name.includes(':') ? name : `lucide:${name}`;
 
-let paths: Path[] = icon.paths || [];
+// Determine dimensions
+const iconSize = size ?? 24;
+const iconWidth = width ?? iconSize;
+const iconHeight = height ?? iconSize;
 ---
 
-{
-  icon ? (
-    <svg
-      class={icon.class}
-      height={icon.height}
-      viewBox={icon.viewBox}
-      width={icon.width}
-      fill={icon.fill}
-      clip-rule={icon.clipRule}
-      fill-rule={icon.fillRule}
-      stroke={icon.stroke}
-      stroke-width={icon.strokeWidth}
-      stroke-linecap={icon.strokeLinecap}
-      stroke-linejoin={icon.strokeLinejoin}
-    >
-      <title>{icon.title}</title>
-      {paths.map((path: Path) => (
-        <path d={path.d} class={path.class || ''} />
-      ))}
-    </svg>
-  ) : (
-    'Icon not found'
-  )
-}
+<AstroIcon
+  name={iconName}
+  class={className}
+  width={iconWidth}
+  height={iconHeight}
+/>

@@ -3,7 +3,7 @@ import sharp from 'sharp';
 import ico from 'sharp-ico';
 import path from 'node:path';
 
-const faviconSrc = path.resolve('src/images/icon.png');
+const faviconSrc = path.resolve('src/images/amina-logo.png');
 
 export const GET: APIRoute = async () => {
   // Resize the image to multiple sizes
@@ -18,7 +18,7 @@ export const GET: APIRoute = async () => {
   // Convert the image to an ICO file
   const icoBuffer = ico.encode(buffers);
 
-  return new Response(icoBuffer, {
+  return new Response(icoBuffer as unknown as BodyInit, {
     headers: { 'Content-Type': 'image/x-icon' },
   });
 };

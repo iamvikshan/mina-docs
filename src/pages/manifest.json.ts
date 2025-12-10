@@ -1,13 +1,8 @@
-import type { APIRoute, ImageMetadata } from 'astro';
+import type { APIRoute } from 'astro';
+import type { Favicon } from '@types';
 import { getImage } from 'astro:assets';
-import icon from '@images/icon.png';
-import maskableIcon from '@images/icon-maskable.png';
-
-interface Favicon {
-  purpose: 'any' | 'maskable' | 'monochrome';
-  src: ImageMetadata;
-  sizes: number[];
-}
+import icon from '@images/amina-logo.png';
+import maskableIcon from '@images/amina-logo.png';
 
 const sizes = [192, 512];
 const favicons: Favicon[] = [

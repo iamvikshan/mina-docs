@@ -1,51 +1,61 @@
 /* Dark mode colors. */
 :root {
-  --primary-button-hover: #d946ef;
-  --backdrop-color: #272727cc;
-  --sl-color-accent: #d946ef;
-  --sl-color-accent-high: #f0abfc;
-  --sl-color-accent-low: #4a044e;
-  --sl-color-black: #1c1917;
+  /* Amina Design System - Core Colors */
+  --amina-crimson: #dc143c;
+  --blood-red: #8b0000;
+  --electric-blue: #1e90ff;
+  --imperial-gold: #ffd700;
+  --midnight-black: #0a0a0a;
+  --shadow-gray: #1a1a1a;
+
+  --primary-button-hover: #e63946; /* Rose Red (lighter crimson) */
+  --backdrop-color: #1a1a1acc; /* Shadow gray with alpha */
+  --sl-color-accent: #dc143c; /* Amina Crimson */
+  --sl-color-accent-high: #e63946; /* Rose Red (lighter) */
+  --sl-color-accent-low: #8b0000; /* Blood Red (darker) */
+  --sl-color-black: #0a0a0a; /* Midnight black */
   --sl-color-gray-1: #eee;
   --sl-color-gray-2: #c2c2c2;
   --sl-color-gray-3: #8b8b8b;
   --sl-color-gray-4: #585858;
-  --sl-color-gray-5: #383838;
-  --sl-color-gray-6: #272727;
+  --sl-color-gray-5: #2d2d2d; /* Steel gray */
+  --sl-color-gray-6: #1a1a1a; /* Shadow gray */
   --sl-color-white: #fff;
-  --cyan-hsl: 180, 96.4%, 56.3%;
-  --overlay-cyan: hsla(var(--cyan-hsl), 0.2);
-  --border: hsla(var(--border-neutral), 0.4);
-  --border-neutral: 0, 0%, 25.1%;
+  --crimson-hsl: 348, 83%, 47%; /* Amina Crimson HSL */
+  --overlay-crimson: hsla(var(--crimson-hsl), 0.15);
+  --border: hsla(348, 83%, 47%, 0.3); /* Crimson border */
 }
 
-/* Light mode colors. */
+/* Light mode colors (optional - dark first approach) */
 :root[data-theme='light'] {
-  --primary-button-hover: #d946ef;
-  --backdrop-color: #f6f6f699;
-  --sl-color-accent: #c026d3;
-  --sl-color-accent-high: #4a044e;
-  --sl-color-accent-low: #f0abfc;
+  --primary-button-hover: #8b0000; /* Blood Red */
+  --backdrop-color: #f5f5f599; /* Off-white with alpha */
+  --sl-color-accent: #8b0000; /* Blood Red for light mode */
+  --sl-color-accent-high: #dc143c; /* Amina Crimson */
+  --sl-color-accent-low: #e63946; /* Rose Red */
+  /* NOTE: Semantic colors are deliberately inverted here for light mode theme switching.
+     --sl-color-black gets a light value and --sl-color-white gets a dark value
+     so that text/bg contrast remains correct when the theme toggles. */
   --sl-color-black: #fff;
-  --sl-color-gray-1: #272727;
-  --sl-color-gray-2: #383838;
+  --sl-color-gray-1: #1a1a1a; /* Shadow gray */
+  --sl-color-gray-2: #2d2d2d; /* Steel gray */
   --sl-color-gray-3: #585858;
   --sl-color-gray-4: #8b8b8b;
   --sl-color-gray-5: #c2c2c2;
   --sl-color-gray-6: #eee;
-  --sl-color-gray-7: #f6f6f6;
-  --sl-color-white: #1c1917;
-  --cyan-hsl: 180, 95.8%, 53.1%;
-  --border-cyan: 180, 96.7%, 88%;
-  --border: hsla(var(--border-cyan), 0.4);
+  --sl-color-gray-7: #f5f5f5; /* Off-white */
+  --sl-color-white: #0a0a0a; /* Midnight black */
+  --crimson-hsl: 348, 83%, 47%;
+  --overlay-crimson: hsla(var(--crimson-hsl), 0.08);
+  --border: hsla(348, 83%, 47%, 0.3); /* Crimson border */
 }
 
 .page {
   background:
-    linear-gradient(215deg, var(--overlay-cyan), transparent 40%),
-    radial-gradient(var(--overlay-cyan), transparent 40%) no-repeat center
+    linear-gradient(215deg, var(--overlay-crimson), transparent 40%),
+    radial-gradient(var(--overlay-crimson), transparent 40%) no-repeat center
       center / cover,
-    radial-gradient(var(--overlay-cyan), transparent 65%) no-repeat center
+    radial-gradient(var(--overlay-crimson), transparent 65%) no-repeat center
       center / cover;
   background-blend-mode: overlay;
 }
@@ -89,4 +99,81 @@ select {
 .sl-flex.action.primary:hover svg {
   transform: translateX(0.25rem);
   transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================
+   Icon Theming - Lucide Icons
+   ======================================== */
+
+/* Category-specific icon colors */
+.category-icon {
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+  display: inline-block;
+}
+
+/* Moderation - Blood Red */
+.category-icon.blood-red-icon {
+  color: var(--blood-red);
+}
+
+/* Info/Utility/Music - Electric Blue */
+.category-icon.info-icon,
+.category-icon.cyan-icon {
+  color: var(--electric-blue);
+}
+
+/* Economy/Giveaways - Imperial Gold */
+.category-icon.gold-icon {
+  color: var(--imperial-gold);
+}
+
+/* Social - Rose Red */
+.category-icon.rose-icon {
+  color: #e63946;
+}
+
+/* Admin/Bot - Steel Gray */
+.category-icon.gray-icon {
+  color: var(--sl-color-gray-3);
+}
+
+/* Fun - Crimson */
+.category-icon.crimson-icon {
+  color: var(--amina-crimson);
+}
+
+/* Success - Discord Green */
+.category-icon.success-icon {
+  color: #57f287;
+}
+
+/* Hover effects for category icons */
+.category-icon:hover {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+/* Command Category Header Layout */
+.command-category-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--sl-color-gray-5);
+}
+
+.command-category-header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  line-height: 1.2;
+}
+
+.command-category-header .category-description {
+  margin: 0.5rem 0 0 0;
+  color: var(--sl-color-gray-2);
+  font-size: 1.125rem;
+  line-height: 1.5;
 }

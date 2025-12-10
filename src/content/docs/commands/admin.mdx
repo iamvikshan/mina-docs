@@ -1,0 +1,363 @@
+---
+title: "admin & setup"
+description: "server configuration, automod, greetings, logging, and management."
+sidebar:
+  label: admin & setup
+  order: 3
+---
+
+import { CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+import { Icon } from 'astro-icon/components';
+import { Card, Aside } from '@components/ui/starlight/components';
+
+<div class="command-category-header">
+  <Icon name="lucide:settings" size="2rem" class="category-icon gray-icon" />
+  <div>
+    <h1>admin & setup</h1>
+    <p class="category-description">configure your server. set up automation. manage systems.</p>
+  </div>
+</div>
+
+<Aside type="caution">
+these commands require `ADMINISTRATOR` or `MANAGE_GUILD` permissions.
+</Aside>
+
+---
+
+## server hub
+
+### `/admin`
+
+central hub for server configuration, AI settings, and logging.
+
+**usage:** opens interactive menu
+
+#### hub options
+
+| category | description |
+|----------|-------------|
+| **server settings** | updates channel, staff roles |
+| **mina ai** | ai responder configuration |
+| **logging** | audit log setup |
+| **status** | view all current settings |
+
+<Tabs>
+  <TabItem label="server settings">
+    | option | description |
+    |--------|-------------|
+    | set updates channel | channel for bot updates and announcements |
+    | add staff role | add a role to the staff list |
+    | remove staff role | remove a role from staff list |
+  </TabItem>
+  
+  <TabItem label="mina ai">
+    | option | description |
+    |--------|-------------|
+    | toggle ai | enable/disable ai responder for this server |
+    | set free-will channel | channel where i respond without @mention |
+    | toggle mention-only | when on, i only respond to @mentions |
+    | manage free-will | add/remove free-will channels |
+  </TabItem>
+  
+  <TabItem label="logging (page 1)">
+    | option | description |
+    |--------|-------------|
+    | set log channel | channel for all audit logs |
+    | toggle all logging | master switch for logging |
+    | message edits | log when messages are edited |
+    | message deletes | log when messages are deleted |
+    | member role changes | log when member roles change |
+    | ghost ping detection | log when someone ghost pings |
+  </TabItem>
+  
+  <TabItem label="logging (page 2)">
+    | option | description |
+    |--------|-------------|
+    | all channel logs | toggle all channel event logging |
+    | channel created | log new channel creation |
+    | channel updated | log channel modifications |
+    | channel deleted | log channel deletions |
+    | all role logs | toggle all role event logging |
+    | role created | log new role creation |
+    | role updated | log role modifications |
+    | role deleted | log role deletions |
+  </TabItem>
+</Tabs>
+
+---
+
+## automod
+
+### `/automod`
+
+configure automated moderation.
+
+| subcommand | description | options |
+|------------|-------------|---------|
+| `status` | view current automod status | - |
+| `strikes` | configure strike thresholds | - |
+| `action` | set action for violations | - |
+| `debug` | toggle debug mode | - |
+| `whitelist` | view whitelisted channels | - |
+| `whitelistadd` | add channel to whitelist | `channel` |
+| `whitelistremove` | remove channel from whitelist | `channel` |
+
+---
+
+### `/anti`
+
+toggle protection features.
+
+| subcommand | description |
+|------------|-------------|
+| `ghostping` | toggle ghost ping detection |
+| `spam` | toggle spam protection |
+| `massmention` | toggle mass mention protection |
+
+**example:**
+```
+/anti ghostping
+/anti spam
+```
+
+---
+
+### `/autodelete`
+
+auto-remove messages matching criteria.
+
+| subcommand | description | options |
+|------------|-------------|---------|
+| `attachments` | auto-delete attachments | `status` (on/off) |
+| `invites` | auto-delete invite links | `status` (on/off) |
+| `links` | auto-delete links | `status` (on/off) |
+| `maxlines` | auto-delete long messages | `amount` (number) |
+
+**example:**
+```
+/autodelete invites status:on
+/autodelete maxlines amount:20
+```
+
+---
+
+## channel tools
+
+### `/counter`
+
+create an auto-updating count channel.
+
+| option | description | required |
+|--------|-------------|----------|
+| `type` | counter type: USERS, MEMBERS, or BOTS | yes |
+| `name` | custom channel name template | yes |
+
+**example:**
+```
+/counter type:MEMBERS name:👥 Members: {count}
+```
+
+---
+
+### `/embed`
+
+craft and send a custom embed message.
+
+| option | description | required |
+|--------|-------------|----------|
+| `channel` | target channel for the embed | yes |
+
+opens an interactive embed builder.
+
+---
+
+## logging
+
+### `/logs`
+
+quick access to logging configuration.
+
+**usage:** opens logging hub (same as `/admin` → logging)
+
+see the [admin hub](#admin) for all logging options.
+
+---
+
+## warnings
+
+### `/maxwarn`
+
+set warning threshold and punishment.
+
+| subcommand | description | options |
+|------------|-------------|---------|
+| `limit` | max warnings before action | `amount` |
+| `action` | punishment action | `action` |
+
+**example:**
+```
+/maxwarn limit amount:3
+/maxwarn action action:timeout
+```
+
+---
+
+## roles
+
+### `/reactionrole`
+
+let members pick roles by reacting.
+
+| option | description | required |
+|--------|-------------|----------|
+| `action` | add or remove | yes |
+| `channel` | channel with message | yes |
+| `message_id` | target message id | yes |
+| `emoji` | emoji to react with | yes |
+| `role` | role to assign | yes |
+
+**example:**
+```
+/reactionrole action:add channel:#roles message_id:123456 emoji:🎮 role:@Gamer
+```
+
+---
+
+### `/roles`
+
+bulk role management hub.
+
+**usage:** opens interactive menu
+
+**required permissions:** `Manage Guild`, `Manage Roles`
+
+<Tabs>
+  <TabItem label="operations">
+    | operation | description |
+    |-----------|-------------|
+    | **cleanup** | bulk delete roles by criteria |
+    | **create role** | create new role with custom settings |
+    | **autorole** | auto-assign role to new members |
+    | **add to user** | assign roles to multiple users |
+  </TabItem>
+  
+  <TabItem label="cleanup methods">
+    | method | description |
+    |--------|-------------|
+    | empty roles | delete roles with no members |
+    | name prefix | delete roles starting with prefix |
+    | below position | delete roles below hierarchy position |
+    | older than | delete roles created before date |
+  </TabItem>
+  
+  <TabItem label="autorole">
+    | action | description |
+    |--------|-------------|
+    | enable/change | select role for new members |
+    | disable | turn off autorole |
+    
+    **requirements:**
+    - role must be below my highest role
+    - role cannot be managed by integration
+    - role cannot be @everyone
+  </TabItem>
+</Tabs>
+
+---
+
+## tickets
+
+### `/ticket`
+
+support ticket system for your server.
+
+**usage:** opens interactive menu
+
+**required permissions:** `Manage Guild`
+
+<Tabs>
+  <TabItem label="setup menu">
+    | option | description |
+    |--------|-------------|
+    | setup message | create ticket creation message |
+    | log channel | set channel for ticket logs |
+    | ticket limit | max open tickets per user |
+    | manage topics | add/remove ticket topics |
+  </TabItem>
+  
+  <TabItem label="manage menu">
+    | option | description |
+    |--------|-------------|
+    | close ticket | close current ticket |
+    | close all | close all open tickets |
+    | add user | add users to ticket |
+    | remove user | remove users from ticket |
+    
+    **note:** requires being inside a ticket channel.
+  </TabItem>
+</Tabs>
+
+---
+
+## greetings
+
+### `/welcome`
+
+configure welcome messages.
+
+| subcommand | description | options |
+|------------|-------------|---------|
+| `status` | enable/disable | `status` (on/off) |
+| `preview` | preview current message | - |
+| `channel` | set welcome channel | `channel` |
+| `desc` | set welcome text | `message` |
+| `thumbnail` | set thumbnail image | `url` |
+| `color` | set embed color | `color` |
+| `footer` | set footer text | `text` |
+| `image` | set large image | `url` |
+
+**example:**
+```
+/welcome status status:on
+/welcome channel channel:#welcome
+/welcome desc message:welcome to the server, {user}!
+```
+
+---
+
+### `/farewell`
+
+configure goodbye messages.
+
+| subcommand | description | options |
+|------------|-------------|---------|
+| `status` | enable/disable | `status` (on/off) |
+| `preview` | preview current message | - |
+| `channel` | set farewell channel | `channel` |
+| `desc` | set farewell text | `message` |
+| `thumbnail` | set thumbnail image | `url` |
+| `color` | set embed color | `color` |
+| `footer` | set footer text | `text` |
+| `image` | set large image | `url` |
+
+---
+
+## communication
+
+### `/say`
+
+speak through the bot.
+
+| option | description | required |
+|--------|-------------|----------|
+| `message` | message content | yes |
+| `channel` | target channel | no |
+| `message_id` | message to reply to | no |
+| `edit` | edit existing bot message | no |
+| `ping` | allow mentions | no |
+
+**example:**
+```
+/say message:hello everyone! channel:#announcements
+/say message:updated content edit:123456789
+```
