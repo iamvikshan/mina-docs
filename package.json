@@ -1,13 +1,11 @@
 {
   "name": "mina-docs",
   "version": "0.0.1",
-  "main": "dist/server/entry.mjs",
-  "engines": {
-    "bun": ">=1.3.0"
-  },
+  "type": "module",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build && bun process-html.mts",
+    "build:prd": "bun install --production --frozen-lockfile && bun add -d astro-compressor && bun run build && bun process-html.mts",
     "preview": "astro preview",
     "astro": "astro",
     "f": "prettier -w .",
