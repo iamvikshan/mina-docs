@@ -1,0 +1,10 @@
+{
+  "name": "mina-docs",
+  "type": "javascript",
+  "compatibility_date": "2025-11-17",
+  "build": {
+    "command": "bun install && bun run build",
+    "cwd": "./",
+    "root_dir": "dist"
+  },
+}
