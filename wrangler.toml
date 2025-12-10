@@ -1,0 +1,13 @@
+name = "mina-docs"
+type = "javascript"
+compatibility_date = "2024-12-01"
+
+# Build configuration for Cloudflare Pages
+[build]
+command = "bun install && bun run build"
+cwd = "./"
+root_dir = "dist"
+
+# Environment variables (optional)
+[env.production]
+route = "example.com"
