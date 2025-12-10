@@ -2,7 +2,7 @@
 import fs from 'node:fs/promises';
 import { globby } from 'globby';
 import path from 'node:path';
-import type { ProcessResult, TotalStats } from './types/process-html';
+import type { ProcessResult, TotalStats } from '@types';
 
 // html-minifier-terser is a CJS module without proper ESM types
 // Using dynamic import with type assertion
@@ -31,7 +31,7 @@ const minifyOptions: Record<string, unknown> = {
   // Additional optimizations
   collapseBooleanAttributes: true,
   decodeEntities: true,
-  minifyURLs: 'https://docs.4mina.app',
+  minifyURLs: false,
   removeAttributeQuotes: false,
   removeOptionalTags: false,
   removeEmptyElements: false, // Keep false for Astro components
