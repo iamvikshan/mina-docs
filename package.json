@@ -39,7 +39,7 @@
     "@astrojs/check": "^0.9.6",
     "@astrojs/upgrade": "^0.6.2",
     "@tailwindcss/postcss": "^4.1.17",
-    "@types/node": "^24.10.2",
+    "@types/node": "^25.0.0",
     "astro-compressor": "^1.2.0",
     "astro-icon": "^1.1.5",
     "depcheck": "^1.4.7",
