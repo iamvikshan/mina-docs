@@ -1,6 +1,6 @@
 /**
  * User API Routes
- * 
+ *
  * Endpoints for retrieving authenticated user data for the dashboard
  */
 
@@ -17,7 +17,7 @@ user.use('*', requireApiKey);
 
 /**
  * GET /v1/user/header-data
- * 
+ *
  * Returns user data needed for the dashboard header component
  * - User profile (Discord info)
  * - Guardian rank & XP
@@ -27,7 +27,7 @@ user.use('*', requireApiKey);
 user.get('/header-data', async (c) => {
   const logger = createLogger(c);
   const userId = c.get('userId');
-  
+
   if (!userId) {
     return errors.unauthorized(c, 'User not authenticated');
   }
@@ -130,13 +130,13 @@ user.get('/header-data', async (c) => {
 
 /**
  * GET /v1/user/profile
- * 
+ *
  * Returns complete user profile data
  */
 user.get('/profile', async (c) => {
   const logger = createLogger(c);
   const userId = c.get('userId');
-  
+
   if (!userId) {
     return errors.unauthorized(c, 'User not authenticated');
   }
@@ -181,13 +181,13 @@ user.get('/profile', async (c) => {
 
 /**
  * GET /v1/user/guilds
- * 
+ *
  * Returns all guilds the user is a member of
  */
 user.get('/guilds', async (c) => {
   const logger = createLogger(c);
   const userId = c.get('userId');
-  
+
   if (!userId) {
     return errors.unauthorized(c, 'User not authenticated');
   }
@@ -244,13 +244,13 @@ user.get('/guilds', async (c) => {
 
 /**
  * GET /v1/user/achievements
- * 
+ *
  * Returns user's achievements
  */
 user.get('/achievements', async (c) => {
   const logger = createLogger(c);
   const userId = c.get('userId');
-  
+
   if (!userId) {
     return errors.unauthorized(c, 'User not authenticated');
   }

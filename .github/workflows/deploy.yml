@@ -37,17 +37,25 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     name: Check API diff on Bump.sh
     runs-on: ubuntu-latest
+    env:
+      BUMP_TOKEN: ${{ secrets.BUMP_TOKEN }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.1
 
       - name: Comment pull request with API diff
+        if: env.BUMP_TOKEN != ''
         uses: bump-sh/github-action@v1.2.8
         with:
           hub: amina
-          token: ${{ secrets.BUMP_TOKEN }}
+          token: ${{ env.BUMP_TOKEN }}
           file: docs/
           command: diff
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+
+      - name: Skip Bump.sh diff (missing token)
+        if: env.BUMP_TOKEN == ''
+        run: echo "BUMP_TOKEN secret is not set; skipping Bump.sh diff."
