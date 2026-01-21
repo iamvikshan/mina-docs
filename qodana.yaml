@@ -12,7 +12,8 @@ profile:
   name: qodana.recommended
 
 # Install project dependencies before analysis
-bootstrap: bun install --frozen-lockfile
+# bootstrap: bun install --frozen-lockfile
+# this is now handled by the action
 
 # Include additional useful inspections
 include:
