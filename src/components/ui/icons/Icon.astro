@@ -33,7 +33,7 @@ const discordPath =
 const isDiscord = name === 'discord' || name?.includes('discord');
 
 // If not discord, process as normal icon
-const iconName = !isDiscord && name.includes(':') ? name : !isDiscord ? `lucide:${name}` : '';
+const iconName = isDiscord ? '' : name?.includes(':') ? name : `lucide:${name}`;
 
 // Determine dimensions
 const iconSize = size ?? 24;

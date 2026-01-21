@@ -2,7 +2,6 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import compressor from 'astro-compressor';
 import starlight from '@astrojs/starlight';
-import starlightSiteGraph from 'starlight-site-graph';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import react from '@astrojs/react';
@@ -118,7 +117,6 @@ export default defineConfig({
         styleOverrides: { borderRadius: '0.5rem' },
       },
       lastUpdated: true,
-      plugins: [starlightSiteGraph()],
     }),
     compressor({
       gzip: true,
