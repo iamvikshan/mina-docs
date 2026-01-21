@@ -22,7 +22,7 @@
     "@preline/dropdown": "^3.2.3",
     "@preline/overlay": "^3.2.3",
     "@preline/tabs": "^3.2.3",
-    "astro": "5.16.9",
+    "astro": "5.16.11",
     "astro-vtbot": "^2.1.9",
     "globby": "^16.0.0",
     "html-minifier-terser": "^7.2.0",
