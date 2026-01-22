@@ -22,7 +22,7 @@
     "@preline/dropdown": "^3.2.3",
     "@preline/overlay": "^3.2.3",
     "@preline/tabs": "^3.2.3",
-    "astro": "5.16.11",
+    "astro": "5.16.14",
     "astro-vtbot": "^2.1.10",
     "globby": "^16.1.0",
     "html-minifier-terser": "^7.2.0",
@@ -38,12 +38,12 @@
     "@astrojs/check": "^0.9.6",
     "@astrojs/upgrade": "^0.6.2",
     "@tailwindcss/postcss": "^4.1.18",
-    "@types/node": "^25.0.9",
+    "@types/node": "^25.0.10",
     "astro-compressor": "^1.2.0",
     "astro-icon": "^1.1.5",
     "depcheck": "^1.4.7",
     "path-browserify": "^1.0.1",
-    "prettier": "^3.8.0",
+    "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.9.3"
   }
