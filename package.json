@@ -14,7 +14,7 @@
   "dependencies": {
     "@astrojs/react": "4.4.2",
     "@astrojs/sitemap": "^3.7.0",
-    "@astrojs/starlight": "0.37.3",
+    "@astrojs/starlight": "0.37.4",
     "@astrojs/tailwind": "6.0.2",
     "@iconify-json/lucide": "^1.2.86",
     "@preline/accordion": "^3.2.3",
@@ -22,7 +22,7 @@
     "@preline/dropdown": "^3.2.3",
     "@preline/overlay": "^3.2.3",
     "@preline/tabs": "^3.2.3",
-    "astro": "5.16.14",
+    "astro": "5.16.15",
     "astro-vtbot": "^2.1.10",
     "globby": "^16.1.0",
     "html-minifier-terser": "^7.2.0",
