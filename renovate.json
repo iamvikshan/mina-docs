@@ -20,9 +20,9 @@
   "packageRules": [
     {
       "description": "Astro ecosystem packages",
-      "matchPackagePatterns": ["^@astrojs/", "^astro"],
       "groupName": "astro",
-      "labels": ["dependencies", "astro"]
+      "labels": ["dependencies", "astro"],
+      "matchPackageNames": ["/^@astrojs//", "/^astro/"]
     },
     {
       "description": "React packages",
@@ -32,33 +32,33 @@
     },
     {
       "description": "Tailwind CSS packages",
-      "matchPackagePatterns": ["^tailwindcss$", "^@tailwindcss/"],
       "groupName": "tailwindcss",
-      "labels": ["dependencies", "tailwind"]
+      "labels": ["dependencies", "tailwind"],
+      "matchPackageNames": ["/^tailwindcss$/", "/^@tailwindcss//"]
     },
     {
       "description": "Preline UI components",
-      "matchPackagePatterns": ["^@preline/", "^preline$"],
       "groupName": "preline",
-      "labels": ["dependencies", "preline"]
+      "labels": ["dependencies", "preline"],
+      "matchPackageNames": ["/^@preline//", "/^preline$/"]
     },
     {
       "description": "Image processing (sharp)",
-      "matchPackagePatterns": ["^sharp"],
       "groupName": "sharp",
-      "labels": ["dependencies", "images"]
+      "labels": ["dependencies", "images"],
+      "matchPackageNames": ["/^sharp/"]
     },
     {
       "description": "TypeScript and type definitions",
-      "matchPackagePatterns": ["^@types/", "^typescript$"],
       "groupName": "typescript",
-      "labels": ["dependencies", "typescript"]
+      "labels": ["dependencies", "typescript"],
+      "matchPackageNames": ["/^@types//", "/^typescript$/"]
     },
     {
       "description": "Prettier and formatting",
-      "matchPackagePatterns": ["^prettier"],
       "groupName": "prettier",
-      "labels": ["dependencies", "formatting"]
+      "labels": ["dependencies", "formatting"],
+      "matchPackageNames": ["/^prettier/"]
     },
     {
       "description": "GitHub Actions",
