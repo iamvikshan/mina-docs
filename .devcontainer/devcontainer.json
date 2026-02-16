@@ -2,7 +2,7 @@
   "name": "Ubuntu + Bun + Docker",
   "image": "vikshan/ubuntu-bun:latest",
 
-  // Add Docker-in-Docker feature
+  // Add features to the dev container, either from a Dockerfile or a list of features to install.
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {
       "installDirectlyFromGitHubRelease": true,
@@ -18,17 +18,18 @@
     "vscode": {
       "extensions": [
         "dbaeumer.vscode-eslint",
-        "prettier.prettier-vscode",
+        "esbenp.prettier-vscode",
         "eamodio.gitlens",
         "oven.bun-vscode",
         "WakaTime.vscode-wakatime",
-        "mongodb.mongodb-vscode"
+        "mongodb.mongodb-vscode",
+        "coderabbit.coderabbit-vscode"
       ]
     }
   },
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "bun update && docker --version && chmod +x ./scripts/iamvikshan.sh",
+  "postCreateCommand": "[ -f scripts/iamvikshan.sh ] && chmod +x scripts/iamvikshan.sh; bun install",
 
   // Set `remoteUser` to `root` to connect as root.
   "remoteUser": "root"
