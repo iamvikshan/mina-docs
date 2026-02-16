@@ -489,7 +489,13 @@ if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     
     if git remote | grep -q "^origin$"; then
         CURRENT_URL=$(git remote get-url origin)
-        if [ "$CURRENT_URL" != "$TARGET_REPO" ]; then
+        # Normalize URLs for comparison: strip trailing .git and trailing slash
+        # Both https://github.com/user/repo and https://github.com/user/repo.git are equivalent
+        NORMALIZED_CURRENT="${CURRENT_URL%.git}"
+        NORMALIZED_CURRENT="${NORMALIZED_CURRENT%/}"
+        NORMALIZED_TARGET="${TARGET_REPO%.git}"
+        NORMALIZED_TARGET="${NORMALIZED_TARGET%/}"
+        if [ "$NORMALIZED_CURRENT" != "$NORMALIZED_TARGET" ]; then
             echo ""
             echo "⚠️  Remote 'origin' URL differs from target:"
             echo "   Current URL:  $CURRENT_URL"
@@ -534,7 +540,7 @@ if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
                 echo "✓ Remote 'origin' updated"
             fi
         else
-            echo "Remote 'origin' is already set to $TARGET_REPO"
+            echo "Remote 'origin' is already set to $CURRENT_URL"
         fi
     else
         echo "Adding 'origin' remote..."

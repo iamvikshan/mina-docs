@@ -4,14 +4,11 @@
 
 [![API](https://img.shields.io/badge/Endpoint-api.4mina.app-dc143c)](https://api.4mina.app)
 [![Dashboard](https://img.shields.io/badge/Dashboard-4mina.app%2Fdash-dc143c)](https://4mina.app/dash)
-[![Documentation](https://img.shields.io/badge/API%20Docs-docs.api.4mina.app-dc143c)](https://docs.api.4mina.app)
+[![Documentation](https://img.shields.io/badge/API%20Docs-apidocs.4mina.app-dc143c)](https://apidocs.4mina.app)
 
 ## Overview
 
-Production API service built with [Hono](https://hono.dev/) on Cloudflare Workers. Provides image generation endpoints, Discord bot registry, and webhook transformation utilities.
-
-> [!IMPORTANT]
-> Complete API documentation, authentication guides, and interactive examples are available at [docs.api.4mina.app](https://docs.api.4mina.app). This README covers development setup only.
+Amina API service built with [Hono](https://hono.dev/) on Cloudflare Workers. Provides image generation endpoints, Discord bot registry, and webhook transformation utilities.
 
 ## Key Features
 

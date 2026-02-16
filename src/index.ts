@@ -25,7 +25,7 @@ app.get('/', (c) => {
     name: 'Amina API',
     version: '1.0.0',
     description: 'Image generation & utilities API for Amina Discord Bot',
-    documentation: 'https://api.docs.api.4mina.app',
+    documentation: 'https://api.apidocs.4mina.app',
     dashboard: 'https://4mina.app/dash/user',
     endpoints: {
       v1: '/v1/* (authenticated)',
