@@ -7,7 +7,8 @@
     "dev": "wrangler dev",
     "dev:local": "bun run --hot src/server.ts",
     "deploy": "wrangler deploy",
-    "deploy:prod": "wrangler deploy --env production",
+    "build:prd": "bun install --production --frozen-lockfile",
+    "deploy:prd": "wrangler deploy --env production",
     "check": "tsc --noEmit && prettier --check .",
     "f": "prettier --write ."
   },
@@ -20,6 +21,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260217.0",
     "@types/bun": "^1.3.9",
+    "eslint": "^10.0.0",
     "husky": "^9.1.7",
     "prettier": "^3.8.1",
     "typescript": "^5.9.3",

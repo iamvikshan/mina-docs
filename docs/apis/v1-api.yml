@@ -46,7 +46,7 @@ info:
     name: Amina Support
     url: https://discord.gg/uMgS9evnmv
 
-  dashboard:
+  x-dashboard:
     name: Amina Dashboard
     url: https://4mina.app/dash
 
@@ -1032,9 +1032,9 @@ paths:
                         items:
                           $ref: '#/components/schemas/BotMeta'
                   meta:
-                    type: object
+                    allOf:
+                      - $ref: '#/components/schemas/PaginationMetaPage'
                     description: Pagination metadata
-                    $ref: '#/components/schemas/PaginationMetaPage'
 
   /v1/bots/{clientId}:
     get:

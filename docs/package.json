@@ -1,0 +1,17 @@
+{
+  "name": "amina-dev-portal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Amina Developer Portal - API docs & developer wiki",
+  "type": "module",
+  "scripts": {
+    "postinstall": "python3 scripts/patch-react-dom.py",
+    "dev": "zudoku dev",
+    "build": "zudoku build",
+    "build:prd": "bun install --production --frozen-lockfile && zudoku build",
+    "preview": "zudoku preview"
+  },
+  "dependencies": {
+    "zudoku": "^0.68.1"
+  }
+}

@@ -17,3 +17,8 @@ node_modules/
 .DS_Store
 
 plans/
+
+# Zudoku docs
+docs/dist/
+docs/node_modules/
+docs/.zudoku/
