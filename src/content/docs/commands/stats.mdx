@@ -1,0 +1,75 @@
+---
+title: "stats"
+description: "XP system, ranks, activity tracking, leaderboards."
+sidebar:
+  label: stats
+  order: 10
+---
+
+import { Aside, Card } from '@components/ui/starlight/components';
+import { Icon } from 'astro-icon/components';
+
+<div class="command-category-header">
+  <Icon name="lucide:trending-up" size="2rem" class="category-icon info-icon" />
+  <div>
+    <h1>stats</h1>
+    <p class="category-description">xp system, ranks, and activity tracking.</p>
+  </div>
+</div>
+
+---
+
+## ranks
+
+### `/rank`
+
+display your or another member's XP rank card.
+
+| option | description | required |
+|--------|-------------|----------|
+| `user` | user to view | no |
+
+**cooldown:** 5 seconds
+
+---
+
+### `/stats`
+
+view detailed XP and message statistics.
+
+| option | description | required |
+|--------|-------------|----------|
+| `user` | user to view | no |
+
+---
+
+## configuration (admin)
+
+### `/statstracking`
+
+enable or disable XP tracking for the server.
+
+| option | description | required |
+|--------|-------------|----------|
+| `status` | ON or OFF | yes |
+
+**required permissions:** `Manage Guild`
+
+---
+
+### `/levelup`
+
+customize level up messages and notifications.
+
+| subcommand | description | options |
+|------------|-------------|---------|
+| `message` | set level up message text | `message` |
+| `channel` | set announcement channel | `channel` |
+
+**required permissions:** `Manage Guild`
+
+**example:**
+```
+/levelup message message:congrats {user}, you're now level {level}!
+/levelup channel channel:#level-ups
+```

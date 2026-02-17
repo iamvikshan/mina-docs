@@ -1,0 +1,149 @@
+---
+title: helping out
+description: ways to contribute to amina - support, docs, code, or just help others.
+sidebar:
+  label: helping out
+  order: 1
+---
+
+import {
+  CardGrid,
+  LinkCard,
+  Steps,
+} from "@astrojs/starlight/components";
+import { Aside, Card } from '@components/ui/starlight/components';
+
+# helping out
+
+so you wanna help? cool. here's how.
+
+## ways to contribute
+
+## ways to contribute
+
+<CardGrid stagger>
+  <Card title="support financially" icon="lucide:heart">
+    help keep amina running and improving.
+    <LinkCard title="ko-fi" href="https://ko-fi.com/vikshan" />
+    <LinkCard title="patreon" href="https://patreon.com/vikshan" />
+  </Card>
+  <Card title="improve docs" icon="lucide:file-text">
+    found something confusing? fix it or let us know.
+    <LinkCard title="how to contribute" href="#documentation" />
+  </Card>
+  <Card title="write code" icon="lucide:code">
+    add features or fix bugs in the codebase.
+    <LinkCard title="how to contribute" href="#code" />
+  </Card>
+  <Card title="help others" icon="lucide:message-circle">
+    answer questions in the support server.
+    <LinkCard title="join discord" href="https://discord.gg/uMgS9evnmv" />
+  </Card>
+</CardGrid>
+
+---
+
+## documentation
+
+amina has a lot of features. good docs make them usable.
+
+**what you can do:**
+- fix typos or unclear explanations
+- add examples that helped you
+- document undocumented features
+- improve command descriptions
+
+**how to contribute:**
+
+<Steps>
+1. check the current docs and find what needs work
+2. open an issue on [github](https://github.com/iamvikshan/amina) or ask in [discord](https://discord.gg/uMgS9evnmv)
+3. once approved, make your changes
+4. submit a pull request
+</Steps>
+
+<Aside type="tip">
+for this docs site specifically, check the [amina-docs repo](https://github.com/iamvikshan/amina-docs). PRs welcome.
+</Aside>
+
+---
+
+## code
+
+amina is open source and written in discord.js. check out the [repo](https://github.com/iamvikshan/amina).
+
+<Aside type="caution">
+only add features if you know javascript well. don't break things.
+</Aside>
+
+**how to contribute:**
+
+<Steps>
+1. fork the repo on github
+2. clone your fork locally
+3. create a new branch for your feature/fix
+4. make changes with clear commit messages
+5. push to your fork
+6. open a pull request to main repo
+</Steps>
+
+**what we need:**
+- bug fixes (check [issues](https://github.com/iamvikshan/amina/issues))
+- performance improvements
+- new features (discuss first in discord/issues)
+- tests and documentation
+
+**what we don't need:**
+- random rewrites without discussion
+- features that don't fit amina's purpose
+- code that breaks existing functionality
+
+---
+
+## support server
+
+if you know amina well, help others in the [support server](https://discord.gg/uMgS9evnmv).
+
+**requirements:**
+- active for at least 2 weeks
+- actually knows how amina works
+- can troubleshoot problems independently
+- patient with new users
+
+**how to become support staff:**
+1. be active and helpful in the server
+2. show you know your stuff
+3. reach out to staff when ready
+
+we'll notice if you're consistently helping others.
+
+---
+
+## acknowledgements
+
+thanks to everyone who helps make amina better.
+
+**special thanks:**
+- all supporters on [ko-fi](https://ko-fi.com/vikshan) and [patreon](https://patreon.com/vikshan)
+- community members who answer questions
+- contributors who submit code and docs
+- river for the [dashboard guide](https://blog.riverdev.wtf/connect-dashboard-djs-bot-ubuntu-apache)
+- saiteja madha for [source code reference](https://github.com/saiteja-madha/discord-js-bot)
+
+---
+
+## support development
+
+<LinkCard
+  title="support on ko-fi"
+  description="one-time or monthly support. helps keep amina running."
+  href="https://ko-fi.com/vikshan"
+/>
+
+<LinkCard
+  title="support on patreon"
+  description="monthly support with perks. early access to features."
+  href="https://patreon.com/vikshan"
+/>
+
+ngl, running a bot costs money (hosting, api costs, etc). if amina helps your server, consider supporting development.

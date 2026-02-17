@@ -1,0 +1,44 @@
+---
+/**
+ * Primary Button - Amina Crimson
+ * ================================
+ * Primary CTA button with gradient crimson background
+ * Amina Style: Bold, energetic, main action button
+ * Perfect for: Discord invites, main CTAs, important actions
+ */
+
+import Icon from '@components/ui/icons/Icon.astro';
+
+interface Props {
+  url?: string;
+  text?: string;
+  icon?: string;
+  class?: string;
+}
+
+const {
+  url = '#',
+  text = 'Get Started',
+  icon = 'lucide:arrow-right',
+  class: className = '',
+} = Astro.props;
+---
+
+<a
+  href={url}
+  class:list={[
+    'group inline-flex items-center gap-2 px-8 py-4',
+    'bg-gradient-to-r from-amina-crimson to-rose-red text-white',
+    'rounded-xl font-heading font-bold text-lg',
+    'hover:scale-105 hover:shadow-glow-red',
+    'transition-all duration-300',
+    className,
+  ]}
+>
+  <Icon name={icon} class="w-6 h-6" />
+  <span>{text}</span>
+  <Icon
+    name="lucide:arrow-right"
+    class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+  />
+</a>

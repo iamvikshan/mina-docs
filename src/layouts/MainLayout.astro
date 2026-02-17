@@ -1,0 +1,80 @@
+---
+/**
+ * Main Layout - Minimal SEO Wrapper
+ * ==================================
+ * Simplified layout that only handles SEO, metadata, and basic HTML structure.
+ * Pages are responsible for composing their own Header and Footer components.
+ *
+ * Adapted from Amina dashboard Layout.astro
+ */
+import type { MainLayoutProps } from '@types';
+import Meta from '@components/Meta.astro';
+import { SITE } from '@/data/constants';
+
+// Props
+type Props = MainLayoutProps;
+const { title = SITE.title, meta, structuredData, lang = 'en' } = Astro.props;
+---
+
+<html lang={lang} class="scrollbar-hide lenis lenis-smooth scroll-pt-16">
+  <head>
+    <!-- Metadata -->
+    <Meta meta={meta} structuredData={structuredData} />
+    <title>{title}</title>
+
+    <!-- Amina Typography - Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@300;400;500;600;700;800&family=Quicksand:wght@500&family=Fira+Code:wght@400;500;600&display=swap"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+
+    <!-- Dark mode script -->
+    <script is:inline>
+      if (
+        localStorage.getItem('hs_theme') === 'dark' ||
+        (!('hs_theme' in localStorage) &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
+
+    <!-- Smooth scroll -->
+    <script>
+      import '@scripts/lenisSmoothScroll.js';
+    </script>
+  </head>
+  <body
+    class="bg-sky-50 selection:bg-amina-crimson selection:text-white dark:bg-midnight-black"
+  >
+    <!--
+      Minimal page structure - just the slot for content.
+      Pages are responsible for including Header and Footer components themselves.
+    -->
+    <slot />
+
+    <!-- Footer commented out for now -->
+    <!-- <Footer /> -->
+
+    <style>
+      /* CSS rules for the page scrollbar */
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </body>
+</html>

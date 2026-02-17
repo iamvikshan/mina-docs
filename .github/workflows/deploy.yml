@@ -1,0 +1,26 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy Astro Site
+        uses: iamvikshan/.github/.github/actions/astro@main
+        # Optional: customize with inputs
+        # with:
+        #   package-manager: bun@latest
+        #   node-version: 20
+        #   path: .

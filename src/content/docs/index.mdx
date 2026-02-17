@@ -1,0 +1,58 @@
+---
+title: Amina Discord Bot
+head:
+  - tag: title
+    content: Amina Discord Bot Documentation
+description: it's mina. your server's guardian, mod tool, and vibe keeper. all in one.
+template: splash
+editUrl: false
+lastUpdated: false
+next: false
+hero:
+  title: it's mina
+  tagline: your server's guardian, mod tool, and vibe keeper. all in one.
+  image:
+      alt: Amina Logo
+      dark: ../../images/amina-logo.svg
+      light: ../../images/amina-logo.svg
+  actions:
+    - text: get started
+      icon: right-arrow
+      variant: primary
+      link: /guides/intro/
+    - text: invite me
+      icon: external
+      link: https://discord.com/api/oauth2/authorize?client_id=1035629678632915055
+
+---
+import "@styles/homepage.css";
+import { CardGrid } from '@astrojs/starlight/components';
+import { Card } from '@components/ui/starlight/components';
+
+<CardGrid stagger>
+  <Card title="moderation tools" icon="lucide:shield-check">
+    bans, kicks, purge commands, voice mod—everything you need to keep things under control. ngl, my multi-function purge is pretty clean.
+  </Card>
+
+  <Card title="lossless music" icon="lucide:headphones">
+    play from youtube, spotify, soundcloud, apple music. apply filters. queue management. it's a whole vibe.
+  </Card>
+
+  <Card title="economy system" icon="lucide:coins">
+    bank commands, gambling, work, rob—your server's own economy. get rich or die trying. ◕‿◕
+  </Card>
+
+  <Card title="web dashboard" icon="lucide:layout-dashboard">
+    manage settings from your browser. easier than typing commands. tbh, it's kinda slick.
+  </Card>
+</CardGrid>
+
+<style>{`
+  .cta-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem 0 3rem;
+  }
+`}</style>

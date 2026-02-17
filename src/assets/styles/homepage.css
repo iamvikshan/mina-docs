@@ -1,0 +1,116 @@
+/* ==================== HOMEPAGE-SPECIFIC STYLES ==================== */
+/* Note: Base Amina Design System variables and layout styles are loaded globally 
+   via starlight.css in astro.config.mts. This file contains only homepage-specific 
+   component styling to avoid duplication. */
+
+.sl-flex.action.primary {
+  transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sl-flex.action.primary:hover {
+  background-color: var(--rose-red);
+}
+
+.sl-flex.action.primary svg {
+  transform: translateX(0);
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sl-flex.action.primary:hover svg {
+  transform: translateX(0.25rem);
+}
+
+/* ========================================
+   Icon Theming - Lucide Icons
+   ======================================== */
+
+/* Category-specific icon colors */
+.category-icon {
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+  display: inline-block;
+}
+
+/* Moderation - Blood Red */
+.category-icon.blood-red-icon {
+  color: var(--blood-red);
+}
+
+/* Info/Utility/Music - Electric Blue */
+.category-icon.info-icon,
+.category-icon.cyan-icon {
+  color: var(--electric-blue);
+}
+
+/* Economy/Giveaways - Imperial Gold */
+.category-icon.gold-icon {
+  color: var(--imperial-gold);
+}
+
+/* Social - Rose Red */
+.category-icon.rose-icon {
+  color: var(--rose-red);
+}
+
+/* Admin/Bot - Gray */
+.category-icon.gray-icon {
+  color: var(--sl-color-gray-3);
+}
+
+/* Fun - Crimson */
+.category-icon.crimson-icon {
+  color: var(--amina-crimson);
+}
+
+/* Success - Discord Green */
+.category-icon.success-icon {
+  color: var(--discord-green);
+}
+
+/* Hover effects for category icons */
+.category-icon:hover {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .sl-flex.action.primary,
+  .sl-flex.action.primary svg,
+  .category-icon {
+    transition: none;
+  }
+
+  .category-icon:hover {
+    transform: none;
+    filter: none;
+  }
+
+  .sl-flex.action.primary:hover svg {
+    transform: none;
+  }
+}
+
+/* Command Category Header Layout */
+.command-category-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--sl-color-gray-5);
+}
+
+.command-category-header h1 {
+  margin: 0;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  line-height: 1.2;
+}
+
+.command-category-header .category-description {
+  margin: 0.5rem 0 0 0;
+  color: var(--sl-color-gray-2);
+  font-size: clamp(1rem, 2.5vw, 1.125rem);
+  line-height: 1.5;
+}

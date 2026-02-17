@@ -1,0 +1,49 @@
+---
+/**
+ * Secondary Button - Cyber Blue
+ * ===============================
+ * Secondary CTA button with electric blue outline
+ * Amina Style: Tactical, informative, support actions
+ * Perfect for: Documentation, secondary CTAs, info links
+ */
+import Icon from '@components/ui/icons/Icon.astro';
+
+interface Props {
+  text?: string;
+  url?: string;
+  icon?: string;
+  class?: string;
+}
+
+const {
+  text = 'learn more',
+  url = '#',
+  icon = 'lucide:file-text',
+  class: className = '',
+} = Astro.props;
+---
+
+<a
+  href={url}
+  class:list={[
+    'inline-flex items-center justify-center gap-2',
+    'px-8 py-4 text-lg',
+    'font-heading font-bold',
+    'text-[var(--cyber-blue)] bg-transparent',
+    'border-2 border-[var(--cyber-blue)] rounded-xl',
+    'transition-all duration-300',
+    'hover:bg-[var(--cyber-blue)]/10 hover:scale-105',
+    'outline-none focus-visible:ring-4 focus-visible:ring-[var(--cyber-blue)]/50',
+    className,
+  ]}
+  style="--glow-blue: 0 0 20px rgba(30, 144, 255, 0.6);"
+>
+  <Icon name={icon} class="w-6 h-6" />
+  <span>{text}</span>
+</a>
+
+<style>
+  a:hover {
+    box-shadow: var(--glow-blue);
+  }
+</style>

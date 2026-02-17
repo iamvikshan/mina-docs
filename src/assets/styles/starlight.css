@@ -1,0 +1,549 @@
+@import './tailwind.css';
+
+/* ==================== AMINA DESIGN SYSTEM - STARLIGHT OVERRIDES ==================== */
+/* Dark mode colors - consolidated from dash/global.css */
+:root {
+  /* === AKAME'S CRIMSON === */
+  --amina-crimson: #dc143c;
+  --blood-red: #8b0000;
+  --rose-red: #e63946;
+
+  /* === NIGHT RAID'S DARKNESS === */
+  --midnight-black: #0a0a0a;
+  --shadow-gray: #1a1a1a;
+  --steel-gray: #2d2d2d;
+  --slate-gray: #3d3d3d;
+
+  /* === IMPERIAL GOLD === */
+  --imperial-gold: #ffd700;
+  --amber-gold: #ffa500;
+  --bronze: #cd7f32;
+
+  /* === DIGITAL BLUE === */
+  --electric-blue: #1e90ff;
+  --cyber-blue: #00ced1;
+  --ice-blue: #87ceeb;
+
+  /* === DISCORD INTEGRATION === */
+  --discord-blurple: #5865f2;
+  --discord-green: #57f287;
+  --discord-red: #ed4245;
+  --discord-gray: #36393f;
+
+  /* === NEUTRAL/UTILITY === */
+  --pure-white: #ffffff;
+  --off-white: #f5f5f5;
+
+  /* === TYPOGRAPHY === */
+  --font-heading: 'Rajdhani', 'Orbitron', 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', 'Poppins', sans-serif;
+  --font-dialogue: 'Quicksand', 'Comfortaa', cursive;
+  --font-mono: 'Fira Code', 'JetBrains Mono', monospace;
+
+  /* === SHADOWS & GLOWS === */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+
+  --glow-crimson: 0 0 20px rgba(220, 20, 60, 0.6);
+  --glow-blue: 0 0 20px rgba(30, 144, 255, 0.6);
+  --glow-gold: 0 0 20px rgba(255, 215, 0, 0.6);
+  --glow-green: 0 0 20px rgba(87, 242, 135, 0.6);
+
+  /* Extended glow variants (docs-specific) */
+  --glow-crimson-intense: 0 0 30px rgba(220, 20, 60, 0.8);
+  --glow-blue-intense: 0 0 30px rgba(30, 144, 255, 0.8);
+  --glow-gold-intense: 0 0 30px rgba(255, 215, 0, 0.8);
+  --shadow-crimson: 0 4px 14px rgba(220, 20, 60, 0.4);
+  --shadow-blue: 0 4px 14px rgba(30, 144, 255, 0.4);
+
+  /* === SPACING === */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  /* === TRANSITIONS === */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* === BORDER RADIUS === */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* === STARLIGHT THEME INTEGRATION === */
+  --border: hsla(348, 83%, 47%, 0.3); /* Crimson border */
+  --backdrop-color: #1a1a1acc; /* shadow-gray with alpha */
+  --crimson-hsl: 348, 83%, 47%; /* Amina Crimson HSL */
+  --overlay-crimson: hsla(var(--crimson-hsl), 0.15);
+  --background-overlay: linear-gradient(
+    135deg,
+    rgba(220, 20, 60, 0.05),
+    /* Amina Crimson */ rgba(30, 144, 255, 0.03),
+    /* Electric Blue */ rgba(139, 0, 0, 0.05) /* Blood Red */
+  );
+  --base-background: #0a0a0a; /* midnight-black */
+  --sl-color-accent: #dc143c; /* Amina Crimson */
+  --sl-color-accent-high: #e63946; /* Rose Red (lighter) */
+  --sl-color-accent-low: #8b0000; /* Blood Red (darker) */
+  --sl-color-black: #0a0a0a;
+  --sl-color-gray-1: #eee;
+  --sl-color-gray-2: #c2c2c2;
+  --sl-color-gray-3: #8b8b8b;
+  --sl-color-gray-4: #585858;
+  --sl-color-gray-5: #2d2d2d; /* steel-gray */
+  --sl-color-gray-6: #1a1a1a; /* shadow-gray */
+  --sl-color-white: #fff;
+  --list-marker-color: #dc143c; /* Amina Crimson marker */
+}
+
+/* Light mode colors (optional - dark first approach) */
+:root[data-theme='light'] {
+  --border: hsla(348, 83%, 47%, 0.3); /* Crimson border */
+  --backdrop-color: #f5f5f599; /* Off-white with alpha */
+  --crimson-hsl: 348, 83%, 47%; /* Amina Crimson HSL */
+  --overlay-crimson: hsla(var(--crimson-hsl), 0.08);
+  --background-overlay: linear-gradient(
+    135deg,
+    rgba(220, 20, 60, 0.02),
+    /* Amina Crimson */ rgba(30, 144, 255, 0.02),
+    /* Electric Blue */ rgba(139, 0, 0, 0.02) /* Blood Red */
+  );
+  --base-background: #ffffff;
+  --sl-color-accent: #8b0000; /* Blood Red for light mode */
+  --sl-color-accent-high: #dc143c; /* Amina Crimson (lighter for light mode) */
+  --sl-color-accent-low: #e63946; /* Rose Red (lightest) */
+  --sl-color-black: #fff;
+  --sl-color-gray-1: #1a1a1a; /* shadow-gray */
+  --sl-color-gray-2: #2d2d2d; /* steel-gray */
+  --sl-color-gray-3: #585858;
+  --sl-color-gray-4: #8b8b8b;
+  --sl-color-gray-5: #c2c2c2;
+  --sl-color-gray-6: #eee;
+  --sl-color-gray-7: #f5f5f5; /* Off-white */
+  --sl-color-white: #0a0a0a; /* midnight-black */
+  --list-marker-color: #dc143c; /* Amina Crimson marker */
+}
+
+/* Page gradient effect - matches index page */
+.page {
+  background:
+    linear-gradient(215deg, var(--overlay-crimson), transparent 40%),
+    radial-gradient(var(--overlay-crimson), transparent 40%) no-repeat center
+      center / cover,
+    radial-gradient(var(--overlay-crimson), transparent 65%) no-repeat center
+      center / cover;
+  background-blend-mode: overlay;
+}
+
+/* ==================== STARLIGHT LAYOUT OVERRIDES ==================== */
+
+header {
+  border: none !important;
+  padding: 0 !important;
+}
+
+header.header {
+  background-color: transparent !important;
+  height: 4.5rem !important;
+  margin-inline: auto !important;
+  padding-block: 0 !important;
+  padding-inline: 2rem !important;
+}
+
+header > div:first-of-type {
+  backdrop-filter: blur(10px) !important;
+  background-color: var(--backdrop-color) !important;
+  border: 1px var(--border) solid;
+  border-radius: 36px;
+  height: 100% !important;
+  margin-inline: auto !important;
+  margin-top: 1rem !important;
+  max-width: 1536px;
+  padding-inline: 2rem !important;
+  width: auto !important;
+}
+
+#starlight__sidebar {
+  border-radius: 1rem;
+  margin-top: 2rem !important;
+}
+
+.content-panel:first-of-type {
+  margin-top: 2rem !important;
+}
+
+.right-sidebar {
+  top: 2rem !important;
+}
+
+#starlight__on-this-page--mobile {
+  border: none !important;
+}
+
+mobile-starlight-toc > nav {
+  border: none !important;
+  border-radius: 1rem;
+  margin-top: 2rem !important;
+}
+
+select {
+  background-image: none;
+  box-shadow: none;
+}
+
+select:focus-visible {
+  outline: -webkit-focus-ring-color auto 1px;
+}
+
+/* Add background styling to body or main container */
+body {
+  background: var(--base-background);
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--background-overlay);
+  pointer-events: none;
+  z-index: 0;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+article.card {
+  border-radius: var(--radius-md);
+  background: var(--backdrop-color);
+  backdrop-filter: blur(8px);
+}
+
+/* ==================== STARLIGHT COMPONENTS ==================== */
+
+/* Starlight Asides */
+.starlight-aside--tip {
+  background: var(--electric-blue); /* Fallback */
+  background: linear-gradient(
+    45deg,
+    var(--electric-blue),
+    var(--cyber-blue)
+  ); /* Electric Blue to Cyber Blue */
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--midnight-black); /* midnight-black for text */
+}
+
+.starlight-aside--note {
+  background: var(--steel-gray); /* Fallback */
+  background: linear-gradient(
+    45deg,
+    var(--steel-gray),
+    var(--slate-gray)
+  ); /* steel-gray to slate-gray */
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--off-white); /* Off-white for text */
+}
+
+.starlight-aside__icon {
+  transform: scale(0.8);
+}
+
+.starlight-aside--tip .starlight-aside__title {
+  color: var(--midnight-black); /* midnight-black - high contrast */
+}
+
+.starlight-aside--note .starlight-aside__title {
+  color: var(--off-white); /* Off-white */
+}
+
+.sl-markdown-content ul:not(:where(.not-content *)) {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.sl-markdown-content ul:not(:where(.not-content *)) > li {
+  padding-left: 1.75rem;
+  position: relative;
+}
+
+.sl-markdown-content li:not(:where(.not-content *)) > ul,
+.sl-markdown-content li + li:not(:where(.not-content *)) {
+  margin-top: 0.625rem;
+}
+
+.sl-markdown-content ul:not(:where(.not-content *)) > li:before {
+  background: var(--list-marker-color);
+  border-radius: 1px;
+  content: '';
+  height: 2px;
+  left: 2px;
+  position: absolute;
+  top: 13px;
+  width: 0.875rem;
+}
+
+@media screen and (max-width: 800px) {
+  mobile-starlight-toc > nav {
+    border-radius: 1rem;
+    margin-top: 3rem !important;
+  }
+  header > div:first-of-type {
+    padding-inline-end: 5rem !important;
+  }
+  starlight-menu-button > button {
+    right: 3rem !important;
+    top: 2.2rem !important;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  header.header {
+    padding-inline: 1.5rem !important;
+  }
+}
+
+/* ========================================
+   Amina Typography System Application
+   ======================================== */
+
+/* Body text - Inter */
+body,
+.sl-markdown-content,
+.sl-markdown-content p,
+.sl-markdown-content li {
+  font-family: var(--font-body);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
+}
+
+/* Headings - Rajdhani (bold, uppercase for h1/h2) */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.sl-markdown-content h1,
+.sl-markdown-content h2,
+.sl-markdown-content h3,
+.sl-markdown-content h4,
+.sl-markdown-content h5,
+.sl-markdown-content h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-wide);
+}
+
+h1,
+.sl-markdown-content h1 {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+h2,
+.sl-markdown-content h2 {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+/* Navigation - Rajdhani */
+nav,
+.sidebar-content,
+.sidebar-pane a,
+header a,
+.site-title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+/* Code blocks - Fira Code */
+:root code,
+:root pre,
+:root .sl-markdown-content code,
+:root .sl-markdown-content pre,
+:root .expressive-code,
+body code,
+body pre {
+  font-family: var(--font-mono);
+}
+
+/* Dialogue/Personality elements - Quicksand */
+.amina-voice,
+blockquote,
+.sl-markdown-content blockquote {
+  font-family: var(--font-dialogue);
+  font-weight: 500;
+}
+
+/* Starlight aside titles - Heading font */
+.starlight-aside__title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+/* Button text - Heading font */
+button,
+.button,
+a.button {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ========================================
+   Amina Visual Effects
+   ======================================== */
+
+/* Glow effects */
+.glow-crimson {
+  box-shadow: var(--glow-crimson);
+}
+
+.glow-crimson-intense {
+  box-shadow: var(--glow-crimson-intense);
+}
+
+.glow-blue {
+  box-shadow: var(--glow-blue);
+}
+
+.glow-blue-intense {
+  box-shadow: var(--glow-blue-intense);
+}
+
+.glow-gold {
+  box-shadow: var(--glow-gold);
+}
+
+.glow-gold-intense {
+  box-shadow: var(--glow-gold-intense);
+}
+
+/* Hover effects */
+.hover-lift {
+  transition: var(--transition-all);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.hover-glow-crimson {
+  transition: var(--transition-all);
+}
+
+.hover-glow-crimson:hover {
+  box-shadow: var(--glow-crimson);
+}
+
+.hover-glow-blue {
+  transition: var(--transition-all);
+}
+
+.hover-glow-blue:hover {
+  box-shadow: var(--glow-blue);
+}
+
+/* Combined hover effects */
+.hover-lift-glow {
+  transition: var(--transition-all);
+}
+
+.hover-lift-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glow-crimson);
+}
+
+/* Smooth transitions */
+.smooth-transition {
+  transition: var(--transition-base);
+}
+
+.smooth-transition-all {
+  transition: var(--transition-all);
+}
+
+/* Interactive elements default hover */
+button:not(.not-content button),
+.link-card,
+.button,
+a.button,
+a.interactive {
+  transition: var(--transition-all);
+}
+
+button:not(.not-content button):hover,
+.link-card:hover,
+.button:hover,
+a.button:hover,
+a.interactive:hover {
+  transform: translateY(-2px);
+}
+
+/* Card transitions - hover transform handled separately for stagger compatibility */
+.card {
+  transition: var(--transition-all);
+}
+
+/* Accent links with crimson glow */
+.sl-markdown-content a:not(.not-content *) {
+  color: var(--sl-color-accent-high);
+  transition: var(--transition-fast);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+}
+
+.sl-markdown-content a:not(.not-content *):hover {
+  color: var(--sl-color-accent);
+  text-decoration-color: var(--sl-color-accent);
+  text-shadow: var(--glow-crimson);
+}
+
+/* ========================================
+   CardGrid Stagger Fix
+   ======================================== */
+
+/*
+ * Starlight's CardGrid with stagger prop applies:
+ * - .stagger class to the grid
+ * - transform: translateY(5rem) to :nth-child(2n) (even/right-side cards)
+ *
+ * When we add hover transform, it REPLACES the stagger transform,
+ * causing the card to jump up dramatically. To fix this, we need to
+ * preserve the stagger offset in the hover state.
+ */
+
+/* Default hover for all cards (non-stagger or left-side cards) */
+.card-grid > .card:hover,
+.card-grid > article.card:hover {
+  transform: translateY(-4px);
+}
+
+/* Left side (odd) cards in stagger grid - normal lift */
+.card-grid.stagger > .card:nth-child(2n + 1):hover,
+.card-grid.stagger > article.card:nth-child(2n + 1):hover {
+  transform: translateY(-4px);
+}
+
+/* Right side (even) cards in stagger grid - maintain 5rem offset with lift */
+.card-grid.stagger > .card:nth-child(2n):hover,
+.card-grid.stagger > article.card:nth-child(2n):hover {
+  transform: translateY(calc(5rem - 4px)) !important;
+}
