@@ -998,7 +998,7 @@ paths:
         '200':
           $ref: '#/components/responses/SvgImage'
 
-    # ========== Bots ==========
+  # ========== Bots ==========
   /v1/bots:
     get:
       tags: [Bots]
