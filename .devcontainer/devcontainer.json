@@ -23,7 +23,9 @@
         "oven.bun-vscode",
         "WakaTime.vscode-wakatime",
         "mongodb.mongodb-vscode",
-        "coderabbit.coderabbit-vscode"
+        "coderabbit.coderabbit-vscode",
+        "DeepScan.vscode-deepscan",
+        "jetbrains.qodana-code"
       ]
     }
   },

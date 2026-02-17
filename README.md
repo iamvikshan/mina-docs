@@ -1,257 +1,59 @@
-# Amina API
+# mina-dev
 
-> Image generation and bot utilities API powered by Cloudflare Workers
+> Amina API & Developer Portal
 
-[![API](https://img.shields.io/badge/Endpoint-api.4mina.app-dc143c)](https://api.4mina.app)
-[![Dashboard](https://img.shields.io/badge/Dashboard-4mina.app%2Fdash-dc143c)](https://4mina.app/dash)
-[![Documentation](https://img.shields.io/badge/API%20Docs-apidocs.4mina.app-dc143c)](https://apidocs.4mina.app)
+This repository contains:
 
-## Overview
+- **API Server** — Cloudflare Workers-powered API for [api.4mina.app](https://api.4mina.app), built with [Hono](https://hono.dev)
+- **Developer Portal** — API documentation and developer wiki powered by [Zudoku](https://zudoku.dev), deployed to [dev.4mina.app](https://dev.4mina.app) via Cloudflare Pages
 
-Amina API service built with [Hono](https://hono.dev/) on Cloudflare Workers. Provides image generation endpoints, Discord bot registry, and webhook transformation utilities.
+## Project Structure
 
-## Key Features
+```
+ src/              # API server source (Cloudflare Workers)
+ types/            # TypeScript type definitions
+ docs/             # Developer portal (Zudoku)
+   ├── apis/         # OpenAPI specifications
+   ├── pages/        # Markdown/MDX documentation pages
+   │   ├── wiki/     # Developer wiki (migrated from GitHub wiki)
+   │   └── ...       # Other documentation pages
+   └── zudoku.config.ts
+ wrangler.jsonc    # Workers config (amina-api)
+ package.json
+```
 
-- **Image Generation** - SVG-based cards, filters, overlays, and meme generators
-- **Bot Registry** - Public bot discovery with stats and commands
-- **Webhook Transformations** - Convert provider webhooks to Discord format
-- **Rate Limiting** - 60 requests/minute per API key via sliding window algorithm
-- **OpenAPI 3.1** - Full specification at `docs/v1-api.yml`
+## Development
 
-## Quick Start
-
-### Prerequisites
-
-- [Bun](https://bun.sh/) >= 1.3.3
-- [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/) >= 4.33.0
-- Cloudflare account with Workers enabled
-- MongoDB Atlas cluster
-
-### Development
+### API Server
 
 ```bash
 # Install dependencies
 bun install
 
-# Run with Wrangler (Cloudflare Workers environment)
+# Local development
 bun run dev
 
-# Run with Bun (faster iteration, no Workers features)
-bun run dev:local
+# Deploy to Cloudflare Workers
+bun run deploy
 ```
 
-> [!TIP]
-> Use `bun run dev:local` for rapid development of business logic. Switch to `bun run dev` when testing Workers-specific features (KV, secrets, etc.).
-
-### Environment Configuration
-
-**Development without Doppler:**
+### Developer Portal
 
 ```bash
-cp .env.example .env
-# Edit .env with your credentials
-bun run dev:local
+cd docs
+npm install
+npm run dev      # Local dev server
+npm run build    # Production build → docs/dist/
 ```
-
-**Required Secrets:**
-
-| Variable           | Description                     | Example                                             |
-| ------------------ | ------------------------------- | --------------------------------------------------- |
-| `MONGO_CONNECTION` | MongoDB Atlas connection string | `mongodb+srv://user:pass@cluster.mongodb.net/amina` |
-
-**Optional Secrets:**
-
-| Variable        | Description                         |
-| --------------- | ----------------------------------- |
-| `CLIENT_SECRET` | Salt for IP hashing in rate limiter |
-| `LOGS_WEBHOOK`  | Discord webhook for error logs      |
 
 ## Deployment
 
-### Cloudflare Workers Setup
+- **API Server**: Deployed to Cloudflare Workers as `amina-api` via `wrangler deploy`
+- **Developer Portal**: Deployed to Cloudflare Pages as `mina-dev` via CF dashboard
+  - Build command: `cd docs && npm run build`
+  - Output directory: `docs/dist`
+  - Custom domain: `dev.4mina.app`
 
-**1. Create KV Namespaces**
+## Links
 
-```bash
-# Rate limiting store
-wrangler kv:namespace create RATE_LIMIT
-
-# Bot registry store
-wrangler kv:namespace create BOTS
-
-# Update wrangler.jsonc with the namespace IDs
-```
-
-**2. Configure Secrets**
-
-```bash
-wrangler secret put MONGO_CONNECTION
-```
-
-**3. Deploy**
-
-```bash
-# Deploy to production
-bun run deploy:prod
-
-# Deploy to staging
-bun run deploy:staging
-```
-
-> [!WARNING]
-> Always test deployments in staging before pushing to production. Rate limiting and bot registry require KV namespaces to be properly bound in `wrangler.jsonc`.
-
-<details>
-<summary><strong>Project Structure</strong></summary>
-
-## Project Structure
-
-```
-.
-├── docs/
-│   └── v1-api.yml              # OpenAPI 3.1 specification
-├── scripts/
-│   └── iamvikshan.sh           # Deployment utilities
-├── src/
-│   ├── index.ts                # Hono app entry point
-│   ├── server.ts               # Local dev server (Bun)
-│   ├── lib/
-│   │   ├── api-keys.ts         # API key validation
-│   │   ├── bot-stats.ts        # Bot statistics aggregation
-│   │   ├── botAuth.ts          # Bot authentication
-│   │   ├── kvBots.ts           # Bot registry KV operations
-│   │   ├── logger.ts           # Structured logging
-│   │   ├── mongodb.ts          # MongoDB client
-│   │   ├── rate-limit.ts       # Sliding window rate limiter
-│   │   ├── response.ts         # Standardized API responses
-│   │   ├── styles.ts           # Design system utilities
-│   │   ├── cards/
-│   │   │   ├── index.ts
-│   │   │   ├── rank-card.ts    # SVG rank card generator
-│   │   │   ├── spotify-card.ts # Spotify now-playing card
-│   │   │   └── welcome-card.ts # Welcome/farewell cards
-│   │   └── webhooks/
-│   │       ├── doppler.ts      # Doppler webhook transformer
-│   │       └── templates.ts    # HTML templates
-│   ├── middleware/
-│   │   ├── index.ts            # CORS, logging, error handling
-│   │   ├── auth.ts             # API key authentication
-│   │   ├── botAuth.ts          # Bot secret authentication
-│   │   ├── rateLimit.ts        # Rate limiting middleware
-│   │   └── webhooks.ts         # Webhook validation
-│   └── routes/
-│       ├── bot.ts              # Bot health & stats endpoints
-│       ├── guild.ts            # Guild management
-│       ├── images.ts           # Legacy image routes
-│       ├── webhooks.ts         # Webhook transformation
-│       ├── internal/
-│       │   ├── index.ts
-│       │   ├── bots.ts         # Bot registration & heartbeat
-│       │   └── guilds.ts       # Guild data sync
-│       └── v1/
-│           ├── index.ts        # V1 API router
-│           ├── bots.ts         # Public bot discovery
-│           ├── images.ts       # Image generation
-│           ├── filters.ts      # Image filters
-│           ├── generators.ts   # Meme generators
-│           └── overlays.ts     # Image overlays
-├── types/
-│   ├── api.d.ts                # API types
-│   ├── bot.d.ts                # Bot types
-│   ├── cards.d.ts              # Card generation types
-│   ├── database.d.ts           # Database schema
-│   ├── discord.d.ts            # Discord types
-│   ├── env.d.ts                # Environment bindings
-│   └── index.d.ts              # Type exports
-├── package.json
-├── tsconfig.json
-└── wrangler.jsonc              # Cloudflare Workers config
-```
-
-</details>
-
-## Development Guidelines
-
-### API Response Format
-
-All JSON responses follow a standardized structure:
-
-```typescript
-// Success
-{
-  "success": true,
-  "data": { /* endpoint-specific data */ },
-  "meta": {
-    "generatedAt": "2024-01-01T00:00:00.000Z"
-  }
-}
-
-// Error
-{
-  "success": false,
-  "error": {
-    "message": "Human-readable error message",
-    "code": "ERROR_CODE"
-  },
-  "meta": {
-    "generatedAt": "2024-01-01T00:00:00.000Z"
-  }
-}
-```
-
-### Rate Limiting
-
-Rate limits are enforced using a sliding window algorithm stored in Cloudflare KV:
-
-- **Authenticated endpoints**: 60 requests/minute per API key
-- **Public endpoints**: 60 requests/minute per IP address (hashed)
-
-Headers returned:
-
-- `X-RateLimit-Limit`: Maximum requests per window
-- `X-RateLimit-Remaining`: Requests remaining
-- `X-RateLimit-Reset`: Unix timestamp when limit resets
-
-### Authentication
-
-**API Key (V1 endpoints)**:
-
-```bash
-Authorization: Bearer amina_xxxxxxxxxx
-```
-
-**Bot Secret (Internal endpoints)**:
-
-```bash
-X-Bot-Secret: your-bot-secret
-X-Bot-ID: your-bot-id
-```
-
-> [!TIP]
-> API keys are validated against MongoDB. Bot secrets are validated through Discord's OAuth2 flow using your bot's client secret. You must own the bot to modify its data.
-
-## Testing
-
-```bash
-# Type checking
-bun run check
-
-# Build (validates TypeScript and Wrangler config)
-bun run build
-```
-
-> [!NOTE]
-> There are currently no unit tests. API functionality is validated through integration testing against the staging environment.
-
-## Contributing
-
-Contributions are welcome. Please ensure:
-
-1. Code follows existing patterns and conventions
-2. TypeScript types are properly defined
-3. API responses follow the standardized format
-4. Changes are tested in staging before production deployment
-
----
-
-**Support**: [Discord Server](https://discord.gg/uMgS9evnmv)
+- [API](https://api.4mina.app) • [Developer Portal](https://dev.4mina.app) • [Discord](https://discord.gg/uMgS9evnmv) • [Dashboard](https://4mina.app/dash)

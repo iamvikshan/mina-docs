@@ -15,7 +15,7 @@
 #   ./iamvikshan.sh [--repo <repository-url>] [--force|--yes]
 #
 # Options:
-#   --repo <url>       Override the target repository URL (default: https://github.com/iamvikshan/amina)
+#   --repo <url>       Override the target repository URL (default: https://github.com/iamvikshan/mina-dev)
 #   --force, --yes     Force changes without prompting (required in non-interactive mode for remote URL changes)
 #
 # Environment variables:
@@ -54,7 +54,7 @@ MARKER_START="# iamvikshan development setup"
 MARKER_END="# End iamvikshan development setup"
 
 # Default target repository (can be overridden by TARGET_REPO env var or --repo argument)
-DEFAULT_TARGET_REPO="https://github.com/iamvikshan/amina"
+DEFAULT_TARGET_REPO="https://github.com/iamvikshan/mina-dev"
 TARGET_REPO="${TARGET_REPO:-$DEFAULT_TARGET_REPO}"
 
 # Flag to force remote URL changes without prompting (for non-interactive use)

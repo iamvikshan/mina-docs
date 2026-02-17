@@ -1,0 +1,7 @@
+gitlab:
+  enabled: true
+  owner: vikshan
+  project: mina-dev
+
+github:
+  enabled: true
