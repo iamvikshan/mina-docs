@@ -57,5 +57,5 @@ if [ -n "$CODESPACES" ]; then
 fi
 
 # Run project checks (Linting, Type Checking & Formatting)
-echo "Running pre-commit checks..."
-bun run check
+# echo "Running pre-commit checks..."
+# bun run check

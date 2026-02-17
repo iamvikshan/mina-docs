@@ -17,7 +17,7 @@ const config: ZudokuConfig = {
         {
           title: 'Resources',
           links: [
-            { label: 'Consumer Docs', href: 'https://docs.4mina.app' },
+            { label: 'Consumer Docs', href: '/guide/index' },
             { label: 'Dashboard', href: 'https://4mina.app/dash' },
           ],
         },
@@ -33,7 +33,7 @@ const config: ZudokuConfig = {
         },
       ],
       social: [
-        { icon: 'github', href: 'https://github.com/iamvikshan/mina-dev' },
+        { icon: 'github', href: 'https://github.com/iamvikshan/mina-docs' },
         { icon: 'discord', href: 'https://discord.gg/uMgS9evnmv' },
       ],
     },
@@ -90,6 +90,44 @@ const config: ZudokuConfig = {
     },
   },
   navigation: [
+    {
+      type: 'category',
+      label: 'Guide',
+      icon: 'book',
+      items: [
+        { type: 'doc', label: 'Home', file: 'guide/index' },
+        {
+          type: 'category',
+          label: 'Getting Started',
+          items: [
+            { type: 'doc', label: 'Introduction', file: 'guide/intro' },
+            { type: 'doc', label: 'Getting Started', file: 'guide/start' },
+          ],
+        },
+        { type: 'doc', label: 'Commands', file: 'guide/commands' },
+        {
+          type: 'category',
+          label: 'Command Categories',
+          items: [
+            { type: 'doc', label: 'Mina AI', file: 'guide/mina-ai' },
+            { type: 'doc', label: 'Bot', file: 'guide/bot' },
+            { type: 'doc', label: 'Admin & Setup', file: 'guide/admin' },
+            { type: 'doc', label: 'Moderation', file: 'guide/moderation' },
+            { type: 'doc', label: 'Music', file: 'guide/music' },
+            { type: 'doc', label: 'Economy', file: 'guide/economy' },
+            { type: 'doc', label: 'Fun', file: 'guide/fun' },
+            { type: 'doc', label: 'Giveaways', file: 'guide/giveaways' },
+            { type: 'doc', label: 'Social', file: 'guide/social' },
+            { type: 'doc', label: 'Stats', file: 'guide/stats' },
+            { type: 'doc', label: 'Info', file: 'guide/info' },
+            { type: 'doc', label: 'Utility', file: 'guide/utility' },
+            { type: 'doc', label: 'Dev', file: 'guide/dev' },
+          ],
+        },
+        { type: 'doc', label: 'Self-Hosting', file: 'guide/selfhost' },
+        { type: 'doc', label: 'Helping Out', file: 'guide/helping-out' },
+      ],
+    },
     {
       type: 'category',
       label: 'Documentation',
@@ -260,7 +298,7 @@ const config: ZudokuConfig = {
       icon: 'code',
     },
   ],
-  redirects: [{ from: '/', to: '/introduction' }],
+  redirects: [{ from: '/', to: '/guide/index' }],
   apis: {
     type: 'file',
     input: './apis/v1-api.yml',

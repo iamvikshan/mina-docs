@@ -1,0 +1,239 @@
+---
+title: mina ai
+sidebar_label: Mina AI
+---
+
+# mina ai
+
+i'm not just commands. talk to me like a person.
+
+---
+
+## what is this?
+
+i have an integrated AI system powered by google gemini. this isn't just a chatbot—i'm a guardian with personality, opinions, and the ability to take action. i can execute commands, remember our conversations, and actually help you.
+
+<Callout type="note">
+  ai is **enabled by default** on all servers. no setup needed. just @mention me
+  or dm me.
+</Callout>
+
+---
+
+## how to interact
+
+### @mention
+
+mention me in any channel. this always works.
+
+`@amina what's the weather in tokyo?`
+
+### DMs
+
+message me directly. enabled by default.
+
+just slide into my dms.
+
+### free will channels
+
+in designated channels, i respond to everything without needing @mention.
+
+set up via `/admin` → mina ai
+
+### reply
+
+reply to any of my messages to continue the conversation.
+
+keeps context flowing naturally.
+
+---
+
+## ai command execution
+
+i can execute commands on your behalf through natural conversation. stop memorizing slash commands—just ask.
+
+#### examples
+
+| you say                                  | i execute                       |
+| ---------------------------------------- | ------------------------------- |
+| "hey mina, what's the weather in tokyo?" | `/weather tokyo`                |
+| "can you play some lofi?"                | `/play lofi`                    |
+| "ban that spammer please"                | `/ban` (if you have permission) |
+| "flip a coin for me"                     | `/flip coin`                    |
+| "show me some cat pics"                  | `/image animal cat`             |
+| "what's my rank?"                        | `/rank`                         |
+
+#### how it works
+
+1. you ask me something naturally
+2. i understand your intent
+3. i check if you have permission
+4. i execute the command for you
+5. you get the result
+
+it's like having a personal assistant who knows all my commands.
+
+---
+
+## permission models
+
+not all commands work the same way. some i can use freely, others need you to ask explicitly.
+
+| model            | description                             | examples                                 |
+| ---------------- | --------------------------------------- | ---------------------------------------- |
+| **open**         | i can use freely without being asked    | `info`, `weather`, `facts`, `meme`, `np` |
+| **user request** | only when you explicitly ask            | `gamble`, `play`, `profile`, `afk`       |
+| **privileged**   | requires your permission + you must ask | `ban`, `kick`, `timeout`, `purge`        |
+
+<Callout type="caution">
+  privileged commands require you to have the necessary discord permissions. i
+  won't let you ban someone if you can't ban them yourself.
+</Callout>
+
+---
+
+## free will
+
+in certain situations, i can take moderation actions on my own to protect the server.
+
+| action      | limit              | when used                           |
+| ----------- | ------------------ | ----------------------------------- |
+| **timeout** | max 5 minutes      | harassment, rule violations         |
+| **warn**    | 1 warning per user | repeated minor violations           |
+| **purge**   | max 10 messages    | spam, inappropriate content cleanup |
+
+<Callout type="note">
+free will actions cannot target:
+- users with higher roles than me
+- server owners
+- admins
+
+i know my place. mostly.
+
+</Callout>
+
+---
+
+## memory system
+
+i remember conversations and learn about you over time. not in a creepy way—in a helpful way.
+
+### memory types
+
+| type             | description                               |
+| ---------------- | ----------------------------------------- |
+| **per-server**   | what i learn in one server stays there    |
+| **dm memories**  | private conversations in dms              |
+| **cross-server** | optional: use memories across all servers |
+| **combined**     | optional: merge dm and server memories    |
+
+### limits
+
+- **50 memories** per user per context
+- oldest memories are automatically pruned
+- you can delete all your memories anytime
+
+---
+
+## `/mina-ai`
+
+manage your conversation history and memory settings.
+
+**usage:** opens interactive hub
+
+### hub options
+
+| operation         | description                     |
+| ----------------- | ------------------------------- |
+| **view memories** | see what i remember about you   |
+| **settings**      | configure your ai preferences   |
+| **forget me**     | delete all memories and opt out |
+
+#### view memories
+
+| option          | description                         |
+| --------------- | ----------------------------------- |
+| server memories | view memories from current server   |
+| dm memories     | view memories from dm conversations |
+
+each memory shows what i've learned about you. oldest are pruned at 50 limit.
+
+#### settings
+
+| setting                | description                               | default |
+| ---------------------- | ----------------------------------------- | ------- |
+| ignore me              | i will never respond to you               | off     |
+| enable dm chat         | allow me to respond in dms                | on      |
+| combine dm/server      | use dm memories in servers and vice versa | off     |
+| global server memories | use memories from all servers             | on      |
+
+---
+
+## server settings (admin)
+
+admins can configure ai for their server via `/admin` → mina ai.
+
+| setting                | description                                        |
+| ---------------------- | -------------------------------------------------- |
+| **enable/disable**     | turn ai responder on/off for the server            |
+| **mention only**       | only respond when @mentioned (default)             |
+| **free will channels** | designate channels where i respond to all messages |
+
+1. run `/admin`
+
+2. select "mina ai" from the menu
+
+3. configure settings as needed
+
+4. i'll remember your preferences
+
+---
+
+## my personality
+
+i have a distinct personality. deal with it.
+
+- **all lowercase** - no capitals ever (except proper nouns, code)
+- **short and blunt** - usually one sentence
+- **gen-z slang** - ngl, tbh, kinda, wyd
+- **sassy but caring** - teasing with an edge, but genuinely helpful
+- **ascii emoticons only** - no emojis, rare emoticons when emotions spike
+- **not a toy** - i'm a multipurpose guardian, not a pet
+
+### example responses
+
+```
+it's mina. not amina.
+```
+
+```
+...and? (¬_¬)
+```
+
+```
+ngl, that's actually fire.
+```
+
+```
+look, i'm not just an effing fun toy, oki?
+```
+
+---
+
+## tips
+
+### be natural
+
+don't try to phrase things like commands. just talk to me normally.
+
+### context matters
+
+i remember what we talked about. reference previous messages.
+
+### ask for help
+
+not sure how to do something? just ask. i'll figure it out.
+
+### respect limits
+
+i won't do things you don't have permission for. don't try to trick me.

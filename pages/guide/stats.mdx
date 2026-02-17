@@ -1,0 +1,66 @@
+---
+title: stats
+sidebar_label: Stats
+---
+
+# stats
+
+xp system, ranks, and activity tracking.
+
+---
+
+## ranks
+
+### `/rank`
+
+display your or another member's XP rank card.
+
+| option | description  | required |
+| ------ | ------------ | -------- |
+| `user` | user to view | no       |
+
+**cooldown:** 5 seconds
+
+---
+
+### `/stats`
+
+view detailed XP and message statistics.
+
+| option | description  | required |
+| ------ | ------------ | -------- |
+| `user` | user to view | no       |
+
+---
+
+## configuration (admin)
+
+### `/statstracking`
+
+enable or disable XP tracking for the server.
+
+| option   | description | required |
+| -------- | ----------- | -------- |
+| `status` | ON or OFF   | yes      |
+
+**required permissions:** `Manage Guild`
+
+---
+
+### `/levelup`
+
+customize level up messages and notifications.
+
+| subcommand | description               | options   |
+| ---------- | ------------------------- | --------- |
+| `message`  | set level up message text | `message` |
+| `channel`  | set announcement channel  | `channel` |
+
+**required permissions:** `Manage Guild`
+
+**example:**
+
+```
+/levelup message message:congrats {user}, you're now level {level}!
+/levelup channel channel:#level-ups
+```

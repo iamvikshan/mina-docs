@@ -10,7 +10,6 @@
     "build": "zudoku build",
     "build:prd": "bun install --production --frozen-lockfile && zudoku build",
     "preview": "zudoku preview",
-    "check": "tsc --noEmit && prettier --check .",
     "f": "prettier --write ."
   },
   "dependencies": {

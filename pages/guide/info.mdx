@@ -1,0 +1,88 @@
+---
+title: info
+sidebar_label: Info
+---
+
+# info
+
+lookup info, check stats, view profiles.
+
+---
+
+## `/info`
+
+view details about users, channels, server, avatars, or emojis.
+
+| subcommand | description            | options           |
+| ---------- | ---------------------- | ----------------- |
+| `user`     | view user account info | `name` (optional) |
+| `channel`  | view channel details   | `name` (optional) |
+| `guild`    | view server stats      | -                 |
+| `avatar`   | view user's avatar     | `name` (optional) |
+| `emoji`    | view emoji details     | `name`            |
+| `profile`  | view user profile      | `user` (optional) |
+
+**example:**
+
+```
+/info user name:@someone
+/info guild
+/info avatar
+/info profile user:@friend
+```
+
+---
+
+### user info
+
+shows:
+
+- join date & account age
+- roles
+- permissions
+- activity status
+- profile picture
+- badges
+
+---
+
+### guild info
+
+shows:
+
+- member count (total, online, bots)
+- creation date
+- owner
+- boost level & boost count
+- verification level
+- channel counts
+
+---
+
+### profile
+
+shows user's custom profile including:
+
+- bio
+- pronouns
+- socials
+- interests
+
+**tip:** set up your profile with `/profile`
+
+---
+
+## `/leaderboard`
+
+view the top users by XP or invites.
+
+| option | description                    | required |
+| ------ | ------------------------------ | -------- |
+| `type` | leaderboard type: xp or invite | yes      |
+
+**example:**
+
+```
+/leaderboard type:xp
+/leaderboard type:invite
+```

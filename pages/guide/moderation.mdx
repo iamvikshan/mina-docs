@@ -1,0 +1,219 @@
+---
+title: moderation
+sidebar_label: Moderation
+---
+
+# moderation
+
+keep your server clean. handle rule breakers. protect your community.
+
+<Callout type="caution">
+  moderation commands need proper permissions. you need the matching discord
+  perms, and so do i.
+</Callout>
+
+---
+
+## bans
+
+### `/ban`
+
+permanently ban a member from the server.
+
+| option   | description    | required |
+| -------- | -------------- | -------- |
+| `user`   | member to ban  | yes      |
+| `reason` | reason for ban | no       |
+
+**required permissions:** `Ban Members`
+
+**example:**
+
+```
+/ban user:@spammer reason:repeated spam after warnings
+```
+
+---
+
+### `/unban`
+
+remove a ban and allow a user to rejoin.
+
+| option   | description            | required |
+| -------- | ---------------------- | -------- |
+| `name`   | username to search for | yes      |
+| `reason` | reason for unban       | no       |
+
+**required permissions:** `Ban Members`
+
+---
+
+### `/softban`
+
+kick a member and delete their recent messages.
+
+| option   | description        | required |
+| -------- | ------------------ | -------- |
+| `user`   | member to softban  | yes      |
+| `reason` | reason for softban | no       |
+
+**required permissions:** `Kick Members`
+
+---
+
+## kicks & timeouts
+
+### `/kick`
+
+remove a member from the server. they can rejoin with an invite.
+
+| option   | description     | required |
+| -------- | --------------- | -------- |
+| `user`   | member to kick  | yes      |
+| `reason` | reason for kick | no       |
+
+**required permissions:** `Kick Members`
+
+---
+
+### `/timeout`
+
+temporarily mute a member. they can see but not interact.
+
+| option     | description                          | required |
+| ---------- | ------------------------------------ | -------- |
+| `user`     | member to timeout                    | yes      |
+| `duration` | timeout duration (e.g., "1h", "30m") | yes      |
+| `reason`   | reason for timeout                   | no       |
+
+**required permissions:** `Moderate Members`
+
+**duration formats:**
+
+- `10m` - 10 minutes
+- `2h` - 2 hours
+- `1d` - 1 day
+- max: 28 days
+
+---
+
+### `/untimeout`
+
+end a member's timeout early.
+
+| option   | description          | required |
+| -------- | -------------------- | -------- |
+| `user`   | member to untimeout  | yes      |
+| `reason` | reason for untimeout | no       |
+
+**required permissions:** `Moderate Members`
+
+---
+
+## warnings
+
+### `/warn`
+
+issue a warning to a member.
+
+| option   | description        | required |
+| -------- | ------------------ | -------- |
+| `user`   | member to warn     | yes      |
+| `reason` | reason for warning | no       |
+
+**required permissions:** `Kick Members`
+
+---
+
+### `/warnings`
+
+view or clear a member's warning history.
+
+| subcommand | description        | options |
+| ---------- | ------------------ | ------- |
+| `list`     | list all warnings  | `user`  |
+| `clear`    | clear all warnings | `user`  |
+
+**required permissions:** `Kick Members`
+
+---
+
+## nicknames
+
+### `/nick`
+
+change or reset a member's server nickname.
+
+| subcommand | description            | options        |
+| ---------- | ---------------------- | -------------- |
+| `set`      | change nickname        | `user`, `name` |
+| `reset`    | reset to original name | `user`         |
+
+**required permissions:** `Manage Nicknames`
+
+**example:**
+
+```
+/nick set user:@member name:Cool Nickname
+/nick reset user:@member
+```
+
+---
+
+## message management
+
+### `/purge`
+
+bulk delete messages with filtering options.
+
+**usage:** opens interactive purge hub
+
+**required permissions:** `Manage Messages`
+
+#### purge types
+
+| type              | description                                   |
+| ----------------- | --------------------------------------------- |
+| **all messages**  | delete all messages                           |
+| **attachments**   | delete messages with attachments only         |
+| **bot messages**  | delete messages from bots only                |
+| **links**         | delete messages containing links              |
+| **token/keyword** | delete messages containing a specific keyword |
+| **user messages** | delete messages from a specific user          |
+
+#### workflow
+
+1. select purge type
+2. set amount (10-100 messages)
+3. optionally select a different channel
+4. preview and confirm
+
+<Callout type="note">
+  messages older than 14 days cannot be bulk deleted. discord limitation.
+</Callout>
+
+---
+
+## voice moderation
+
+### `/voice`
+
+moderate voice channels.
+
+| subcommand | description             | options                                |
+| ---------- | ----------------------- | -------------------------------------- |
+| `mute`     | mute a member's voice   | `user`, `reason` (optional)            |
+| `unmute`   | unmute a member         | `user`, `reason` (optional)            |
+| `deafen`   | deafen a member         | `user`, `reason` (optional)            |
+| `undeafen` | undeafen a member       | `user`, `reason` (optional)            |
+| `kick`     | kick from voice channel | `user`, `reason` (optional)            |
+| `move`     | move to another channel | `user`, `channel`, `reason` (optional) |
+
+**required permissions:** `Mute Members`, `Move Members`, `Deafen Members`
+
+**example:**
+
+```
+/voice mute user:@louduser reason:background noise
+/voice move user:@member channel:#vc-2
+```

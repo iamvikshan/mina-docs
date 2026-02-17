@@ -1,0 +1,74 @@
+---
+title: economy
+sidebar_label: Economy
+---
+
+# economy
+
+run a virtual economy in your server. earn coins, manage wealth, compete on leaderboards.
+
+<Callout type="note">
+  economy is per-server. your coins in one server don't transfer to others.
+</Callout>
+
+---
+
+## banking
+
+### `/bank`
+
+manage your virtual wallet.
+
+| subcommand | description                    | options           |
+| ---------- | ------------------------------ | ----------------- |
+| `balance`  | view wallet and bank balance   | `user` (optional) |
+| `deposit`  | move coins from wallet to bank | `coins`           |
+| `withdraw` | take coins from bank to wallet | `coins`           |
+| `transfer` | send coins to another user     | `user`, `coins`   |
+
+**example:**
+
+```
+/bank balance
+/bank deposit coins:1000
+/bank transfer user:@friend coins:500
+```
+
+**why use bank?**
+
+- separate savings from spending
+- track wealth better
+
+---
+
+## earning
+
+### `/daily`
+
+claim your daily coin reward with streak bonuses.
+
+---
+
+### `/beg`
+
+ask celebrities for spare coins.
+
+**cooldown:** 1 hour
+
+---
+
+## gambling
+
+### `/gamble`
+
+risk your coins on a slot machine spin.
+
+| option  | description                         | required |
+| ------- | ----------------------------------- | -------- |
+| `coins` | number of coins to bet (minimum 10) | yes      |
+
+**example:**
+
+```
+/gamble coins:100
+```

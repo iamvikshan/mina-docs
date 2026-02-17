@@ -1,0 +1,110 @@
+---
+title: giveaways
+sidebar_label: Giveaways
+---
+
+# giveaways
+
+create and manage giveaways. winners chosen fairly.
+
+---
+
+## `/giveaway`
+
+all giveaway management in one command.
+
+### `start`
+
+create a new giveaway.
+
+| option     | description                                 | required |
+| ---------- | ------------------------------------------- | -------- |
+| `channel`  | channel to host the giveaway                | yes      |
+| `duration` | how long until it ends (e.g., 1d, 12h, 30m) | yes      |
+| `winners`  | number of winners                           | yes      |
+| `prize`    | what you're giving away                     | yes      |
+| `role`     | role required to enter                      | no       |
+
+**example:**
+
+```
+/giveaway start channel:#giveaways duration:24h winners:1 prize:nitro classic
+```
+
+---
+
+### `pause`
+
+temporarily pause an active giveaway. entries stop.
+
+| option       | description                | required |
+| ------------ | -------------------------- | -------- |
+| `message_id` | message id of the giveaway | yes      |
+
+---
+
+### `resume`
+
+resume a paused giveaway.
+
+| option       | description                | required |
+| ------------ | -------------------------- | -------- |
+| `message_id` | message id of the giveaway | yes      |
+
+---
+
+### `end`
+
+immediately end a giveaway and pick winners.
+
+| option       | description                | required |
+| ------------ | -------------------------- | -------- |
+| `message_id` | message id of the giveaway | yes      |
+
+---
+
+### `reroll`
+
+pick new winner(s) for an ended giveaway.
+
+| option       | description                | required |
+| ------------ | -------------------------- | -------- |
+| `message_id` | message id of the giveaway | yes      |
+
+---
+
+### `list`
+
+view all active giveaways in the server.
+
+no options required.
+
+---
+
+### `edit`
+
+modify an active giveaway's settings.
+
+| option       | description                | required |
+| ------------ | -------------------------- | -------- |
+| `message_id` | message id of the giveaway | yes      |
+| `duration`   | new duration               | no       |
+| `winners`    | new winner count           | no       |
+| `prize`      | new prize description      | no       |
+
+<Callout type="tip">
+  get the message id by right-clicking the giveaway embed in discord (enable
+  developer mode in settings first).
+</Callout>
+
+---
+
+## permissions
+
+**required:** `Manage Guild` for all giveaway commands
+
+everyone can join giveaways by clicking the reaction/button on the embed.
+
+<Callout type="note">
+  giveaways use true random selection. no funny business.
+</Callout>
