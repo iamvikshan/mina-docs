@@ -1,25 +1,16 @@
 # mina-dev
 
-> Amina API & Developer Portal
+API server and developer portal for [Amina](https://4mina.app) — your server's guardian, mod tool, and vibe keeper.
 
-This repository contains:
-
-- **API Server** — Cloudflare Workers-powered API for [api.4mina.app](https://api.4mina.app), built with [Hono](https://hono.dev)
-- **Developer Portal** — API documentation and developer wiki powered by [Zudoku](https://zudoku.dev), deployed to [dev.4mina.app](https://dev.4mina.app) via Cloudflare Pages
-
-## Project Structure
+## Structure
 
 ```
- src/              # API server source (Cloudflare Workers)
- types/            # TypeScript type definitions
- docs/             # Developer portal (Zudoku)
-   ├── apis/         # OpenAPI specifications
-   ├── pages/        # Markdown/MDX documentation pages
-   │   ├── wiki/     # Developer wiki (migrated from GitHub wiki)
-   │   └── ...       # Other documentation pages
-   └── zudoku.config.ts
- wrangler.jsonc    # Workers config (amina-api)
- package.json
+src/           → Cloudflare Worker API server (Hono + MongoDB)
+docs/          → Developer portal (Zudoku on CF Pages)
+  apis/        → OpenAPI specifications
+  pages/       → Documentation pages (MDX/Markdown)
+    wiki/      → Migrated GitHub wiki (28 pages)
+types/         → Shared TypeScript type definitions
 ```
 
 ## Development
@@ -27,33 +18,29 @@ This repository contains:
 ### API Server
 
 ```bash
-# Install dependencies
 bun install
-
-# Local development
-bun run dev
-
-# Deploy to Cloudflare Workers
-bun run deploy
+bun run dev        # Start Wrangler dev server
 ```
 
-### Developer Portal
+### Documentation Portal
 
 ```bash
 cd docs
-npm install
-npm run dev      # Local dev server
-npm run build    # Production build → docs/dist/
+bun install
+bun run dev        # Start Zudoku dev server at localhost:3000
+bun run build      # Build for production
 ```
 
 ## Deployment
 
-- **API Server**: Deployed to Cloudflare Workers as `amina-api` via `wrangler deploy`
-- **Developer Portal**: Deployed to Cloudflare Pages as `mina-dev` via CF dashboard
-  - Build command: `cd docs && npm run build`
+- **API**: Cloudflare Workers via Wrangler (`amina-api`)
+- **Docs**: Cloudflare Pages via dashboard (`mina-dev` → [dev.4mina.app](https://dev.4mina.app))
+  - Build command: `cd docs && bun install && bun run build`
   - Output directory: `docs/dist`
-  - Custom domain: `dev.4mina.app`
 
 ## Links
 
-- [API](https://api.4mina.app) • [Developer Portal](https://dev.4mina.app) • [Discord](https://discord.gg/uMgS9evnmv) • [Dashboard](https://4mina.app/dash)
+- [Developer Portal](https://dev.4mina.app) — API docs & wiki
+- [Consumer Docs](https://docs.4mina.app) — User documentation
+- [Dashboard](https://4mina.app/dash) — API keys & bot management
+- [Discord](https://discord.gg/uMgS9evnmv) — Community & support

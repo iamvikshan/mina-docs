@@ -141,7 +141,7 @@ After the files are updated, the `@semantic-release/git` plugin commits them wit
 
 _Sources: [release.config.js:75-79](https://github.com/iamvikshan/amina/blob/main/release.config.js#L75-L79)_
 
-## Github integration
+## GitHub integration
 
 The release process is tightly integrated with GitHub.
 

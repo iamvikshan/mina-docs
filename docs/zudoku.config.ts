@@ -5,28 +5,85 @@ const config: ZudokuConfig = {
     title: 'Amina Dev Portal',
     logo: {
       src: {
-        light: 'https://4mina.app/logo.png',
-        dark: 'https://4mina.app/logo.png',
+        light: '/logo.png',
+        dark: '/logo.png',
       },
       alt: 'Amina',
       width: 120,
     },
     showPoweredBy: false,
+    footer: {
+      columns: [
+        {
+          title: 'Resources',
+          links: [
+            { label: 'Consumer Docs', href: 'https://docs.4mina.app' },
+            { label: 'Dashboard', href: 'https://4mina.app/dash' },
+          ],
+        },
+        {
+          title: 'Community',
+          links: [
+            { label: 'Discord', href: 'https://discord.gg/uMgS9evnmv' },
+            { label: 'GitHub', href: 'https://github.com/iamvikshan/mina-dev' },
+          ],
+        },
+      ],
+      social: [
+        { icon: 'github', href: 'https://github.com/iamvikshan/mina-dev' },
+        { icon: 'discord', href: 'https://discord.gg/uMgS9evnmv' },
+      ],
+    },
   },
   metadata: {
     title: 'Amina Dev Portal',
     description:
       "api docs and developer wiki for amina. your server's guardian, mod tool, and vibe keeper.",
-    favicon: 'https://4mina.app/favicon.ico',
+    favicon: '/favicon.ico',
   },
   theme: {
+    customCss: {
+      ':root': {
+        '--amina-crimson': '#dc143c',
+        '--blood-red': '#8b0000',
+        '--rose-red': '#e63946',
+        '--midnight-black': '#0a0a0a',
+        '--shadow-gray': '#1a1a1a',
+        '--steel-gray': '#2d2d2d',
+        '--imperial-gold': '#ffd700',
+        '--electric-blue': '#1e90ff',
+        '--glow-crimson': '0 0 20px rgba(220, 20, 60, 0.6)',
+      },
+      'h1, h2, h3, h4, h5, h6': {
+        'font-weight': '700',
+      },
+      'h1, h2': {
+        'text-transform': 'uppercase',
+        'letter-spacing': '0.05em',
+      },
+    },
+    fonts: {
+      sans: {
+        url: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap',
+        fontFamily: 'Inter, sans-serif',
+      },
+      mono: {
+        url: 'https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap',
+        fontFamily: 'Fira Code, monospace',
+      },
+    },
     light: {
-      primary: '#6366f1',
+      primary: '#dc143c',
       primaryForeground: '#ffffff',
+      secondary: '#8b0000',
+      secondaryForeground: '#ffffff',
     },
     dark: {
-      primary: '#818cf8',
+      primary: '#e63946',
       primaryForeground: '#ffffff',
+      secondary: '#dc143c',
+      secondaryForeground: '#ffffff',
+      background: '#0a0a0a',
     },
   },
   navigation: [

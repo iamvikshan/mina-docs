@@ -5,8 +5,6 @@ sidebar_label: 'Profiles'
 
 The User Profile system allows users to "express yourself and share your story with the world." It provides a structured way for users to share personal information, interests, and social links within the bot's ecosystem. This information is primarily managed through the `/profile` command and its associated handlers.
 
-[Image of User Profile UI]
-
 Profiles are not just for display; they are integrated with other parts of the application, such as the [AI Responder](#ai-responder-integration) to create more personalized and context-aware interactions. The system includes privacy controls, allowing users to manage the visibility of sensitive information like age and region.
 
 <details>

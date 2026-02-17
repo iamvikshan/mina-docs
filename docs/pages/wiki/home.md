@@ -55,8 +55,6 @@ _Sources: [package.json:10-37](https://github.com/iamvikshan/amina/blob/main/pac
 
 The diagram below illustrates the high-level architecture of the Amina bot.
 
-[Image of Discord Bot Architecture Diagram]
-
 ```mermaid
 graph TD
     subgraph Discord

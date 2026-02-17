@@ -25,7 +25,8 @@
         "mongodb.mongodb-vscode",
         "coderabbit.coderabbit-vscode",
         "DeepScan.vscode-deepscan",
-        "jetbrains.qodana-code"
+        "jetbrains.qodana-code",
+        "unifiedjs.vscode-mdx"
       ]
     }
   },

@@ -39,15 +39,9 @@ erDiagram
         string discriminator
         number coins "Wallet balance"
         number bank "Bank balance"
-        object daily "Daily reward tracking"
+        number daily_streak "Consecutive daily claims (embedded)"
+        Date daily_timestamp "Last claim timestamp (embedded)"
     }
-
-    daily {
-        number streak "Consecutive daily claims"
-        Date timestamp "Timestamp of last claim"
-    }
-
-    User ||--o{ daily : contains
 ```
 
 ### Schema fields
