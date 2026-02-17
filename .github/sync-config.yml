@@ -1,7 +1,7 @@
 gitlab:
   enabled: true
   owner: vikshan
-  project: mina-dev
+  project: mina-docs
 
 github:
   enabled: true

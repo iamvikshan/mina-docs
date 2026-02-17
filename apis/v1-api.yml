@@ -1,0 +1,1414 @@
+openapi: 3.1.0
+info:
+  title: Amina API
+  version: 1.0.0
+  description: |
+    Image generation and utilities API for the Amina Discord Bot.
+
+    ## Authentication
+
+    All `/v1/*` endpoints require API key authentication via Bearer token.
+
+    ```bash
+    curl -H "Authorization: Bearer amina_YOUR_API_KEY" https://api.4mina.app/v1/images/rank-card?...
+    ```
+
+    Get your API key at [4mina.app/dash](https://4mina.app/dash)
+
+    ## Rate Limiting
+
+    All endpoints, including status checks (e.g. `/v1/bots/{clientId}/status`), are subject to rate limits:
+    - **60 requests per minute** per API key
+    - Rate limit headers included in responses:
+      - `X-RateLimit-Limit`: Maximum requests per window
+      - `X-RateLimit-Remaining`: Requests remaining
+      - `X-RateLimit-Reset`: Unix timestamp when limit resets
+
+    If you exceed the limit, you will receive a `429 Rate Limited` response. Status endpoints are lightweight but still count toward your quota.
+
+    ## Response Format
+
+    All JSON responses follow this structure:
+
+    ```json
+    {
+      "success": true,
+      "data": { ... },
+      "meta": {
+        "generatedAt": "2024-01-01T00:00:00.000Z"
+      }
+    }
+    ```
+
+    Image endpoints return SVG directly with `Content-Type: image/svg+xml`.
+
+  contact:
+    name: Amina Support
+    url: https://discord.gg/uMgS9evnmv
+
+  x-dashboard:
+    name: Amina Dashboard
+    url: https://4mina.app/dash
+
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.4mina.app
+    description: Production
+
+tags:
+  - name: Bots
+    description: Bot information and discovery endpoints
+  - name: Cards
+    description: Generate various card images (rank, welcome, spotify)
+  - name: Filters
+    description: Apply filters to images
+  - name: Overlays
+    description: Add overlays to images
+  - name: Generators
+    description: Meme generators
+  - name: Utilities
+    description: General utilities
+  - name: Webhooks
+    description: Transform webhooks from various providers to Discord format
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: API key from dashboard
+
+  parameters:
+    imageUrl:
+      name: image
+      in: query
+      required: true
+      schema:
+        type: string
+        format: uri
+      description: URL of the image to process
+
+    page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 1
+        minimum: 1
+      description: Page number for paginated results
+
+    limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 20
+        minimum: 1
+        maximum: 100
+      description: 'Number of bots per page (default: 20, max: 100)'
+
+    width:
+      name: width
+      in: query
+      schema:
+        type: integer
+        default: 512
+        minimum: 1
+        maximum: 1024
+      description: Output width in pixels
+
+    height:
+      name: height
+      in: query
+      schema:
+        type: integer
+        default: 512
+        minimum: 1
+        maximum: 1024
+      description: Output height in pixels
+
+  responses:
+    SvgImage:
+      description: SVG image
+      content:
+        image/svg+xml:
+          schema:
+            type: string
+
+    BadRequest:
+      description: Bad request - missing or invalid parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Unauthorized:
+      description: Unauthorized - invalid or missing API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    RateLimited:
+      description: Rate limit exceeded
+      headers:
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+        Retry-After:
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            code:
+              type: string
+        meta:
+          type: object
+          properties:
+            generatedAt:
+              type: string
+              format: date-time
+    PaginationMetaPage:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total number of public bots
+          example: 123
+        page:
+          type: integer
+          description: Current page number
+          example: 1
+        limit:
+          type: integer
+          description: Number of bots per page
+          example: 20
+        pages:
+          type: integer
+          description: Total number of pages
+          example: 7
+        hasMore:
+          type: boolean
+          description: Whether more pages are available
+          example: true
+    PaginationMetaCursor:
+      type: object
+      properties:
+        nextCursor:
+          type: string
+          description: Cursor for next page (null if no more results)
+          example: 'eyJpZCI6IjEyMzQ1NiJ9'
+        hasMore:
+          type: boolean
+          description: Whether more results are available
+          example: true
+    BotMeta:
+      type: object
+      properties:
+        clientId:
+          type: string
+          description: Discord bot client ID
+          example: '1234567890123456789'
+        name:
+          type: string
+          description: Bot display name
+          example: 'Amina'
+        avatar:
+          type: string
+          nullable: true
+          description: Bot avatar URL (Discord CDN)
+          example: 'https://cdn.discordapp.com/avatars/...'
+        ownerId:
+          type: string
+          description: Discord user ID of bot owner
+          example: '9876543210987654321'
+        registeredAt:
+          type: string
+          format: date-time
+          description: When the bot was registered with the API
+        lastSeen:
+          type: string
+          format: date-time
+          description: Last heartbeat timestamp
+        version:
+          type: string
+          description: Bot version string
+          example: '1.0.0'
+        inviteUrl:
+          type: string
+          format: uri
+          description: Bot invite URL
+          example: 'https://discord.com/oauth2/authorize?client_id=...'
+        supportServer:
+          type: string
+          format: uri
+          description: Support server invite link
+          example: 'https://discord.gg/...'
+        website:
+          type: string
+          format: uri
+          description: Bot website URL
+          example: 'https://example.com'
+        isPublic:
+          type: boolean
+          description: Whether the bot is listed publicly
+          example: true
+        features:
+          type: array
+          items:
+            type: string
+          description: Bot feature tags
+          example: ['moderation', 'music', 'leveling']
+
+    BotStats:
+      type: object
+      properties:
+        guilds:
+          type: integer
+          description: Number of guilds
+          example: 150
+        members:
+          type: integer
+          description: Total member count
+          example: 50000
+        channels:
+          type: integer
+          description: Total channel count
+          example: 3000
+        commands:
+          type: integer
+          description: Total command count
+          example: 50
+        ping:
+          type: integer
+          description: WebSocket ping in milliseconds
+          example: 45
+        uptime:
+          type: integer
+          description: Bot uptime in seconds
+          example: 86400
+        memoryUsage:
+          type: integer
+          description: Memory usage in MB
+          example: 512
+        status:
+          type: string
+          enum: [online, idle, dnd, invisible, offline]
+          description: Bot presence status
+          example: 'online'
+        presence:
+          type: object
+          properties:
+            type:
+              type: string
+              example: 'Playing'
+            name:
+              type: string
+              example: 'with commands'
+            url:
+              type: string
+              format: uri
+        lastUpdated:
+          type: string
+          format: date-time
+          nullable: true
+          description: When stats were last pushed, null if no stats have been reported
+        hasStats:
+          type: boolean
+          description: Whether real stats have been reported (false means default fallback values)
+          example: true
+
+paths:
+  # ========== Cards ==========
+  /v1/images/rank-card:
+    get:
+      tags: [Cards]
+      summary: Generate a rank card
+      description: |
+        Creates a customizable rank card showing user level, XP, and rank position.
+        Uses Amina's design system with support for custom themes and colors.
+      parameters:
+        - name: username
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Display name
+        - name: level
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+          description: Current level
+        - name: xp
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+          description: Current XP
+        - name: requiredXp
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: XP needed for next level
+        - name: rank
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Leaderboard position
+        - name: avatar
+          in: query
+          schema:
+            type: string
+            format: uri
+          description: Avatar image URL
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [online, idle, dnd, offline]
+          description: Discord status indicator
+        - name: theme
+          in: query
+          schema:
+            type: string
+            enum: [dark, light, amina]
+            default: amina
+          description: Card theme
+        - name: progressColor
+          in: query
+          schema:
+            type: string
+            pattern: '^#[0-9A-Fa-f]{6}$'
+          description: Progress bar color (hex)
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
+  /v1/images/welcome-card:
+    get:
+      tags: [Cards]
+      summary: Generate a welcome card
+      description: Creates a welcome card for new server members.
+      parameters:
+        - name: username
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: memberCount
+          in: query
+          schema:
+            type: integer
+          description: Member number
+        - name: guildName
+          in: query
+          schema:
+            type: string
+          description: Server name
+        - name: avatar
+          in: query
+          schema:
+            type: string
+            format: uri
+        - name: message
+          in: query
+          schema:
+            type: string
+          description: Custom message
+        - name: accentColor
+          in: query
+          schema:
+            type: string
+            pattern: '^#[0-9A-Fa-f]{6}$'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /v1/images/farewell-card:
+    get:
+      tags: [Cards]
+      summary: Generate a farewell card
+      description: Creates a farewell card for departing members.
+      parameters:
+        - name: username
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: memberCount
+          in: query
+          schema:
+            type: integer
+        - name: guildName
+          in: query
+          schema:
+            type: string
+        - name: avatar
+          in: query
+          schema:
+            type: string
+            format: uri
+        - name: message
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /v1/images/spotify-card:
+    get:
+      tags: [Cards]
+      summary: Generate a Spotify "Now Playing" card
+      parameters:
+        - name: title
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Track title
+        - name: artist
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: album
+          in: query
+          schema:
+            type: string
+        - name: albumArt
+          in: query
+          schema:
+            type: string
+            format: uri
+        - name: progress
+          in: query
+          schema:
+            type: number
+            minimum: 0
+            maximum: 100
+          description: Playback progress percentage
+        - name: duration
+          in: query
+          schema:
+            type: string
+          description: Track duration (e.g., "3:45")
+        - name: currentTime
+          in: query
+          schema:
+            type: string
+          description: Current playback time
+        - name: isPlaying
+          in: query
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # ========== Filters ==========
+  /v1/images/filters/greyscale:
+    get:
+      tags: [Filters]
+      summary: Convert image to greyscale
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+        - name: intensity
+          in: query
+          schema:
+            type: number
+            minimum: 0
+            maximum: 1
+            default: 1
+          description: Filter intensity
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /v1/images/filters/blur:
+    get:
+      tags: [Filters]
+      summary: Apply blur effect
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+        - name: radius
+          in: query
+          schema:
+            type: number
+            minimum: 0
+            maximum: 50
+            default: 5
+          description: Blur radius
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /v1/images/filters/sepia:
+    get:
+      tags: [Filters]
+      summary: Apply sepia filter
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+        - name: intensity
+          in: query
+          schema:
+            type: number
+            minimum: 0
+            maximum: 1
+            default: 1
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /v1/images/filters/invert:
+    get:
+      tags: [Filters]
+      summary: Invert image colors
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /v1/images/filters/brighten:
+    get:
+      tags: [Filters]
+      summary: Brighten an image
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+        - name: amount
+          in: query
+          schema:
+            type: number
+            minimum: 0
+            maximum: 2
+            default: 1.3
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /v1/images/filters/darken:
+    get:
+      tags: [Filters]
+      summary: Darken an image
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+        - name: amount
+          in: query
+          schema:
+            type: number
+            minimum: 0
+            maximum: 1
+            default: 0.7
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /v1/images/filters/contrast:
+    get:
+      tags: [Filters]
+      summary: Adjust contrast
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+        - name: amount
+          in: query
+          schema:
+            type: number
+            minimum: 0
+            maximum: 3
+            default: 1.5
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /v1/images/filters/pixelate:
+    get:
+      tags: [Filters]
+      summary: Pixelate effect
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+        - name: pixels
+          in: query
+          schema:
+            type: integer
+            minimum: 2
+            maximum: 50
+            default: 10
+          description: Pixel size
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /v1/images/filters/saturate:
+    get:
+      tags: [Filters]
+      summary: Adjust saturation
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+        - name: amount
+          in: query
+          schema:
+            type: number
+            minimum: 0
+            maximum: 3
+            default: 1.5
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /v1/images/filters/hue-rotate:
+    get:
+      tags: [Filters]
+      summary: Rotate hue
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+        - name: degrees
+          in: query
+          schema:
+            type: number
+            default: 90
+          description: Rotation angle in degrees
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # ========== Overlays ==========
+  /v1/images/overlays/approved:
+    get:
+      tags: [Overlays]
+      summary: Add "APPROVED" stamp
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/overlays/rejected:
+    get:
+      tags: [Overlays]
+      summary: Add "REJECTED" stamp
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/overlays/wasted:
+    get:
+      tags: [Overlays]
+      summary: GTA "WASTED" effect
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/overlays/triggered:
+    get:
+      tags: [Overlays]
+      summary: '"TRIGGERED" meme effect'
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/overlays/jail:
+    get:
+      tags: [Overlays]
+      summary: Prison bars overlay
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/overlays/gay:
+    get:
+      tags: [Overlays]
+      summary: Rainbow pride overlay
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+        - name: opacity
+          in: query
+          schema:
+            type: number
+            minimum: 0
+            maximum: 1
+            default: 0.5
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/overlays/rip:
+    get:
+      tags: [Overlays]
+      summary: R.I.P. gravestone effect
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  # ========== Generators ==========
+  /v1/images/generators/changemymind:
+    get:
+      tags: [Generators]
+      summary: '"Change My Mind" meme'
+      parameters:
+        - name: text
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Text on the sign
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/generators/drake:
+    get:
+      tags: [Generators]
+      summary: Drake approve/disapprove meme
+      parameters:
+        - name: top
+          in: query
+          schema:
+            type: string
+          description: Text for rejection (top panel)
+        - name: bottom
+          in: query
+          schema:
+            type: string
+          description: Text for approval (bottom panel)
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/generators/facts:
+    get:
+      tags: [Generators]
+      summary: '"Book of Facts" meme'
+      parameters:
+        - name: text
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The "fact" text
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/generators/affect:
+    get:
+      tags: [Generators]
+      summary: '"Does this affect my baby?" meme'
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/generators/beautiful:
+    get:
+      tags: [Generators]
+      summary: '"It''s beautiful" meme'
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/generators/delete:
+    get:
+      tags: [Generators]
+      summary: '"Delet this" meme'
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/generators/trash:
+    get:
+      tags: [Generators]
+      summary: '"It''s Trash" meme'
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/generators/distracted:
+    get:
+      tags: [Generators]
+      summary: Distracted boyfriend meme labels
+      parameters:
+        - name: boyfriend
+          in: query
+          schema:
+            type: string
+            default: 'Me'
+        - name: girlfriend
+          in: query
+          schema:
+            type: string
+            default: 'My responsibilities'
+        - name: other
+          in: query
+          schema:
+            type: string
+            default: 'Literally anything else'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  # ========== Utilities ==========
+  /v1/images/color:
+    get:
+      tags: [Utilities]
+      summary: Generate a solid color image
+      parameters:
+        - name: hex
+          in: query
+          schema:
+            type: string
+            pattern: '^[0-9A-Fa-f]{6}$'
+            default: DC143C
+          description: Hex color code (without #)
+        - $ref: '#/components/parameters/width'
+        - $ref: '#/components/parameters/height'
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  /v1/images/circle:
+    get:
+      tags: [Utilities]
+      summary: Circle crop an image
+      parameters:
+        - $ref: '#/components/parameters/imageUrl'
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 256
+            minimum: 16
+            maximum: 1024
+          description: Output size (width and height)
+      responses:
+        '200':
+          $ref: '#/components/responses/SvgImage'
+
+  # ========== Bots ==========
+  /v1/bots:
+    get:
+      tags: [Bots]
+      summary: List all public bots (paginated)
+      description: |
+        Returns a paginated list of all bots registered with the API that are marked as public.
+
+        - Default limit: 20
+        - Maximum limit: 100
+        - Pagination metadata is returned under `meta`.
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: Paginated list of public bots
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      bots:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/BotMeta'
+                  meta:
+                    allOf:
+                      - $ref: '#/components/schemas/PaginationMetaPage'
+                    description: Pagination metadata
+
+  /v1/bots/{clientId}:
+    get:
+      tags: [Bots]
+      summary: Get bot information
+      description: Returns detailed information about a specific bot (public bots only)
+      security: []
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discord bot client ID
+      responses:
+        '200':
+          description: Bot information with current stats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      bot:
+                        allOf:
+                          - $ref: '#/components/schemas/BotMeta'
+                          - type: object
+                            properties:
+                              stats:
+                                $ref: '#/components/schemas/BotStats'
+                  meta:
+                    type: object
+                    properties:
+                      generatedAt:
+                        type: string
+                        format: date-time
+        '404':
+          description: Bot not found or not public
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/bots/{clientId}/stats:
+    get:
+      tags: [Bots]
+      summary: Get bot statistics
+      description: Returns current statistics for a specific bot (public bots only)
+      security: []
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discord bot client ID
+      responses:
+        '200':
+          description: Bot statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      stats:
+                        $ref: '#/components/schemas/BotStats'
+                  meta:
+                    type: object
+                    properties:
+                      generatedAt:
+                        type: string
+                        format: date-time
+        '404':
+          description: Bot not found, not public, or stats not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/bots/{clientId}/commands:
+    get:
+      tags: [Bots]
+      summary: Get bot commands
+      description: Returns list of commands for a specific bot (public bots only)
+      security: []
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discord bot client ID
+      responses:
+        '200':
+          description: Bot commands
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      commands:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              example: 'ping'
+                            description:
+                              type: string
+                              example: 'Check bot latency'
+                            category:
+                              type: string
+                              example: 'Utilities'
+                            usage:
+                              type: string
+                              example: '/ping'
+                            examples:
+                              type: array
+                              items:
+                                type: string
+                            aliases:
+                              type: array
+                              items:
+                                type: string
+                            cooldown:
+                              type: integer
+                              description: Cooldown in seconds
+                            permissions:
+                              type: array
+                              items:
+                                type: string
+                            botPermissions:
+                              type: array
+                              items:
+                                type: string
+                            nsfw:
+                              type: boolean
+                            ownerOnly:
+                              type: boolean
+                      categories:
+                        type: array
+                        items:
+                          type: string
+                        example: ['Moderation', 'Utilities', 'Fun']
+                      totalCommands:
+                        type: integer
+                        example: 50
+                      lastUpdated:
+                        type: string
+                        format: date-time
+                  meta:
+                    type: object
+                    properties:
+                      generatedAt:
+                        type: string
+                        format: date-time
+        '404':
+          description: Bot not found, not public, or commands not available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/bots/{clientId}/status:
+    get:
+      tags: [Bots]
+      summary: Check bot online status
+      description: Quick check if a bot is currently online (public bots only)
+      security: []
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discord bot client ID
+      responses:
+        '200':
+          description: Bot status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      online:
+                        type: boolean
+                        description: Whether bot is online (heartbeat within 5 minutes)
+                        example: true
+                      lastSeen:
+                        type: string
+                        format: date-time
+                        description: Last heartbeat timestamp
+                  meta:
+                    type: object
+                    properties:
+                      generatedAt:
+                        type: string
+                        format: date-time
+        '404':
+          description: Bot not found or not public
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ========== Webhooks ==========
+  /webhooks/{id}/{token}/{provider}:
+    post:
+      tags: [Webhooks]
+      summary: Transform and forward webhooks to Discord
+      description: |
+        Receives webhooks from various providers (Doppler, etc.) and transforms them 
+        into formatted Discord embeds before forwarding to your Discord channel.
+
+        Similar to skyhookapi.com - acts as a webhook transformation proxy.
+
+        **Supported Providers:**
+        - `doppler` - Doppler config change webhooks ([docs](https://docs.doppler.com/docs/webhooks))
+
+        **Usage:**
+        1. Get your Discord webhook URL: `https://discord.com/api/webhooks/ID/TOKEN`
+        2. Configure your provider to send webhooks to: `https://api.4mina.app/webhooks/ID/TOKEN/provider`. 
+
+          - You can simply paste your Discord webhook URL into the transformer UI at ([webhooks](https://api.4mina.app/webhooks)) to get the correct URL.
+
+        **Example:**
+        ```
+        Doppler webhook URL: https://api.4mina.app/webhooks/1234567890/abcdef.../doppler
+        ```
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discord webhook ID
+          example: '1438255873965673627'
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Discord webhook token
+          example: 'YgshdkHJbsndKdkfHqDtFl4dqUv_dVtuXcHLT_Oez0WqBQnjPYzPvZ5lUXLLCzcEY'
+        - name: provider
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [doppler]
+          description: |
+            Webhook provider name.
+
+            If you need more providers:
+            - Contact support to request new integrations.
+          example: 'doppler'
+      requestBody:
+        required: true
+        description: Provider-specific webhook payload (JSON)
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Payload varies by provider
+            examples:
+              doppler:
+                summary: Doppler webhook payload
+                value:
+                  config:
+                    name: 'production'
+                    environment: 'prd'
+                  diff:
+                    added: ['NEW_SECRET_KEY']
+                    updated: ['DATABASE_URL']
+                    removed: ['OLD_API_KEY']
+                  project:
+                    name: 'my-project'
+                    id: 'proj_abc123'
+      responses:
+        '200':
+          description: Webhook received and processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Webhook forwarded to Discord successfully.'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /webhooks:
+    get:
+      tags: [Webhooks]
+      summary: Webhook transformer UI
+      description: |
+        Interactive web interface for transforming Discord webhook URLs to provider-specific formats.
+
+        Returns an HTML page where users can:
+        - Paste their Discord webhook URL
+        - Select a provider (Doppler, etc.)
+        - Get the transformed URL instantly
+        - Copy the URL to clipboard
+
+        This is a static HTML page - no authentication required.
+      security: []
+      responses:
+        '200':
+          description: HTML page for webhook transformation
+          content:
+            text/html:
+              schema:
+                type: string
+                example: '<!DOCTYPE html>...'

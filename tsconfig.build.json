@@ -1,8 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "noImplicitAny": false,
-    "skipLibCheck": true
-  },
-  "include": ["*.mts"]
-}

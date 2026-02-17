@@ -1,24 +1,21 @@
 # Dependencies
 node_modules/
 
-# Wrangler
-.wrangler/
+# Build output
+dist/
 
 # Environment files
 .env
 
-
 # IDE
 .idea/
 .vscode/
-
 
 # OS
 .DS_Store
 
 plans/
 
-# Zudoku docs
-docs/dist/
-docs/node_modules/
+# Zudoku cache
+.zudoku/
 docs/.zudoku/

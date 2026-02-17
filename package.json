@@ -1,30 +1,25 @@
 {
-  "name": "mina-dev",
+  "name": "mina-docs",
   "version": "1.0.0",
-  "description": "Amina API & Developer Portal - Cloudflare Workers API + Zudoku documentation",
+  "private": true,
+  "description": "Amina documentation portal - API reference, developer wiki & user guides",
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev",
-    "dev:local": "bun run --hot src/server.ts",
-    "deploy": "wrangler deploy",
-    "build:prd": "bun install --production --frozen-lockfile",
-    "deploy:prd": "wrangler deploy --env production",
+    "postinstall": "python3 scripts/patch-react-dom.py",
+    "dev": "zudoku dev",
+    "build": "zudoku build",
+    "build:prd": "bun install --production --frozen-lockfile && zudoku build",
+    "preview": "zudoku preview",
     "check": "tsc --noEmit && prettier --check .",
     "f": "prettier --write ."
   },
   "dependencies": {
-    "@hono/node-server": "^1.19.9",
-    "hono": "^4.11.9",
-    "mongodb": "^7.1.0",
-    "zod": "^4.3.6"
+    "zudoku": "^0.68.1"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260217.0",
     "@types/bun": "^1.3.9",
-    "eslint": "^10.0.0",
     "husky": "^9.1.7",
     "prettier": "^3.8.1",
-    "typescript": "^5.9.3",
-    "wrangler": "^4.65.0"
+    "typescript": "^5.9.3"
   }
 }
