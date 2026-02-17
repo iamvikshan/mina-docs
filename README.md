@@ -1,13 +1,13 @@
-# Amina Documentation
+# mina Documentation
 
-Official documentation site for Amina, a creative and energetic Discord bot designed to bring fun, functionality, and community engagement to Discord servers.
+mina (Amina), is a creative and energetic Discord bot designed to bring fun, functionality, and community engagement to Discord servers.
 
 > [!IMPORTANT]
-> Looking for the **API Documentation**? Visit [docs.api.4mina.app](https://docs.api.4mina.app)
+> Are you a developer and looking on how to host your own Amina instance? In that case, these docs are not for you, check out the [**Amina Dev Portal**](https://dev.4mina.app) instead.
 
 ## About
 
-This repository contains the comprehensive documentation for [Amina](https://github.com/iamvikshan/amina), covering everything from getting started guides to advanced self-hosting instructions. The documentation is built with [Astro](https://astro.build) and [Starlight](https://starlight.astro.build), providing a fast, accessible, and user-friendly experience.
+This repository contains the comprehensive source code (documentation) for [Amina](https://github.com/iamvikshan/amina), covering everything from getting started guides to advanced self-hosting instructions. The documentation is built with [Astro](https://astro.build) and [Starlight](https://starlight.astro.build), providing a fast, accessible, and user-friendly experience.
 
 ## What is Amina?
 
@@ -167,9 +167,3 @@ This documentation is part of the Amina project. Please refer to the [main repos
 ---
 
 **Note**: This documentation is actively maintained. If you find any issues or outdated information, please [open an issue](https://github.com/iamvikshan/amina-docs/issues) or join our [Discord server](https://discord.gg/uMgS9evnmv) for assistance.
-
-# Set these in your shell profile (.bashrc, .zshrc, or .fish config)
-
-export CLAUDE_CODE_USE_VERTEX=1
-export ANTHROPIC_VERTEX_PROJECT_ID=YOUR-PROJECT-ID
-export CLOUD_ML_REGION=global
