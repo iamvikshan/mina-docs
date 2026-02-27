@@ -13,7 +13,7 @@
     "f": "prettier --write ."
   },
   "dependencies": {
-    "zudoku": "^0.69.2"
+    "zudoku": "^0.69.3"
   },
   "devDependencies": {
     "@types/bun": "^1.3.9",
