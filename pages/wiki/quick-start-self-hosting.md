@@ -96,7 +96,7 @@ The `.env` file contains secrets and essential configuration for the bot. It is 
 | `SPOTIFY_CLIENT_ID`     | Spotify client ID for music commands.                                              |    No    |
 | `SPOTIFY_CLIENT_SECRET` | Spotify client secret for music commands.                                          |    No    |
 | `OPENAI`                | API key for OpenAI or compatible service for AI commands.                          |    No    |
-| `GH_TOKEN`              | GitHub token for GitHub-related commands.                                          |    No    |
+| `GH_PAT`                | GitHub token for GitHub-related commands.                                          |    No    |
 
 _Sources: [app.json:4-40](https://github.com/iamvikshan/amina/blob/main/app.json#L4-L40), [scripts/local.sh:162-168](https://github.com/iamvikshan/amina/blob/main/scripts/local.sh#L162-L168)_
 

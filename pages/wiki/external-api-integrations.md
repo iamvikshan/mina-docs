@@ -104,7 +104,7 @@ sequenceDiagram
     User->>BotCommand: Executes command
     Note over BotCommand: Reads repository.url from package.json
 
-    BotCommand->>OctokitClient: new Octokit({ auth: GH_TOKEN })
+    BotCommand->>OctokitClient: new Octokit({ auth: GH_PAT })
     BotCommand->>OctokitClient: repos.getContent({ owner, repo, path: 'CHANGELOG.md' })
     OctokitClient->>GitHubAPI: GET /repos/{owner}/{repo}/contents/CHANGELOG.md
     GitHubAPI-->>OctokitClient: File content (base64)
@@ -118,7 +118,7 @@ sequenceDiagram
 
 | Key              | Description                                                                                                        | Source File                                             |
 | :--------------- | :----------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------ |
-| `GH_TOKEN`       | A GitHub personal access token used to authenticate with the GitHub API, increasing rate limits. This is optional. | `app.json:68-72`, `types/config.d.ts:110`               |
+| `GH_PAT`         | A GitHub personal access token used to authenticate with the GitHub API, increasing rate limits. This is optional. | `app.json:68-72`, `types/config.d.ts:110`               |
 | `repository.url` | The URL in `package.json` from which the owner and repository name are parsed.                                     | `package.json:19-22`, `src/commands/bot/bot.ts:192-194` |
 
 ## Discord webhooks
@@ -199,7 +199,7 @@ Amina integrates with several other external services, configured via environmen
 | Service                  | Purpose                                          | NPM Package             | Environment Variable                         | Source Files                                         |
 | :----------------------- | :----------------------------------------------- | :---------------------- | :------------------------------------------- | :--------------------------------------------------- |
 | **Google Generative AI** | Powers the AI chat functionality.                | `@google/generative-ai` | `GEMINI_KEY`                                 | `src/helpers/googleAiClient.ts`, `types/config.d.ts` |
-| **GitHub**               | Fetches repository content like the changelog.   | `@octokit/rest`         | `GH_TOKEN` (optional)                        | `src/commands/bot/bot.ts`, `app.json`                |
+| **GitHub**               | Fetches repository content like the changelog.   | `@octokit/rest`         | `GH_PAT` (optional)                          | `src/commands/bot/bot.ts`, `app.json`                |
 | **Discord Webhooks**     | Sends reports, feedback, and logs.               | `discord.js`            | `LOGS_WEBHOOK`, `FEEDBACK.URL`               | `src/handlers/report.ts`, `types/config.d.ts`        |
 | **Upstash Vector**       | Provides vector database for AI memory recall.   | `@upstash/vector`       | `UPSTASH_VECTOR`, `UPSTASH_URL`              | `package.json`, `types/config.d.ts`                  |
 | **PronounDB**            | Fetches user pronouns for personalized messages. | `fetch` (built-in)      | N/A                                          | `src/events/message/messageCreate.ts`                |

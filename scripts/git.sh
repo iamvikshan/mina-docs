@@ -12,7 +12,7 @@
 # Safe to run multiple times (idempotent).
 #
 # Usage:
-#   ./iamvikshan.sh [--repo <repository-url>] [--force|--yes]
+#   ./git.sh [--repo <repository-url>] [--force|--yes]
 #
 # Options:
 #   --repo <url>       Override the target repository URL (default: https://github.com/iamvikshan/mina-docs)
@@ -22,9 +22,9 @@
 #   TARGET_REPO    Set this to override the default target repository URL
 #
 # Examples:
-#   ./iamvikshan.sh
-#   ./iamvikshan.sh --repo https://github.com/myorg/myrepo.git
-#   TARGET_REPO=https://github.com/myorg/myrepo.git ./iamvikshan.sh
+#   ./git.sh
+#   ./git.sh --repo https://github.com/myorg/myrepo.git
+#   TARGET_REPO=https://github.com/myorg/myrepo.git ./git.sh
 
 set -euo pipefail
 
@@ -59,6 +59,9 @@ TARGET_REPO="${TARGET_REPO:-$DEFAULT_TARGET_REPO}"
 
 # Flag to force remote URL changes without prompting (for non-interactive use)
 FORCE_REMOTE_UPDATE=false
+
+# Flag to track SSH signing key prune failure (deferred failure: final status will be incomplete)
+PRUNE_FAILED=false
 
 # Initialize optional variables with defaults to satisfy 'set -u'
 : "${GITHUB_TOKEN:=}"
@@ -108,6 +111,127 @@ if [[ ! "$TARGET_REPO" =~ ^(https://|git@) ]]; then
     exit 1
 fi
 
+# Function to prune SSH signing keys to enforce maximum of 5
+# Deletes oldest keys first (by created_at timestamp)
+# Uses gh built-in jq query output as TSV (no external jq dependency)
+# Returns 0 on success, 1 on failure
+prune_ssh_signing_keys() {
+    local max_keys=5
+    
+    # Fetch all signing keys with pagination as TSV rows: created_at<TAB>id
+    # NOTE: Defensive '|| FETCH_EXIT=$?' pattern prevents 'set -e' from killing the script
+    local FETCH_EXIT=0
+    local keys_tsv=""
+    keys_tsv=$(gh api /user/ssh_signing_keys --paginate --jq '.[] | [.created_at, .id] | @tsv') || FETCH_EXIT=$?
+    
+    if [[ $FETCH_EXIT -ne 0 ]]; then
+        echo "Failed to fetch SSH signing keys"
+        if [[ -n "$keys_tsv" ]]; then
+            echo "$keys_tsv"
+        fi
+        return 1
+    fi
+    
+    # Create temporary files for validated key rows and delete list
+    local temp_keys
+    local temp_sorted
+    local temp_delete
+    temp_keys=$(mktemp)
+    temp_sorted=$(mktemp)
+    temp_delete=$(mktemp)
+    trap 'rm -f "$temp_keys" "$temp_sorted" "$temp_delete"' RETURN
+
+    # Persist fetched TSV output (empty output is valid when no keys exist)
+    if [[ -n "$keys_tsv" ]]; then
+        printf '%s\n' "$keys_tsv" > "$temp_keys" || {
+            echo "Failed to store SSH signing key list"
+            return 1
+        }
+    else
+        : > "$temp_keys" || {
+            echo "Failed to initialize SSH signing key list"
+            return 1
+        }
+    fi
+
+    # Validate and normalize rows as created_at<TAB>id
+    local PARSE_EXIT=0
+    awk -F '\t' '
+        NF == 0 { next }
+        NF != 2 || $1 == "" || $2 == "" { bad = 1; next }
+        $2 !~ /^[0-9]+$/ { bad = 1; next }
+        { print $1 "\t" $2; count++ }
+        END {
+            if (bad) exit 1
+        }
+    ' "$temp_keys" > "$temp_sorted" || PARSE_EXIT=$?
+
+    if [[ $PARSE_EXIT -ne 0 ]]; then
+        echo "Failed to parse SSH signing keys"
+        return 1
+    fi
+
+    local key_count=0
+    key_count=$(awk -F '\t' 'NF == 2 {count++} END {print count+0}' "$temp_sorted")
+
+    if [[ $key_count -le $max_keys ]]; then
+        echo "SSH signing keys: $key_count key(s) found (within max of $max_keys)"
+        return 0
+    fi
+
+    local delete_needed=0
+    delete_needed=$((key_count - max_keys))
+
+    echo "Found $key_count SSH signing keys (exceeds max of $max_keys)"
+    echo "    Deleting $delete_needed oldest key(s)..."
+
+    # Sort by date ascending (oldest first), then delete exactly the oldest excess entries
+    local BUILD_DELETE_LIST_EXIT=0
+    sort "$temp_sorted" | head -n "$delete_needed" | awk -F '\t' '{print $2}' > "$temp_delete" || BUILD_DELETE_LIST_EXIT=$?
+
+    if [[ $BUILD_DELETE_LIST_EXIT -ne 0 ]]; then
+        echo "Failed to build delete list for old SSH signing keys"
+        return 1
+    fi
+
+    local delete_list_count=0
+    delete_list_count=$(awk 'NF > 0 {count++} END {print count+0}' "$temp_delete")
+    if [[ $delete_list_count -ne $delete_needed ]]; then
+        echo "Failed to identify old SSH signing keys to delete"
+        return 1
+    fi
+    
+    # Delete each old key
+    local delete_count=0
+    local delete_fail_count=0
+    while IFS= read -r key_id; do
+        if [[ -z "$key_id" ]]; then
+            continue
+        fi
+        
+        # NOTE: Defensive '|| DELETE_EXIT=$?' pattern prevents 'set -e' from killing the script
+        local DELETE_EXIT=0
+        local delete_output=""
+        delete_output=$(gh api -X DELETE /user/ssh_signing_keys/"$key_id" 2>&1) || DELETE_EXIT=$?
+        
+        if [[ $DELETE_EXIT -eq 0 ]]; then
+            echo "    Deleted signing key ID $key_id"
+            ((delete_count++))
+        else
+            echo "    Failed to delete signing key ID $key_id: $delete_output"
+            ((delete_fail_count++))
+        fi
+    done < "$temp_delete"
+    
+    if [[ $delete_fail_count -gt 0 ]]; then
+        echo "Failed to delete $delete_fail_count old signing key(s) - setup marked incomplete"
+        return 1
+    fi
+    
+    echo "Pruned $delete_count old signing key(s), now have max $max_keys keys"
+    return 0
+}
+
 # Define the canonical check_dev_setup function body using a here-doc
 # This ensures both code paths (insert after setup.sh and fallback append) use identical content
 read -r -d '' FUNCTION_DEF << 'FUNCTION_EOF' || true
@@ -137,10 +261,10 @@ check_dev_setup() {
     if [[ -z "$gh_user" || "$gh_user" != "GIT_USER_PLACEHOLDER" ]]; then
         if [[ -n "$GITHUB_TOKEN" ]]; then
             echo "⚠️  GitHub CLI is using existing GITHUB_TOKEN, not GIT_USER_PLACEHOLDER"
-            echo "   Run: ./iamvikshan.sh to authenticate as GIT_USER_PLACEHOLDER"
+            echo "   Run: ./git.sh to authenticate as GIT_USER_PLACEHOLDER"
         else
             echo "⚠️  GitHub CLI is not authenticated as GIT_USER_PLACEHOLDER"
-            echo "   Run: ./iamvikshan.sh to authenticate"
+            echo "   Run: ./git.sh to authenticate"
         fi
         return 1
     fi
@@ -263,9 +387,9 @@ if [[ "$NEEDS_AUTH" = "true" ]]; then
     case $choice in
         1)
             echo "Starting web-based authentication..."
-            echo "  Requesting scopes: repo, workflow, write:packages, read:packages, admin:ssh_signing_key"
+            echo "  Requesting scopes: repo, workflow, write:packages, read:packages, write:ssh_signing_key"
             export GITHUB_TOKEN=""
-            gh auth login --hostname github.com --web --git-protocol https --scopes "repo,workflow,write:packages,read:packages,admin:ssh_signing_key"
+            gh auth login --hostname github.com --web --git-protocol https --scopes "repo,workflow,write:packages,read:packages,write:ssh_signing_key"
             
             # Verify the authenticated user is the intended user
             AUTHED_USER=$(gh api user --jq .login 2>/dev/null || echo "")
@@ -282,7 +406,7 @@ if [[ "$NEEDS_AUTH" = "true" ]]; then
         2)
             echo "Please provide your Personal Access Token for $GIT_USER"
             echo "You can create one at: https://github.com/settings/tokens"
-            echo "Required scopes: repo, workflow, write:packages, read:packages, admin:ssh_signing_key"
+            echo "Required scopes: repo, workflow, write:packages, read:packages, write:ssh_signing_key"
             
             # Use timed read for token input; skip on timeout
             token=""
@@ -335,9 +459,9 @@ fi
 echo "Step 3.1: Setting up SSH signing keys for commit verification..."
 export GITHUB_TOKEN=""
 
-# Check if admin:ssh_signing_key scope is available
+# Check if write:ssh_signing_key scope is available
 # We need WRITE access to add signing keys; GET /user/ssh_signing_keys only proves READ access.
-# Use X-OAuth-Scopes header to verify the token actually has admin:ssh_signing_key scope.
+# Use X-OAuth-Scopes header to verify the token actually has write:ssh_signing_key scope.
 # NOTE: Defensive '|| SCOPE_CHECK_EXIT=$?' pattern prevents 'set -e' from killing the script
 #       before we can handle the error.
 HAS_SIGNING_SCOPE=true
@@ -363,7 +487,7 @@ if [[ $SCOPE_CHECK_EXIT -ne 0 ]]; then
         echo "⚠️  Warning: Could not verify SSH signing scope due to network/API issue"
         echo "   Exit code: $SCOPE_CHECK_EXIT"
         echo "   Output: $SCOPE_CHECK_OUTPUT"
-        echo "   Assuming scope is available; if commit signing fails, run: gh auth refresh -h github.com -s admin:ssh_signing_key"
+        echo "   Assuming scope is available; if commit signing fails, run: gh auth refresh -h github.com -s write:ssh_signing_key"
     else
         # Other non-success HTTP status codes (4xx/5xx) - assume scope missing to be safe
         HAS_SIGNING_SCOPE=false
@@ -371,15 +495,15 @@ if [[ $SCOPE_CHECK_EXIT -ne 0 ]]; then
 else
     # GET succeeded (HTTP 200), but this only proves READ access.
     # Check X-OAuth-Scopes header to verify the token also has WRITE access.
-    # admin:ssh_signing_key scope is required for adding/removing signing keys.
-    OAUTH_SCOPES=$(echo "$SCOPE_CHECK_OUTPUT" | grep -i '^X-OAuth-Scopes:' | sed 's/^[^:]*:[[:space:]]*//' || true)
+    # write:ssh_signing_key scope is required for adding signing keys.
+    OAUTH_SCOPES=$(echo "$SCOPE_CHECK_OUTPUT" | grep -i '^X-OAuth-Scopes:' | sed 's/^[^:]*:[[:space:]]*//' | tr -d '\r' || true)
     if [[ -n "$OAUTH_SCOPES" ]]; then
         # Classic OAuth token / PAT - scopes header is present, check for required scope
-        if ! echo "$OAUTH_SCOPES" | grep -qi 'admin:ssh_signing_key'; then
+        if ! echo "$OAUTH_SCOPES" | grep -qi 'write:ssh_signing_key\|admin:ssh_signing_key'; then
             HAS_SIGNING_SCOPE=false
             echo "⚠️  Token can read signing keys but lacks write permission"
             echo "   Current scopes: $OAUTH_SCOPES"
-            echo "   Required scope: admin:ssh_signing_key"
+            echo "   Required scope: write:ssh_signing_key"
         fi
     fi
     # If X-OAuth-Scopes header is empty/missing, it may be a fine-grained token (no
@@ -387,11 +511,11 @@ else
 fi
 
 if [[ "$HAS_SIGNING_SCOPE" != "true" ]]; then
-    echo "⚠️  Need 'admin:ssh_signing_key' scope for commit signing"
+    echo "⚠️  Need 'write:ssh_signing_key' scope for commit signing"
     
     if [[ "$IS_INTERACTIVE" != "true" ]]; then
         echo "   Skipping scope refresh (non-interactive mode)"
-        echo "   Run interactively or pre-authorize with: gh auth refresh -h github.com -s admin:ssh_signing_key"
+        echo "   Run interactively or pre-authorize with: gh auth refresh -h github.com -s write:ssh_signing_key"
     else
         echo "   This will open a browser for authorization..."
         confirm=""
@@ -399,9 +523,13 @@ if [[ "$HAS_SIGNING_SCOPE" != "true" ]]; then
             echo ""
             echo "   Timed out. Skipping scope refresh."
         else
-            gh auth refresh -h github.com -s admin:ssh_signing_key
-            HAS_SIGNING_SCOPE=true
-            echo "✓ Scope granted"
+            if gh auth refresh -h github.com -s write:ssh_signing_key; then
+                HAS_SIGNING_SCOPE=true
+                echo "✓ Scope granted"
+            else
+                echo "⚠️  Failed to refresh scope. SSH signing key upload will be skipped."
+                HAS_SIGNING_SCOPE=false
+            fi
         fi
     fi
 fi
@@ -437,9 +565,9 @@ fi
 # Check if this key is already on GitHub and add if needed
 # Skip GitHub upload if we know the token lacks write scope (it will fail anyway)
 if [[ "$HAS_SIGNING_SCOPE" != "true" ]]; then
-    echo "⚠️  Skipping GitHub key upload (missing admin:ssh_signing_key scope)"
+    echo "⚠️  Skipping GitHub key upload (missing write:ssh_signing_key scope)"
     echo "   The local signing key is configured, but GitHub won't show commits as 'Verified'"
-    echo "   To fix: gh auth refresh -h github.com -s admin:ssh_signing_key"
+    echo "   To fix: gh auth refresh -h github.com -s write:ssh_signing_key"
     echo "   Then re-run this script to upload the key"
 else
     echo "Ensuring SSH signing key is added to GitHub..."
@@ -454,7 +582,7 @@ else
         echo "✓ SSH signing key added to GitHub"
     else
         # Check if key is already on GitHub by verifying fingerprint in list
-        if [[ -n "$KEY_FINGERPRINT" ]] && gh ssh-key list --type signing 2>/dev/null | grep -q "$KEY_FINGERPRINT"; then
+        if [[ -n "$KEY_FINGERPRINT" ]] && gh api /user/ssh_signing_keys --paginate 2>/dev/null | grep -qF "$KEY_FINGERPRINT"; then
             echo "✓ SSH signing key already exists on GitHub"
         else
             echo "⚠️  Failed to add SSH signing key to GitHub"
@@ -464,6 +592,25 @@ else
             echo "   Public key location: $SIGNING_KEY_PUB"
         fi
     fi
+fi
+
+# Prune remote SSH signing keys (attempt oldest-first deletion; failures are recorded for final status)
+if [[ "$HAS_SIGNING_SCOPE" = "true" ]]; then
+    echo "Pruning SSH signing keys (target max 5; failures are recorded for final status)..."
+    PRUNE_EXIT_CODE=0
+    PRUNE_OUTPUT=$(prune_ssh_signing_keys) || PRUNE_EXIT_CODE=$?
+
+    if [[ $PRUNE_EXIT_CODE -eq 0 ]]; then
+        echo "$PRUNE_OUTPUT"
+    else
+        echo "❌ SSH signing key pruning failed"
+        echo "   Exit code: $PRUNE_EXIT_CODE"
+        echo "   Output: $PRUNE_OUTPUT"
+        echo "   Continuing execution; final status will be incomplete if prune failed"
+        PRUNE_FAILED=true
+    fi
+else
+    echo "⚠️  Skipping SSH signing key pruning (missing write:ssh_signing_key scope)"
 fi
 
 # Configure Git for SSH signing
@@ -681,6 +828,9 @@ fi
 if [[ -z "$FINAL_SIGNING_KEY" || "$FINAL_GPGSIGN" != "true" ]]; then
     SETUP_COMPLETE=false
 fi
+if [[ "$PRUNE_FAILED" = "true" ]]; then
+    SETUP_COMPLETE=false
+fi
 
 if [[ "$SETUP_COMPLETE" = "true" ]]; then
     echo "=========================================="
@@ -710,6 +860,10 @@ else
     if [[ -z "$FINAL_SIGNING_KEY" || "$FINAL_GPGSIGN" != "true" ]]; then
         echo "SSH signing key setup needs attention"
         echo "Run this script again to complete SSH signing setup"
+    fi
+    if [[ "$PRUNE_FAILED" = "true" ]]; then
+        echo "SSH signing key pruning failed"
+        echo "Ensure you have sufficient scopes and re-run: $SCRIPT_NAME"
     fi
     echo ""
     exit 1

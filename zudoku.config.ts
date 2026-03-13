@@ -298,7 +298,10 @@ const config: ZudokuConfig = {
       icon: 'code',
     },
   ],
-  redirects: [{ from: '/', to: '/guide/index' }],
+  redirects: [
+    { from: '/', to: '/guide/index' },
+    { from: '/guide', to: '/guide/index' },
+  ],
   apis: {
     type: 'file',
     input: './apis/v1-api.yml',

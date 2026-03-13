@@ -242,7 +242,7 @@ For deployment, sensitive keys and environment-specific values are managed throu
 | `SPOTIFY_CLIENT_ID`     | Spotify API client ID for music commands.        | No       |
 | `SPOTIFY_CLIENT_SECRET` | Spotify API client secret for music commands.    | No       |
 | `OPENAI`                | (Legacy) OpenAI API key.                         | No       |
-| `GH_TOKEN`              | GitHub token for commands like `/bot changelog`. | No       |
+| `GH_PAT`                | GitHub token for commands like `/bot changelog`. | No       |
 
 _Sources: [app.json:4-40](https://github.com/iamvikshan/amina/blob/main/app.json#L4-L40)_
 
@@ -313,7 +313,7 @@ sequenceDiagram
 
     User->>Discord: Executes /bot changelog
     Discord->>Amina: interactionRun(interaction)
-    Amina->>Octokit: new Octokit({ auth: GH_TOKEN })
+    Amina->>Octokit: new Octokit({ auth: GH_PAT })
     Amina->>Octokit: repos.getContent({ path: 'CHANGELOG.md' })
     Octokit->>GitHub: GET /repos/.../contents/CHANGELOG.md
     GitHub-->>Octokit: File content (base64)

@@ -138,7 +138,7 @@ The `Secrets` interface defines the structure for all sensitive data.
 | `LOGS_WEBHOOK`     | A Discord webhook URL for sending error logs.                     | Yes      | `app.json`          |
 | `GEMINI_KEY`       | API key for Google Gemini (for AI features).                      | No       | `types/config.d.ts` |
 | `UPSTASH_VECTOR`   | API token for Upstash Vector database (for AI memory).            | No       | `types/config.d.ts` |
-| `GH_TOKEN`         | GitHub token for accessing the GitHub API (e.g., for changelogs). | No       | `app.json`          |
+| `GH_PAT`           | GitHub token for accessing the GitHub API (e.g., for changelogs). | No       | `app.json`          |
 | `LAVALINK_NODES`   | A JSON array of Lavalink node connection details.                 | Yes      | `secrets.ts`        |
 
 _Sources: [app.json:5-40](https://github.com/iamvikshan/amina/blob/main/app.json#L5-L40), [types/config.d.ts:100-123](https://github.com/iamvikshan/amina/blob/main/types/config.d.ts#L100-L123), [src/config/secrets.ts:20-31](https://github.com/iamvikshan/amina/blob/main/src/config/secrets.ts#L20-L31)_

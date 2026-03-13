@@ -192,7 +192,7 @@ The following table lists key environment variables required for the bot to func
 | `SPOTIFY_CLIENT_ID`     | Spotify API client ID for music commands.                                                         | No       |
 | `SPOTIFY_CLIENT_SECRET` | Spotify API client secret for music commands.                                                     | No       |
 | `OPENAI`                | API key for OpenAI for AI commands.                                                               | No       |
-| `GH_TOKEN`              | GitHub token for GitHub-related commands.                                                         | No       |
+| `GH_PAT`                | GitHub token for GitHub-related commands.                                                         | No       |
 
 _Sources: [app.json:4-46](https://github.com/iamvikshan/amina/blob/main/app.json#L4-L46), [docker-compose.prod.yml:40](https://github.com/iamvikshan/amina/blob/main/docker-compose.prod.yml#L40), [lavalink/application.yml:32](https://github.com/iamvikshan/amina/blob/main/lavalink/application.yml#L32)_
 
