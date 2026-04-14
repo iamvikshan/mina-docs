@@ -1,15 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", ":semanticCommits"],
+  "extends": ["config:recommended", ":semanticCommits", ":dependencyDashboard"],
   "baseBranchPatterns": ["main"],
-  "automerge": false,
+  "automerge": true,
   "prConcurrentLimit": 10,
   "prHourlyLimit": 5,
   "labels": ["dependencies"],
   "assignees": ["iamvikshan"],
   "schedule": ["before 4am every weekday"],
   "timezone": "Africa/Nairobi",
-  "dependencyDashboard": true,
   "dependencyDashboardApproval": false,
   "rebaseWhen": "conflicted",
   "rangeStrategy": "bump",
@@ -18,39 +17,7 @@
   "minimumReleaseAge": "3 days",
   "packageRules": [
     {
-      "description": "Automerge patch updates and digests (safe bug fixes)",
-      "matchUpdateTypes": ["patch", "digest"],
-      "automerge": true,
-      "minimumReleaseAge": "1 day"
-    },
-    {
-      "description": "Automerge minor updates for devDependencies (safe for lint/types)",
-      "matchDepTypes": ["devDependencies"],
-      "matchUpdateTypes": ["minor"],
-      "automerge": true,
-      "minimumReleaseAge": "1 day"
-    },
-    {
-      "description": "Require approval for major updates",
-      "matchUpdateTypes": ["major"],
-      "automerge": false,
-      "minimumReleaseAge": "7 days",
-      "labels": ["dependencies", "major-update"]
-    },
-    {
-      "description": "Require approval for production dependency minor updates",
-      "matchDepTypes": ["dependencies"],
-      "matchUpdateTypes": ["minor"],
-      "automerge": false,
-      "minimumReleaseAge": "3 days"
-    },
-    {
-      "description": "Automerge GitHub Actions (safe, doesn't affect code)",
-      "matchManagers": ["github-actions"],
-      "automerge": true,
-      "minimumReleaseAge": "3 days"
-    },
-    {
+      "description": "Group linters and formatters",
       "groupName": "linters and formatters",
       "matchPackageNames": [
         "eslint",
@@ -62,25 +29,41 @@
       ]
     },
     {
+      "description": "Group TypeScript and types",
       "groupName": "TypeScript and types",
-      "matchPackageNames": ["typescript", "/^@types/"],
-      "automerge": true
+      "matchPackageNames": ["typescript", "/^@types/"]
     },
     {
+      "description": "Group Cloudflare ecosystem",
       "groupName": "Cloudflare ecosystem",
-      "matchPackageNames": ["/^@cloudflare/", "wrangler"],
-      "automerge": true,
-      "minimumReleaseAge": "3 days"
+      "matchPackageNames": ["/^@cloudflare/", "wrangler"]
+    },
+    {
+      "description": "Fast-track patch updates and digests to 1 day",
+      "matchUpdateTypes": ["patch", "digest"],
+      "minimumReleaseAge": "1 day"
+    },
+    {
+      "description": "Fast-track minor devDependencies updates to 1 day",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor"],
+      "minimumReleaseAge": "1 day"
+    },
+    {
+      "description": "Require manual review for major updates (Overrides root automerge)",
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "minimumReleaseAge": "7 days",
+      "labels": ["dependencies", "major-update"]
     }
   ],
   "lockFileMaintenance": {
     "enabled": true,
-    "automerge": true,
+    "minimumReleaseAge": "0 days",
     "schedule": ["before 4am on monday"]
   },
   "vulnerabilityAlerts": {
     "labels": ["security"],
-    "minimumReleaseAge": "0 days",
-    "automerge": true
+    "minimumReleaseAge": "0 days"
   }
 }

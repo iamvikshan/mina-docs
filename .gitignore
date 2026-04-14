@@ -9,7 +9,6 @@ dist/
 
 # IDE
 .idea/
-.vscode/
 
 # OS
 .DS_Store
