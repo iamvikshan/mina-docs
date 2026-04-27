@@ -17,7 +17,7 @@
     "prepare": "test -d .git && husky || true"
   },
   "dependencies": {
-    "zudoku": "^0.73.2"
+    "zudoku": "^0.76.0"
   },
   "devDependencies": {
     "@types/bun": "^1.3.13",
