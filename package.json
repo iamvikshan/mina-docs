@@ -20,7 +20,7 @@
     "zudoku": "^0.76.0"
   },
   "devDependencies": {
-    "@types/bun": "^1.3.13",
+    "@types/bun": "^1.3.14",
     "husky": "^9.1.7",
     "prettier": "^3.8.3",
     "typescript": "^6.0.3"
