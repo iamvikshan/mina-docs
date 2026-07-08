@@ -13,6 +13,7 @@ sidebar_label: 'Developer Commands'
 - [src/database/schemas/Dev.ts](https://github.com/iamvikshan/amina/blob/main/src/database/schemas/Dev.ts)
 - [src/handlers/command.ts](https://github.com/iamvikshan/amina/blob/main/src/handlers/command.ts)
 - [types/commands.d.ts](https://github.com/iamvikshan/amina/blob/main/types/commands.d.ts)
+
 </details>
 
 Developer Commands are a special set of slash commands designed exclusively for bot administrators and developers. These commands provide powerful tools for bot maintenance, debugging, real-time configuration changes, and direct server management. They are categorized under the `DEV` category and are strictly access-controlled to prevent unauthorized use.

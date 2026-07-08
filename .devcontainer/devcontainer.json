@@ -4,10 +4,6 @@
 
   // Add features to the dev container, either from a Dockerfile or a list of features to install.
   "features": {
-    "ghcr.io/devcontainers/features/github-cli:1": {
-      "installDirectlyFromGitHubRelease": true,
-      "version": "latest"
-    },
     "ghcr.io/devcontainers/features/sshd:1": {
       "version": "latest"
     }
@@ -17,19 +13,17 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
         "oven.bun-vscode",
         "WakaTime.vscode-wakatime",
-        "coderabbit.coderabbit-vscode",
-        "DeepScan.vscode-deepscan",
-        "unifiedjs.vscode-mdx"
+        "TypeScriptTeam.native-preview",
+        "eamodio.gitlens",
+        "oxc.oxc-vscode"
       ]
     }
   },
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "chmod +x scripts/dvcntnr.sh && scripts/dvcntnr.sh",
+  "postCreateCommand": "bun upd && bun bs --default",
   // Set `remoteUser` to `root` to connect as root.
   "remoteUser": "root"
 }

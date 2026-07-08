@@ -18,3 +18,4 @@ plans/
 # Zudoku cache
 .zudoku/
 docs/.zudoku/
+scripts/bootstrap.sh

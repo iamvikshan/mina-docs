@@ -12,6 +12,7 @@ sidebar_label: 'Creating Commands'
 - [src/commands/bot/bot.ts](https://github.com/iamvikshan/amina/blob/main/src/commands/bot/bot.ts)
 - [src/commands/utility/help.ts](https://github.com/iamvikshan/amina/blob/main/src/commands/utility/help.ts)
 - [src/commands/fun/hack.ts](https://github.com/iamvikshan/amina/blob/main/src/commands/fun/hack.ts)
+
 </details>
 
 This document provides a comprehensive guide to creating, structuring, and registering new commands within the Amina bot. The command system is designed to be modular, with each command defined in its own TypeScript file within the `src/commands` directory. This approach simplifies development, maintenance, and organization.

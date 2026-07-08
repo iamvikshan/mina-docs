@@ -1,5 +1,10 @@
 {
-  "extends": [
-    "github>iamvikshan/.github//renovate/base"
+  "extends": ["github>iamvikshan/.github//renovate/typescript"],
+  "packageRules": [
+    {
+      "description": "Group Cloudflare ecosystem",
+      "groupName": "Cloudflare ecosystem",
+      "matchPackageNames": ["/^@cloudflare/", "wrangler"]
+    }
   ]
 }

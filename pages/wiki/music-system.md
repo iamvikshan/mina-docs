@@ -87,14 +87,15 @@ Key features configured in this file include:
 #### Lavalink plugins
 
 The following plugins are configured to enhance Lavalink's capabilities:
-| Plugin | Version | Repository | Purpose |
-|---|---|---|---|
-| `youtube-plugin` | `1.16.0` | `https://maven.lavalink.dev/releases` | Provides YouTube source support. |
-| `lavasrc-plugin` | `4.2.0` | `https://maven.lavalink.dev/releases` | Adds support for Spotify, Apple Music, and Deezer. |
-| `lavasearch-plugin` | `1.0.0` | `https://maven.lavalink.dev/releases` | Implements advanced search functionality. |
-| `sponsorblock-plugin` | `3.0.1` | `https://maven.lavalink.dev/releases` | Skips sponsored segments in YouTube videos. |
-| `LavaDSPX-Plugin` | `0.0.5` | `https://jitpack.io` | Adds extra DSP filters like high-pass and echo. |
-| `lavalyrics-plugin` | `1.1.0` | `https://maven.topi.wtf/releases` | Provides a lyrics API base. |
+
+| Plugin                | Version  | Repository                            | Purpose                                            |
+| --------------------- | -------- | ------------------------------------- | -------------------------------------------------- |
+| `youtube-plugin`      | `1.16.0` | `https://maven.lavalink.dev/releases` | Provides YouTube source support.                   |
+| `lavasrc-plugin`      | `4.2.0`  | `https://maven.lavalink.dev/releases` | Adds support for Spotify, Apple Music, and Deezer. |
+| `lavasearch-plugin`   | `1.0.0`  | `https://maven.lavalink.dev/releases` | Implements advanced search functionality.          |
+| `sponsorblock-plugin` | `3.0.1`  | `https://maven.lavalink.dev/releases` | Skips sponsored segments in YouTube videos.        |
+| `LavaDSPX-Plugin`     | `0.0.5`  | `https://jitpack.io`                  | Adds extra DSP filters like high-pass and echo.    |
+| `lavalyrics-plugin`   | `1.1.0`  | `https://maven.topi.wtf/releases`     | Provides a lyrics API base.                        |
 
 Sources: [lavalink/application.yml:6-27 ](https://github.com/iamvikshan/amina/blob/main/lavalink/application.yml#L6-L27)
 
@@ -105,34 +106,36 @@ The music system's behavior is controlled by configurations in two separate file
 ### Bot configuration
 
 Bot-side settings are located in the `MUSIC`object within `src/config/config.ts`.
-| Key | Type | Default Value | Description |
-|---|---|---|---|
-| `ENABLED` | `boolean` | `true` | Toggles the entire music system. |
-| `IDLE_TIME` | `number` | `60` | Time in seconds before the bot disconnects from an idle voice channel. |
-| `DEFAULT_VOLUME` | `number` | `60` | The default player volume (1-100). |
-| `MAX_SEARCH_RESULTS` | `number` | `5` | The maximum number of search results to display. |
-| `DEFAULT_SOURCE` | `string` | `scsearch` | The default search provider (e.g., `ytsearch`, `scsearch`). |
-| `LAVALINK_RETRY_AMOUNT` | `number` | `20` | Number of times to retry connecting to a Lavalink node. |
-| `LAVALINK_RETRY_DELAY` | `number` | `30000` | Delay in milliseconds between retry attempts. |
-| `LAVALINK_NODES` | `LavalinkNode[]` | `secret.LAVALINK_NODES` | An array of Lavalink node connection details. |
+
+| Key                     | Type             | Default Value           | Description                                                            |
+| ----------------------- | ---------------- | ----------------------- | ---------------------------------------------------------------------- |
+| `ENABLED`               | `boolean`        | `true`                  | Toggles the entire music system.                                       |
+| `IDLE_TIME`             | `number`         | `60`                    | Time in seconds before the bot disconnects from an idle voice channel. |
+| `DEFAULT_VOLUME`        | `number`         | `60`                    | The default player volume (1-100).                                     |
+| `MAX_SEARCH_RESULTS`    | `number`         | `5`                     | The maximum number of search results to display.                       |
+| `DEFAULT_SOURCE`        | `string`         | `scsearch`              | The default search provider (e.g., `ytsearch`, `scsearch`).            |
+| `LAVALINK_RETRY_AMOUNT` | `number`         | `20`                    | Number of times to retry connecting to a Lavalink node.                |
+| `LAVALINK_RETRY_DELAY`  | `number`         | `30000`                 | Delay in milliseconds between retry attempts.                          |
+| `LAVALINK_NODES`        | `LavalinkNode[]` | `secret.LAVALINK_NODES` | An array of Lavalink node connection details.                          |
 
 Sources: [src/config/config.ts:79-93 ](https://github.com/iamvikshan/amina/blob/main/src/config/config.ts#L79-L93), [types/config.d.ts:60-68 ](https://github.com/iamvikshan/amina/blob/main/types/config.d.ts#L60-L68)
 
 ### Lavalink configuration
 
 The `lavalink/application.yml`file configures the Lavalink server itself, including which audio sources are enabled.
-| Source | Enabled | Notes |
-|---|---|---|
-| `youtube` | `false` | The built-in source is disabled in favor of the `youtube-plugin`. |
-| `bandcamp` | `true` | |
-| `soundcloud` | `true` | |
-| `twitch` | `true` | |
-| `vimeo` | `true` | |
-| `http` | `true` | |
-| `local` | `false` | |
-| `spotify` | `true` | Requires `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET`. Handled by `lavasrc-plugin`. |
-| `applemusic` | `false` | Disabled by default. Handled by `lavasrc-plugin`. |
-| `deezer` | `false` | Disabled by default. Handled by `lavasrc-plugin`. |
+
+| Source       | Enabled | Notes                                                                                  |
+| ------------ | ------- | -------------------------------------------------------------------------------------- |
+| `youtube`    | `false` | The built-in source is disabled in favor of the `youtube-plugin`.                      |
+| `bandcamp`   | `true`  |                                                                                        |
+| `soundcloud` | `true`  |                                                                                        |
+| `twitch`     | `true`  |                                                                                        |
+| `vimeo`      | `true`  |                                                                                        |
+| `http`       | `true`  |                                                                                        |
+| `local`      | `false` |                                                                                        |
+| `spotify`    | `true`  | Requires `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET`. Handled by `lavasrc-plugin`. |
+| `applemusic` | `false` | Disabled by default. Handled by `lavasrc-plugin`.                                      |
+| `deezer`     | `false` | Disabled by default. Handled by `lavasrc-plugin`.                                      |
 
 Sources: [lavalink/application.yml:32-93](https://github.com/iamvikshan/amina/blob/main/lavalink/application.yml#L32-L93)
 
@@ -147,11 +150,12 @@ This sequence diagram shows the typical flow for a `/play`command.
 ### Command validations
 
 To prevent errors and provide clear feedback to the user, music commands are protected by a set of validation checks. These checks are defined in `src/helpers/BotUtils.ts`and are executed before the command's logic runs.
-| Validation | Error Message | Purpose |
-|---|---|---|
-| `client.musicManager.getPlayer(guildId)` | "🚫 I'm not in a voice channel." | Checks if a music player already exists for the guild. |
-| `member.voice?.channelId` | "🚫 You need to join my voice channel." | Ensures the user executing the command is in a voice channel. |
-| `member.voice?.channelId === client.musicManager.getPlayer(guildId)?.voiceChannelId` | "🚫 You're not in the same voice channel." | Verifies the user is in the same voice channel as the bot. |
+
+| Validation                                                                           | Error Message                              | Purpose                                                       |
+| ------------------------------------------------------------------------------------ | ------------------------------------------ | ------------------------------------------------------------- |
+| `client.musicManager.getPlayer(guildId)`                                             | "🚫 I'm not in a voice channel."           | Checks if a music player already exists for the guild.        |
+| `member.voice?.channelId`                                                            | "🚫 You need to join my voice channel."    | Ensures the user executing the command is in a voice channel. |
+| `member.voice?.channelId === client.musicManager.getPlayer(guildId)?.voiceChannelId` | "🚫 You're not in the same voice channel." | Verifies the user is in the same voice channel as the bot.    |
 
 Sources: [src/helpers/BotUtils.ts:116-133 ](https://github.com/iamvikshan/amina/blob/main/src/helpers/BotUtils.ts#L116-L133)
 

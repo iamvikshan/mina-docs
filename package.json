@@ -10,19 +10,24 @@
     "build": "zudoku build",
     "build:prd": "bun install --production --frozen-lockfile && zudoku build",
     "preview": "zudoku preview",
-    "f": "(git diff --name-only --diff-filter=ACMR HEAD && git ls-files --others --exclude-standard) | xargs bunx prettier --write --ignore-unknown",
-    "f:all": "prettier --write .",
-    "f:check": "prettier --check .",
-    "upd": "bun update --latest && bun f",
-    "prepare": "test -d .git && husky || true"
+    "prepare": "test -d .git && husky || true",
+    "f": "oxfmt --write .",
+    "f:check": "oxfmt --check .",
+    "lint:fix": "oxlint --fix .",
+    "lint": "oxlint .",
+    "types": "tsgo --noEmit",
+    "check": "bun lint && bun types",
+    "bs": "mkdir -p scripts && curl -sL https://raw.githubusercontent.com/iamvikshan/.github/main/scripts/bootstrap.sh > scripts/bootstrap.sh && chmod +x scripts/bootstrap.sh && scripts/bootstrap.sh",
+    "upd": "sudo apt update && sudo apt upgrade -y && bun upgrade && bun update --latest && bun i && bun f"
   },
   "dependencies": {
     "zudoku": "^0.82.2"
   },
   "devDependencies": {
     "@types/bun": "^1.3.14",
+    "@typescript/native-preview": "^7.0.0-dev.20260707.2",
     "husky": "^9.1.7",
-    "prettier": "^3.9.4",
-    "typescript": "^6.0.3"
+    "oxfmt": "^0.58.0",
+    "oxlint": "^1.73.0"
   }
 }
