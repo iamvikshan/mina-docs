@@ -21,7 +21,7 @@
     "upd": "sudo apt update && sudo apt upgrade -y && bun upgrade && bun update --latest && bun i && bun f"
   },
   "dependencies": {
-    "zudoku": "^0.82.4"
+    "zudoku": "^0.82.5"
   },
   "devDependencies": {
     "@types/bun": "^1.3.14",
